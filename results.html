@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizKurd V7 - 2026 | دیتنا ئەنجامی ب کۆدێ ئەنجامی</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <meta name="theme-color" content="#facc15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- KaTeX for STEM formulas in results review -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    * { font-family: 'Noto Sans Arabic', sans-serif; box-sizing: border-box; }
+    body { background-color: #020617; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col items-center justify-start p-3 sm:p-6">
+  <div class="w-full max-w-xl space-y-4">
+    <!-- Header -->
+    <header class="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg shadow-md">
+          Q
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-black text-white">Quiz<span class="text-yellow-400">Kurd</span></h1>
+          <p class="text-[11px] text-yellow-400/80 font-bold">سیستەمێ پشکنینا ئەنجامی ب کۆدێ RS</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-700 text-slate-200">
+          ڕووپەلێ سەرەکی ⬅
+        </a>
+      </div>
+    </header>
+
+    <!-- Search Box Card -->
+    <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-2xl space-y-4">
+      <div class="text-center space-y-1">
+        <span class="px-3 py-0.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-black">
+          📊 پشکنینا ئەنجامی
+        </span>
+        <h2 class="text-lg sm:text-xl font-black text-white mt-1">دیتنا ئەنجامێ خۆ ب کۆدێ RS</h2>
+        <p class="text-xs text-slate-400">
+          کۆدێ ئەنجامێ تە (RS-XXXX-XXXX) یێ کو پشتی ئەزموونێ بۆتە هاتیە دان بنڤیسە.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label for="searchCodeInput" class="block text-xs font-bold text-yellow-400 mb-1.5">
+            کۆدێ ئەنجامی (تنێ کودێن RS دهێنە قەبیلکرن):
+          </label>
+          <div class="relative">
+            <input 
+              id="searchCodeInput" 
+              type="text" 
+              placeholder="نموونە: RS-A3F9-K2L1" 
+              dir="ltr"
+              autofocus
+              autocomplete="off"
+              class="w-full h-13 px-4 rounded-xl bg-slate-800 border-2 border-slate-700 text-yellow-400 font-mono font-bold text-base uppercase text-center focus:outline-none focus:border-yellow-400 transition-colors shadow-inner tracking-wider"
+              onkeydown="if(event.key==='Enter') checkResult();"
+            />
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">
+            * تێبینی: کۆدێن QZ بۆ ئەنجامان نینن و تنێ بۆ دەستپێکرنا ئەزموونێ نە.
+          </p>
+        </div>
+
+        <button 
+          onclick="checkResult()" 
+          id="btnSearch"
+          class="w-full h-12 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-sm transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+        >
+          <span>🔍</span>
+          <span>دیتنا ئەنجامی</span>
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingBox" class="hidden text-center py-4 text-yellow-400 font-bold text-sm animate-pulse">
+        <span>🔄 لێگەڕیان دهێتە کرن...</span>
+      </div>
+
+      <!-- Error State (Prominently displays QZ code error) -->
+      <div id="errorBox" class="hidden bg-rose-950/40 border-2 border-rose-500/50 text-rose-300 p-4 rounded-xl text-center text-sm font-black space-y-1 shadow-md">
+        <div id="errorIcon" class="text-2xl">⚠️</div>
+        <div id="errorMessageText"></div>
+      </div>
+
+      <!-- Result Card -->
+      <div id="resultBox" class="hidden space-y-4 pt-3 border-t border-slate-800">
+        <!-- Student Banner -->
+        <div class="bg-gradient-to-r from-slate-800 to-slate-850 p-4 rounded-xl border border-slate-700 text-center relative overflow-hidden">
+          <div class="text-xs text-slate-400 font-bold">قوتابیێ هێژا</div>
+          <h3 id="resName" class="text-xl font-black text-white mt-1"></h3>
+          <div class="mt-2 inline-flex items-center gap-1.5 bg-slate-950/80 px-3 py-1 rounded-lg border border-yellow-400/40">
+            <span class="text-[11px] text-slate-400 font-bold">کۆدێ ئەنجامی:</span>
+            <span id="resCode" class="font-mono text-yellow-400 font-black text-sm"></span>
+          </div>
+        </div>
+
+        <!-- Scores Grid -->
+        <div class="grid grid-cols-2 gap-3 text-center">
+          <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+            <p class="text-xs text-slate-400 font-bold">نمرە</p>
+            <p id="resScore" class="text-2xl font-black text-yellow-400 mt-1 font-mono"></p>
+          </div>
+          <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+            <p class="text-xs text-slate-400 font-bold">ژ سەدێ</p>
+            <p id="resPercent" class="text-2xl font-black mt-1 font-mono"></p>
+          </div>
+        </div>
+
+        <!-- Meta Details -->
+        <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700/60 text-xs space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">کۆدێ ئەزموونێ (Exam Code Used):</span>
+            <span id="resExamId" class="font-mono text-white font-bold"></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">دەمێ تۆمارکردنێ:</span>
+            <span id="resDate" class="text-slate-300 font-bold"></span>
+          </div>
+        </div>
+
+        <!-- Detailed Answers Section -->
+        <div id="answersSection" class="space-y-2 pt-2">
+          <h4 class="text-xs font-black text-yellow-400 flex items-center gap-1.5">
+            <span>📝</span>
+            <span>وردەکاریێن پرسیاران و بەرسڤان:</span>
+          </h4>
+          <div id="answersList" class="space-y-2.5 max-h-72 overflow-y-auto p-1"></div>
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <button onclick="window.print()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-750 text-slate-200 rounded-xl font-bold text-xs border border-slate-700 transition-colors">
+            🖨️ چاپکردن / Print
+          </button>
+          <button onclick="resetSearch()" class="flex-1 py-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 rounded-xl font-black text-xs transition-colors">
+            🔄 لێگەڕیان ب کۆدەکێ دی
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hybrid API Client & Interceptor
+    const _origFetch = window.fetch;
+    window.fetch = async function(input, init) {
+      try {
+        const urlStr = typeof input === 'string' ? input : (input instanceof Request ? input.url : String(input));
+        const urlObj = new URL(urlStr, window.location.origin);
+
+        if (urlObj.pathname === '/api/results' || urlObj.pathname === '/api/check') {
+          try {
+            const resp = await _origFetch(input, init);
+            if (resp.status !== 404) return resp;
+          } catch(e) {}
+
+          const code = (urlObj.searchParams.get('code') || '').toUpperCase().trim();
+          
+          // 1. QZ code error check:
+          if (code.startsWith('QZ-')) {
+            return new Response(JSON.stringify({ 
+              error: 'ئەڤ کودە بتنێ بۆ دەستپێکرنا ئەزمونێ یە',
+              isExamCode: true
+            }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          if (!code.startsWith('RS-')) {
+            return new Response(JSON.stringify({ 
+              error: 'تکایە کودێ ئەنجامی (RS-XXXX-XXXX) بنڤیسە!' 
+            }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          // Search in localStorage submissions
+          const rawSubmissions = localStorage.getItem('qk_submissions') || '[]';
+          const submissions = JSON.parse(rawSubmissions);
+          const foundSub = submissions.find(s => (s.result_code || s.resultCode) === code);
+          if (foundSub) {
+            return new Response(JSON.stringify(foundSub), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          // Search in results list
+          const rawResults = localStorage.getItem('qk_results_v11') || localStorage.getItem('quiz_results_v11') || '[]';
+          const results = JSON.parse(rawResults);
+          const foundRes = results.find(r => (r.result_code || r.resultCode) === code);
+          if (foundRes) {
+            return new Response(JSON.stringify(foundRes), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          return new Response(JSON.stringify({ error: 'ئەنجام ب ڤی کودی نەهاتە دیتن!' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        if (urlObj.pathname === '/api/disputes' && init && init.method === 'POST') {
+          let body = {};
+          try { body = typeof init.body === 'string' ? JSON.parse(init.body) : init.body; } catch(e) {}
+          const rawDisputes = localStorage.getItem('qk_grade_disputes') || '[]';
+          let disputes = JSON.parse(rawDisputes);
+          const newDisp = {
+            id: 'disp_' + Date.now(),
+            submission_id: body.result_code || body.submission_id || '',
+            result_code: body.result_code || '',
+            student_name: body.student_name || 'قوتابی',
+            student_message: body.student_message || '',
+            question_text: body.question_text || '',
+            teacher_reply: '',
+            status: 'pending',
+            created_at: new Date().toLocaleString('ar-IQ')
+          };
+          disputes.unshift(newDisp);
+          localStorage.setItem('qk_grade_disputes', JSON.stringify(disputes));
+          return new Response(JSON.stringify({ success: true, dispute: newDisp }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        return _origFetch(input, init);
+      } catch(e) {
+        return _origFetch(input, init);
+      }
+    };
+
+    async function checkResult() {
+      const codeInput = document.getElementById('searchCodeInput');
+      const code = (codeInput?.value || '').trim().toUpperCase();
+      const errBox = document.getElementById('errorBox');
+      const errMsg = document.getElementById('errorMessageText');
+      const resBox = document.getElementById('resultBox');
+      const loading = document.getElementById('loadingBox');
+
+      errBox.classList.add('hidden');
+      resBox.classList.add('hidden');
+
+      if (!code) {
+        errMsg.innerText = 'تکایە کۆدێ ئەنجامێ (RS-XXXX-XXXX) بنڤیسە!';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      // Exact requirement: QZ code check on frontend as well
+      if (code.startsWith('QZ-')) {
+        errMsg.innerText = 'ئەڤ کودە بتنێ بۆ دەستپێکرنا ئەزمونێ یە';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      if (!code.startsWith('RS-')) {
+        errMsg.innerText = 'کۆدێ ئەنجامی دڤێت ب پیتێن RS- دەستپێبکەت (نموونە: RS-A3F9-K2L1)';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      loading.classList.remove('hidden');
+
+      try {
+        let res = await fetch('/api/results?code=' + encodeURIComponent(code));
+        if (res.status === 404) {
+          // fallback to /api/check
+          res = await fetch('/api/check?code=' + encodeURIComponent(code));
+        }
+
+        loading.classList.add('hidden');
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          errMsg.innerText = errData.error || 'ئەنجام ب ڤی کودی نەهاتە دیتن! تکایە پشتڕاست بە کو کۆد دروستە.';
+          errBox.classList.remove('hidden');
+          return;
+        }
+
+        const data = await res.json();
+        renderResultData(data, code);
+      } catch (err) {
+        loading.classList.add('hidden');
+        errMsg.innerText = 'خەلەتیەک ڕویدا دەمێ پەیوەندیکردنێ: ' + err.message;
+        errBox.classList.remove('hidden');
+      }
+    }
+
+    function renderResultData(data, searchCode) {
+      const resBox = document.getElementById('resultBox');
+      const resName = document.getElementById('resName');
+      const resCode = document.getElementById('resCode');
+      const resScore = document.getElementById('resScore');
+      const resPercent = document.getElementById('resPercent');
+      const resExamId = document.getElementById('resExamId');
+      const resDate = document.getElementById('resDate');
+      const answersList = document.getElementById('answersList');
+
+      const name = data.student_name || data.name || data.fullName || 'قوتابی';
+      const rCode = data.result_code || data.resultCode || searchCode;
+      const score = data.score !== undefined ? String(data.score) : '—';
+      const percent = data.percent !== undefined ? parseInt(data.percent, 10) : 0;
+      const examId = data.exam_code_used || data.exam_id || data.code || '—';
+      const dateStr = data.created_at || data.date || new Date().toLocaleString('ar-IQ');
+
+      resName.innerText = name;
+      resCode.innerText = rCode;
+      resScore.innerText = score;
+      
+      resPercent.innerText = `${percent}%`;
+      resPercent.className = percent >= 50 
+        ? "text-2xl font-black mt-1 font-mono text-emerald-400" 
+        : "text-2xl font-black mt-1 font-mono text-rose-400";
+
+      resExamId.innerText = examId;
+      resDate.innerText = dateStr;
+
+      // Render answers list if available
+      let answers = data.answers || [];
+      if (typeof answers === 'string') {
+        try { answers = JSON.parse(answers); } catch(e){ answers = []; }
+      }
+
+      if (Array.isArray(answers) && answers.length > 0) {
+        answersList.innerHTML = answers.map((ans, idx) => {
+          const isCorrect = ans.isCorrect === true || ans.isCorrectCalculated === true;
+          const qText = ans.question || ans.text || (ans.qIndex !== undefined ? `پرسیارا ${ans.qIndex + 1}` : `پرسیارا ${idx + 1}`);
+          const studentAns = ans.userAns || ans.answer || ans.studentAnswer || '—';
+          const expected = ans.model_answer || ans.expected || ans.correctAnswer || '';
+          const isWritten = (ans.isWritten === true || ans.type === 'writing' || ans.type === 'nivisin');
+
+          if (isWritten) {
+            const itemScore = ans.final_score !== undefined ? ans.final_score : (ans.auto_score !== undefined ? ans.auto_score : (ans.pts || 0));
+            const maxPts = ans.pts || 10;
+            const teacherComment = ans.teacher_comment || data.teacher_comment || '';
+            const missingKw = Array.isArray(ans.missingKeywords) ? ans.missingKeywords.join('، ') : (ans.missingKeywords || '');
+            const explanation = ans.explanation || '';
+
+            return `
+              <div class="p-4 rounded-xl border text-xs bg-slate-900 border-amber-500/40 text-slate-200 space-y-2.5 shadow-md">
+                <div class="flex items-center justify-between font-bold border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-md bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-[10px]">${idx + 1}</span>
+                    <span class="font-bold text-white text-xs sm:text-sm">${qText}</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 text-yellow-300 font-mono font-black text-xs border border-amber-400/40">
+                      نمرا تە: ${itemScore}/${maxPts}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 1. What they wrote -->
+                <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 text-[11px] space-y-1">
+                  <span class="text-slate-400 font-bold block">بەرسڤا تە:</span>
+                  <div class="text-white leading-relaxed whitespace-pre-wrap font-sans">${studentAns}</div>
+                </div>
+
+                <!-- 2. Model Answer -->
+                ${expected ? `
+                  <div class="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-[11px] space-y-1">
+                    <span class="text-emerald-400 font-bold block">بەرسڤا درست (Model Answer):</span>
+                    <div class="text-emerald-200 leading-relaxed whitespace-pre-wrap font-sans">${expected}</div>
+                  </div>
+                ` : ''}
+
+                <!-- 3. Teacher Comment -->
+                ${teacherComment ? `
+                  <div class="p-2.5 rounded-lg bg-sky-950/30 border border-sky-500/40 text-[11px] space-y-1">
+                    <span class="text-sky-400 font-bold flex items-center gap-1.5">
+                      <span>✍️</span><span>شلوڤەکرنا ماموستای (Teacher Feedback):</span>
+                    </span>
+                    <div class="text-sky-200 leading-relaxed font-sans">${teacherComment}</div>
+                  </div>
+                ` : (data.status === 'pending_teacher_review' ? `
+                  <div class="p-2 rounded-lg bg-amber-500/10 border border-amber-400/30 text-[11px] text-amber-300 flex items-center gap-1.5">
+                    <span>⏳</span><span>بەرسڤا تە ل دەف مامۆستایە بۆ پێداچوونا دووماهیێ</span>
+                  </div>
+                ` : '')}
+
+                <!-- 4. Missing Keywords & Explanation -->
+                ${(missingKw || explanation) ? `
+                  <div class="p-2 rounded-lg bg-rose-950/20 border border-rose-500/30 text-[11px] space-y-1">
+                    ${missingKw ? `<div>پەیڤێن کێم: <strong class="text-rose-400 font-bold">[${missingKw}]</strong></div>` : ''}
+                    ${explanation ? `<div class="text-slate-400 text-[10px]">ڕوونکردن: ${explanation}</div>` : ''}
+                  </div>
+                ` : ''}
+
+                <!-- 5. Dispute Button -->
+                <div class="pt-1 flex justify-end">
+                  <button 
+                    type="button" 
+                    onclick="openDisputeModal('${rCode}', '${idx}', encodeURIComponent('${qText.replace(/'/g, "\\'")}'))" 
+                    class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-yellow-300 border border-amber-400/40 rounded-lg text-xs font-bold transition-transform active:scale-95 flex items-center gap-1.5"
+                  >
+                    <span>🗣️</span>
+                    <span>گازندە بکە (Dispute Grade)</span>
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          return `
+            <div class="p-3 rounded-xl border text-xs ${isCorrect ? 'bg-emerald-950/20 border-emerald-500/30 text-emerald-200' : 'bg-rose-950/20 border-rose-500/30 text-rose-200'}">
+              <div class="flex items-center justify-between font-bold mb-1">
+                <span>${idx + 1}. ${qText}</span>
+                <span class="${isCorrect ? 'text-emerald-400' : 'text-rose-400'} font-black">${isCorrect ? '✓ بەرسڤا راست' : '✗ بەرسڤا خەلەت'}</span>
+              </div>
+              <div class="text-[11px] text-slate-300 space-y-0.5">
+                <div>بەرسڤا قوتابی: <strong class="text-white">${studentAns}</strong></div>
+                ${expected ? `<div>بەرسڤا دروست: <strong class="text-yellow-400">${expected}</strong></div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('answersSection').classList.remove('hidden');
+      } else {
+        document.getElementById('answersSection').classList.add('hidden');
+      }
+
+      resBox.classList.remove('hidden');
+
+      // Auto-render STEM formulas with KaTeX in results breakdown
+      setTimeout(() => {
+        if (window.renderMathInElement) {
+          try {
+            renderMathInElement(resBox, {
+              delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      }, 50);
+    }
+
+    function resetSearch() {
+      document.getElementById('searchCodeInput').value = '';
+      document.getElementById('resultBox').classList.add('hidden');
+      document.getElementById('errorBox').classList.add('hidden');
+      document.getElementById('searchCodeInput').focus();
+    }
+
+    // Dispute modal helpers
+    let currentDisputeContext = null;
+
+    function openDisputeModal(resultCode, qIndex, qTextEscaped) {
+      currentDisputeContext = {
+        resultCode,
+        qIndex,
+        qText: decodeURIComponent(qTextEscaped)
+      };
+      const modal = document.getElementById('disputeModal');
+      const qDisplay = document.getElementById('disputeQuestionDisplay');
+      if (qDisplay) qDisplay.innerText = currentDisputeContext.qText;
+      const msgInput = document.getElementById('disputeMessageInput');
+      if (msgInput) msgInput.value = 'بوچی ئەڤە یا خەلەتە؟ من بەرسڤا دروست نڤیسیە و پێتڤیە نمرەیا من زێدە بیت.';
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeDisputeModal() {
+      const modal = document.getElementById('disputeModal');
+      if (modal) modal.classList.add('hidden');
+      currentDisputeContext = null;
+    }
+
+    async function submitGradeDispute() {
+      if (!currentDisputeContext) return;
+      const msg = (document.getElementById('disputeMessageInput')?.value || '').trim();
+      if (!msg) {
+        alert('تکایە هۆکارێ گازندەیا خۆ بنڤیسە!');
+        return;
+      }
+
+      const btn = document.getElementById('btnSendDispute');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = 'ناردن دهێتە ئەنجامدان...';
+      }
+
+      try {
+        const res = await fetch('/api/disputes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            result_code: currentDisputeContext.resultCode,
+            submission_id: currentDisputeContext.resultCode,
+            question_text: currentDisputeContext.qText,
+            student_message: msg,
+            student_name: document.getElementById('resName')?.innerText || 'قوتابی'
+          })
+        });
+
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = 'ناردنا گازندەیێ بۆ مامۆستای 📨';
+        }
+
+        if (res.ok) {
+          alert('گازندەیا تە ب سەرکەفتیانە گەهشتە ئینبۆکسا مامۆستای! پشتی پێداچوونێ دێ نمرەیا تە هێتە ڕاستڤەکرن.');
+          closeDisputeModal();
+        } else {
+          alert('ناردنا گازندەیێ سەرنەکەفت. تکایە دووبارە بکەوە.');
+        }
+      } catch (e) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = 'ناردنا گازندەیێ بۆ مامۆستای 📨';
+        }
+        alert('خەلەتی: ' + e.message);
+      }
+    }
+
+    // Auto search from URL: /results?code=RS-XXXX-XXXX
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      if (code) {
+        document.getElementById('searchCodeInput').value = code;
+        checkResult();
+      }
+    });
+  </script>
+
+  <!-- Grade Dispute Modal -->
+  <div id="disputeModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-5 space-y-4 shadow-2xl text-right">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <h3 class="font-black text-amber-300 text-sm flex items-center gap-2">
+          <span>🗣️</span>
+          <span>گازندە بکە ل سەر نمرەیا پرسیارا نڤیسینێ</span>
+        </h3>
+        <button onclick="closeDisputeModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+          <span class="text-slate-400 font-bold block mb-1">پرسیار:</span>
+          <p id="disputeQuestionDisplay" class="text-white font-bold leading-relaxed"></p>
+        </div>
+
+        <div>
+          <label for="disputeMessageInput" class="block text-xs font-bold text-yellow-400 mb-1">
+            پەیاما تە بۆ مامۆستای (بوچی ئەڤە یا خەلەتە؟):
+          </label>
+          <textarea 
+            id="disputeMessageInput" 
+            rows="4" 
+            placeholder="بوچی ئەڤە یا خەلەتە؟ من ئەڤ بەرسڤە نڤیسیە چونکی..." 
+            class="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-xs font-sans leading-relaxed"
+          ></textarea>
+          <p class="text-[11px] text-slate-400 mt-1">
+            💡 ئەڤ پەیامە ئێکسەر دچیتە بەشی گازندەکان د داشبۆردا مامۆستای دا بۆ پێداچوونا دادپەروەر.
+          </p>
+        </div>
+
+        <div class="flex gap-2 pt-1">
+          <button 
+            type="button" 
+            onclick="closeDisputeModal()" 
+            class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold text-xs border border-slate-700"
+          >
+            پەشیمانبوون
+          </button>
+          <button 
+            type="button" 
+            id="btnSendDispute" 
+            onclick="submitGradeDispute()" 
+            class="flex-1 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-slate-950 rounded-xl font-black text-xs transition-transform active:scale-95 shadow"
+          >
+            ناردنا گازندەیێ بۆ مامۆستای 📨
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

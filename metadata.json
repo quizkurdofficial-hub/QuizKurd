@@ -1,0 +1,8 @@
+{
+  "name": "QuizKurd",
+  "description": "پلاتفۆڕما تاقیکرنێن کوردی ب دیالێکتا بەهدینی بۆ مامۆستا و قوتابیان - QuizKurd Bahdini Edition",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
+

@@ -1,0 +1,2881 @@
+<!doctype html>
+<html lang="ku" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXX');
+  </script>
+  <title>QuizKurd V7 - 2026 | پلاتفۆڕما تاقیکرنان</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <meta name="theme-color" content="#facc15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="QuizKurd">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <!-- KaTeX for STEM formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0A1931',
+            navyDark: '#050D1A',
+            navyLight: '#122543',
+            gold: '#D4A574',
+            goldBright: '#FFD700',
+            cream: '#FFFEF8'
+          },
+          fontFamily: {
+            sans: ['"Noto Sans Arabic"', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; box-sizing: border-box; }
+    body {
+      margin:0!important; padding:0!important; min-height:100vh!important; background:#0f172a;
+      color: #F8FAFC;
+      direction: rtl;
+      text-align: right;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(212, 165, 116, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(255, 215, 0, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(18, 37, 67, 0.9) 0%, #0A1931 100%);
+      background-attachment: fixed;
+    }
+    .hero-glow-text {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 30%, #FFD700 70%, #D4A574 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.25));
+    }
+    .timer-glow {
+      font-size: 64px; line-height: 1; font-weight: 900;
+      background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3)); }
+      50% { transform: scale(1.03); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+    }
+    .glass-card {
+      background: rgba(18, 37, 67, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 165, 116, 0.3);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+    .btn-gold-gradient {
+      background: linear-gradient(135deg, #FFD700 0%, #E5B869 50%, #D4A574 100%);
+      color: #0A1931; font-weight: 900; border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(212, 165, 116, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-gold-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(255, 215, 0, 0.5);
+      background: linear-gradient(135deg, #FFE033 0%, #EDB86A 50%, #DB9E5A 100%);
+    }
+    .btn-gold-gradient:active { transform: scale(0.98); }
+    .input-icon-wrap {
+      position: relative; width: 100%;
+    }
+    .input-icon-wrap .icon {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: #D4A574; font-size: 1.1rem; pointer-events: none;
+    }
+    .qk-input-2026 {
+      width: 100%; padding: 9px 38px 9px 12px;
+      border-radius: 12px; background: rgba(10, 25, 49, 0.7);
+      border: 1.5px solid rgba(212, 165, 116, 0.35);
+      color: #FFFFFF; font-size: 0.85rem; font-weight: 600;
+      outline: none; transition: all 0.2s;
+    }
+    .qk-input-2026:focus {
+      border-color: #FFD700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.35), 0 0 0 3px rgba(212, 165, 116, 0.2);
+      transform: scale(1.01);
+      background: rgba(18, 37, 67, 0.85);
+    }
+    .qk-input-2026::placeholder { color: #8292A6; font-weight: 500; }
+    .float-item { animation: floating 4s ease-in-out infinite; }
+    .float-item-delayed { animation: floating 5s ease-in-out 1.5s infinite; }
+    @keyframes floating {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    #toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120px);
+      background: #0A1931; color: #FFF; padding: 12px 24px; border-radius: 999px;
+      font-weight: 800; font-size: 0.9rem; z-index: 9999; border: 2px solid #FFD700;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #sec-home, #sec-encam, #sec-quiz { padding: 4px 2px !important; margin: 0 !important; min-height: auto !important; }
+    #sec-mamosta { margin-top:6px!important; padding:12px!important; min-height:auto!important; }
+  </style>
+</head>
+<body class="flex flex-col justify-start m-0 p-0 overflow-x-hidden pb-4 gap-1">
+  <div id="toast"></div>
+
+  <!-- Max 500px Centered as Specified - margin-top 4px only -->
+  <main class="w-full max-w-[500px] mx-auto flex flex-col justify-start mt-[4px] px-2.5">
+    <!-- Header Navigation with Glass Tabs -->
+    <header class="flex items-center justify-between mb-2 h-[48px] shrink-0">
+      <a href="#/" class="flex items-center gap-1.5 sm:gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-gold to-goldBright flex items-center justify-center text-navy font-black text-base shadow-lg shrink-0">
+          Q
+        </div>
+        <div>
+          <span class="text-base font-black text-white tracking-wide">Quiz<span class="text-goldBright">Kurd</span></span>
+          <span class="text-[8px] block text-gold/80 font-bold uppercase -mt-1 tracking-widest">V7 • 2026</span>
+        </div>
+      </a>
+
+      <!-- Header buttons exactly as specified -->
+      <div class="flex gap-1.5">
+        <button id="btn-taqikirin" class="tab-btn bg-yellow-400 text-black px-2.5 py-1.5 rounded-lg text-xs font-black transition-all shadow-sm" onclick="location.hash='#'">تاقیکرن</button>
+        <button id="btn-encam" class="tab-btn text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-black transition-all hover:text-goldBright" onclick="location.hash='#encam'">ئەنجام</button>
+        <button id="btn-mamosta" class="tab-btn text-gray-400 px-2.5 py-1.5 rounded-lg text-xs font-black transition-all hover:text-goldBright" onclick="location.hash='#mamosta-veşarti-2026'">مامۆستا</button>
+      </div>
+
+      <div class="flex items-center gap-1.5" id="header-logout-wrap"></div>
+    </header>
+
+    <!-- Wrap everything in 3 sections only (plus quiz) -->
+    <section id="sec-home">
+      <div id="home-content"></div>
+    </section>
+
+    <section id="sec-encam" class="hidden">
+      <div id="encam-content"></div>
+    </section>
+
+    <section id="sec-mamosta" class="hidden">
+      <div id="mamosta-content"></div>
+    </section>
+
+    <section id="sec-quiz" class="hidden">
+      <div id="quiz-content"></div>
+    </section>
+  </main>
+
+  <footer class="text-center py-1.5 text-[10px] text-gray-400 font-semibold max-w-[500px] mx-auto">
+    QuizKurd V7 • 2026 Modern Edition • دیزاینێ شوشەیی ب بەهدینی
+  </footer>
+
+  <script>
+    const MASTER_CODE = "BAHDINI-MAMOSTA-2026";
+    const LOCK_MINUTES = 5;
+
+    const DB = {
+      getTeachers: () => JSON.parse(localStorage.getItem('qk_T2') || '[]'),
+      saveTeachers: (d) => localStorage.setItem('qk_T2', JSON.stringify(d)),
+      getQuizzes: () => JSON.parse(localStorage.getItem('qk_Q2') || '[]'),
+      saveQuizzes: (d) => localStorage.setItem('qk_Q2', JSON.stringify(d)),
+      getResults: () => JSON.parse(localStorage.getItem('qk_R2') || '[]'),
+      saveResults: (d) => localStorage.setItem('qk_R2', JSON.stringify(d)),
+      getCurrTeacher: () => {
+        try { return JSON.parse(localStorage.getItem('qk_curr_teacher')); } catch(e){ return null; }
+      },
+      setCurrTeacher: (t) => {
+        if(t) localStorage.setItem('qk_curr_teacher', JSON.stringify(t));
+        else localStorage.removeItem('qk_curr_teacher');
+      },
+      getLockTime: () => parseInt(localStorage.getItem('lockTime') || '0', 10),
+      setLockTime: (ts) => localStorage.setItem('lockTime', ts.toString()),
+      getFails: () => parseInt(localStorage.getItem('qk_fails') || '0', 10),
+      setFails: (n) => localStorage.setItem('qk_fails', n.toString()),
+      clearFails: () => { localStorage.removeItem('qk_fails'); localStorage.removeItem('lockTime'); }
+    };
+
+    function generateResultCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let p1 = '';
+      let p2 = '';
+      for (let i = 0; i < 4; i++) p1 += chars.charAt(Math.floor(Math.random() * chars.length));
+      for (let i = 0; i < 4; i++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+      return `RS-${p1}-${p2}`;
+    }
+
+    // Native API client interceptor & sync for /api/exam, /api/save, /api/results, /api/check, /api/teacher
+    const _originalFetch = window.fetch;
+    window.fetch = async function(input, init) {
+      try {
+        const urlStr = typeof input === 'string' ? input : (input instanceof Request ? input.url : String(input));
+        const urlObj = new URL(urlStr, window.location.origin);
+        
+        // 1. /api/exam
+        if (urlObj.pathname === '/api/exam') {
+          if (init && init.method === 'POST') {
+            let data = {};
+            if (init.body) {
+              try { data = typeof init.body === 'string' ? JSON.parse(init.body) : init.body; } catch(e){}
+            }
+            const rand = Math.floor(1000 + Math.random() * 9000);
+            const id = (data.id || data.code || `QZ-${rand}`).toUpperCase();
+            const questions = data.questions || [];
+            const status = data.status || 'draft';
+            
+            // Map questions to DB format
+            const dbQuestions = questions.map((q, idx) => {
+              if (q.type === 'blank') {
+                return {
+                  id: idx + 1,
+                  type: 'blank',
+                  mode: 'keyword',
+                  text: q.text,
+                  correctAnswer: q.correctAnswer || '',
+                  keywords: [q.correctAnswer || ''],
+                  pts: 10,
+                  sec: 30
+                };
+              } else if (q.type === 'writing') {
+                return {
+                  id: idx + 1,
+                  type: 'writing',
+                  mode: 'keyword',
+                  text: q.text,
+                  correctAnswer: q.correctAnswer || '',
+                  keywords: [q.correctAnswer || ''],
+                  pts: 10,
+                  sec: 30
+                };
+              } else {
+                return {
+                  id: idx + 1,
+                  type: 'mcq',
+                  text: q.text,
+                  options: q.options || [],
+                  opts: q.options || [],
+                  correct: typeof q.correct === 'number' ? q.correct : 0,
+                  cor: typeof q.correct === 'number' ? q.correct : 0,
+                  pts: 10,
+                  sec: 30
+                };
+              }
+            });
+
+            const newQuiz = {
+              code: id,
+              id: id,
+              name: data.title || 'تاقیکرن',
+              title: data.title || 'تاقیکرن',
+              status: status,
+              active: (status === 'active'),
+              subject: 'گشتی',
+              duration: 30,
+              teacherId: 'MAM01',
+              showScore: true,
+              questions: dbQuestions,
+              publishedAt: new Date().toISOString()
+            };
+
+            const quizzes = DB.getQuizzes();
+            const existIdx = quizzes.findIndex(q => q.code === id);
+            if (existIdx >= 0) quizzes[existIdx] = newQuiz;
+            else quizzes.unshift(newQuiz);
+            DB.saveQuizzes(quizzes);
+
+            return new Response(JSON.stringify({ success: true, id, code: id, status, questions }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          // GET /api/exam?code=...
+          const code = (urlObj.searchParams.get('code') || '').toUpperCase().trim();
+          const role = (urlObj.searchParams.get('role') || '').toLowerCase().trim();
+          const quizzes = DB.getQuizzes();
+          const quiz = quizzes.find(q => q.code === code);
+          if (!quiz) {
+            return new Response(JSON.stringify({ error: 'کۆدێ ئەزمونێ نەهاتە دیتن!' }), {
+              status: 404,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          const examStatus = quiz.status || (quiz.active ? 'active' : 'draft');
+          if (role !== 'teacher' && role !== 'preview' && examStatus !== 'active') {
+            return new Response(JSON.stringify({
+              error: examStatus === 'closed'
+                ? '🔒 ئەڤ تاقیکرنە هاتە داخستن (Status: Closed)'
+                : `⚠️ ئەڤ ئەزموونە هێشتا نەهاتیە کاراکرن ژ لایێ مامۆستای ڤە (Status: ${examStatus})! Only active exams can be entered.`,
+              status: examStatus,
+              notActive: true
+            }), {
+              status: 403,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          // Format questions compatibility for simple/minimal runners (mcq, blank, writing)
+          const formattedQuestions = (quiz.questions || []).map((q, idx) => {
+            let type = q.type || 'mcq';
+            let options = q.options || q.opts || [];
+            let correct = typeof q.correct === 'number' ? q.correct : (typeof q.cor === 'number' ? q.cor : 0);
+            let correctAnswer = q.correctAnswer || (q.keywords && q.keywords[0]) || '';
+
+            if (q.type === 'blank') {
+              type = 'blank';
+              correctAnswer = q.correctAnswer || (q.keywords && q.keywords[0]) || '';
+            } else if (q.type === 'writing' || q.type === 'nivisin') {
+              type = 'writing';
+              correctAnswer = q.correctAnswer || (q.keywords && q.keywords[0]) || '';
+            } else if (q.type === 'rast') {
+              type = 'mcq';
+              options = ['راست', 'خەلەت'];
+              correct = q.cor === true ? 0 : 1;
+            } else if (q.type === 'chand') {
+              type = 'mcq';
+              correct = Array.isArray(q.cor) && q.cor.length > 0 ? q.cor[0] : 0;
+            } else {
+              type = 'mcq';
+              options = q.options || q.opts || [];
+              correct = typeof q.correct === 'number' ? q.correct : (typeof q.cor === 'number' ? q.cor : 0);
+            }
+
+            return {
+              id: idx + 1,
+              text: q.text || '',
+              type: q.type || type,
+              options: options,
+              correct: correct,
+              correctAnswer: correctAnswer,
+              model_answer: q.model_answer || correctAnswer,
+              keywords: q.keywords || '',
+              grading_rubric: q.grading_rubric || '',
+              pairs: q.pairs || [],
+              unit: q.unit || '',
+              tolerance: q.tolerance !== undefined ? q.tolerance : 0.1,
+              correctNumber: q.correctNumber !== undefined ? q.correctNumber : 0,
+              image: q.image || null,
+              pts: q.pts || q.points || 10,
+              sec: q.sec || 30
+            };
+          });
+
+          const resData = {
+            id: quiz.code,
+            code: quiz.code,
+            title: quiz.title || quiz.name || 'تاقیکرن',
+            subject: quiz.subject || 'بیرکاری',
+            status: examStatus,
+            questions: formattedQuestions
+          };
+
+          return new Response(JSON.stringify(resData), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // 2. POST /api/save
+        if (urlObj.pathname === '/api/save' && init && init.method === 'POST') {
+          let body = {};
+          if (init.body) {
+            try {
+              body = typeof init.body === 'string' ? JSON.parse(init.body) : init.body;
+            } catch(e) { body = {}; }
+          }
+
+          const examCode = (body.exam_id || body.code || body.exam_code_used || '').toUpperCase().trim();
+          const studentName = body.name || body.fullName || body.student_name || 'قوتابی';
+          const score = body.score || '0';
+          const percent = body.percent !== undefined ? body.percent : 0;
+          const answers = body.answers || [];
+
+          // Generate RS-XXXX-XXXX
+          const resultCode = generateResultCode();
+
+          const record = {
+            id: 'res_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+            exam_id: examCode,
+            exam_code_used: examCode,
+            code: examCode,
+            student_name: studentName,
+            fullName: studentName,
+            name: studentName,
+            resultCode: resultCode,
+            result_code: resultCode,
+            answers: answers,
+            score: String(score),
+            percent: percent,
+            time: '30 چرکە',
+            cheat: 0,
+            published: true,
+            date: new Date().toLocaleString('ar-IQ')
+          };
+
+          const results = DB.getResults();
+          results.unshift(record);
+          DB.saveResults(results);
+
+          // Save in submissions
+          const rawSubmissions = localStorage.getItem('qk_submissions') || '[]';
+          let submissions = JSON.parse(rawSubmissions);
+          submissions.unshift(record);
+          localStorage.setItem('qk_submissions', JSON.stringify(submissions));
+
+          return new Response(JSON.stringify({
+            success: true,
+            resultCode: resultCode,
+            result_code: resultCode,
+            exam_code_used: examCode,
+            exam_id: examCode,
+            student_name: studentName,
+            name: studentName,
+            score: score,
+            percent: percent,
+            id: record.id
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // 3. GET /api/results?code=... OR /api/check?code=...
+        if (urlObj.pathname === '/api/results' || urlObj.pathname === '/api/check') {
+          const code = (urlObj.searchParams.get('code') || '').toUpperCase().trim();
+          
+          // QZ- code ONLY for entering exam! Reject when checking results!
+          if (code.startsWith('QZ-')) {
+            return new Response(JSON.stringify({ 
+              error: 'ئەڤ کودە بتنێ بۆ دەستپێکرنا ئەزمونێ یە',
+              isExamCode: true
+            }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          if (!code.startsWith('RS-')) {
+            return new Response(JSON.stringify({ 
+              error: 'تکایە کودێ ئەنجامی (RS-XXXX-XXXX) بنڤیسە!' 
+            }), {
+              status: 400,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          const results = DB.getResults();
+          const found = results.find(r => 
+            (r.resultCode && r.resultCode.toUpperCase() === code) || 
+            (r.result_code && r.result_code.toUpperCase() === code)
+          );
+
+          if (found) {
+            return new Response(JSON.stringify({
+              student_name: found.fullName || found.name || found.student_name,
+              name: found.fullName || found.name || found.student_name,
+              exam_code_used: found.exam_code_used || found.exam_id || found.code,
+              exam_id: found.exam_code_used || found.exam_id || found.code,
+              score: typeof found.score === 'string' ? found.score : `${found.score}/${found.total}`,
+              percent: found.percent !== undefined ? found.percent : Math.round((found.score/found.total)*100),
+              result_code: found.resultCode || found.result_code || code,
+              resultCode: found.resultCode || found.result_code || code,
+              answers: found.answers || [],
+              created_at: found.date || new Date().toLocaleString('ar-IQ')
+            }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          return new Response(JSON.stringify({ error: 'ئەنجام ب ڤی کودی نەهاتە دیتن!' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // 4. GET /api/teacher
+        if (urlObj.pathname === '/api/teacher') {
+          const results = DB.getResults();
+          return new Response(JSON.stringify(results.map(f => ({
+            id: f.id || f.submission_id,
+            submission_id: f.id || f.submission_id,
+            student_name: f.fullName || f.name,
+            name: f.fullName || f.name,
+            exam_id: f.exam_id || f.code,
+            score: typeof f.score === 'string' ? f.score : `${f.score}/${f.total}`,
+            percent: f.percent !== undefined ? f.percent : Math.round((f.score/f.total)*100),
+            result_code: f.resultCode || f.result_code || '',
+            status: f.status || 'graded',
+            hasWrittenQuestions: f.hasWrittenQuestions === true
+          }))), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        // 5. GET or POST /api/grading
+        if (urlObj.pathname === '/api/grading') {
+          const rawSubmissions = localStorage.getItem('qk_submissions') || '[]';
+          let submissions = JSON.parse(rawSubmissions);
+
+          if (init && init.method === 'POST') {
+            let body = {};
+            try { body = typeof init.body === 'string' ? JSON.parse(init.body) : init.body; } catch(e) {}
+            const { submission_id, resultCode, result_code, answers, teacher_comment, final_score } = body;
+            const targetCode = resultCode || result_code;
+
+            const idx = submissions.findIndex(s => 
+              (submission_id && s.id === submission_id) || 
+              (targetCode && (s.resultCode === targetCode || s.result_code === targetCode))
+            );
+
+            if (idx >= 0) {
+              if (answers) submissions[idx].answers = answers;
+              if (teacher_comment !== undefined) submissions[idx].teacher_comment = teacher_comment;
+              if (final_score !== undefined) {
+                submissions[idx].final_score = final_score;
+                submissions[idx].score = `${final_score}/${submissions[idx].total || 100}`;
+                submissions[idx].percent = Math.round((final_score / (submissions[idx].total || 100)) * 100);
+              }
+              submissions[idx].status = 'graded';
+              submissions[idx].graded_at = new Date().toLocaleString('ar-IQ');
+
+              localStorage.setItem('qk_submissions', JSON.stringify(submissions));
+
+              // Sync in results table as well
+              const results = DB.getResults();
+              const rIdx = results.findIndex(r => 
+                (submission_id && r.id === submission_id) || 
+                (targetCode && (r.resultCode === targetCode || r.result_code === targetCode))
+              );
+              if (rIdx >= 0) {
+                results[rIdx] = { ...results[rIdx], ...submissions[idx] };
+                DB.saveResults(results);
+              }
+
+              return new Response(JSON.stringify({ success: true, updated: submissions[idx] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+              });
+            }
+
+            return new Response(JSON.stringify({ error: 'بەرسڤا قوتابی نەهاتە دیتن!' }), {
+              status: 404,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          // GET /api/grading?exam_id=...
+          const examId = (urlObj.searchParams.get('exam_id') || '').toUpperCase().trim();
+          let filtered = submissions;
+          if (examId) {
+            filtered = filtered.filter(s => (s.exam_id || s.code || '').toUpperCase() === examId);
+          }
+          return new Response(JSON.stringify(filtered), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        // 6. POST or GET /api/disputes (grade_disputes table)
+        if (urlObj.pathname === '/api/disputes') {
+          const rawDisputes = localStorage.getItem('qk_grade_disputes') || '[]';
+          let disputes = JSON.parse(rawDisputes);
+
+          if (init && init.method === 'POST') {
+            let body = {};
+            try { body = typeof init.body === 'string' ? JSON.parse(init.body) : init.body; } catch(e) {}
+            const newDispute = {
+              id: 'disp_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+              submission_id: body.submission_id || body.result_code || '',
+              result_code: body.result_code || '',
+              student_name: body.student_name || 'قوتابی',
+              student_message: body.student_message || body.message || '',
+              question_text: body.question_text || '',
+              teacher_reply: '',
+              status: 'pending',
+              created_at: new Date().toLocaleString('ar-IQ')
+            };
+            disputes.unshift(newDispute);
+            localStorage.setItem('qk_grade_disputes', JSON.stringify(disputes));
+
+            return new Response(JSON.stringify({ success: true, dispute: newDispute }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          return new Response(JSON.stringify(disputes), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+      } catch (err) {
+        console.error('Fetch intercept error:', err);
+      }
+      return _originalFetch.apply(this, arguments);
+    };
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.innerHTML = `<span>⚡</span> ${msg}`;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    function checkAnswer(q, studentAnswer) {
+      if (q.type === 'taka' || q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+        const expected = typeof q.correct === 'number' ? q.correct : (typeof q.cor === 'number' ? q.cor : 0);
+        return studentAnswer === expected;
+      }
+      if (q.type === 'truefalse') {
+        const expBool = (q.correct === true || q.correctAnswer === 'true' || q.cor === true);
+        return studentAnswer === expBool;
+      }
+      if (q.type === 'chand') {
+        if (!Array.isArray(studentAnswer) || !Array.isArray(q.cor)) return false;
+        return JSON.stringify([...studentAnswer].sort()) === JSON.stringify([...q.cor].sort());
+      }
+      if (q.type === 'rast') return studentAnswer === q.cor;
+      if (q.type === 'matching') {
+        if (!studentAnswer || typeof studentAnswer !== 'object') return false;
+        const pairs = q.pairs || [];
+        if (pairs.length === 0) return false;
+        return pairs.every(p => {
+          const ans = studentAnswer[p.left];
+          return ans && String(ans).toLowerCase().trim() === String(p.right).toLowerCase().trim();
+        });
+      }
+      if (q.type === 'numerical') {
+        const val = parseFloat(studentAnswer);
+        const target = parseFloat(q.correctNumber !== undefined ? q.correctNumber : (q.correctAnswer || 0));
+        const tol = parseFloat(q.tolerance !== undefined ? q.tolerance : 0.1);
+        return !isNaN(val) && Math.abs(val - target) <= tol;
+      }
+      if (q.type === 'blank') {
+        const text = String(studentAnswer || '').toLowerCase().trim();
+        const expected = String(q.correctAnswer || '').toLowerCase().trim();
+        if (!text) return false;
+        return text.includes(expected) || expected.includes(text) || text === expected;
+      }
+      if (q.type === 'writing' || q.type === 'nivisin') {
+        const res = calculateWrittenScore(
+          studentAnswer, 
+          q.model_answer || q.correctAnswer || '', 
+          q.keywords || '', 
+          q.pts || q.points || 10
+        );
+        return res.isPass;
+      }
+      return false;
+    }
+
+    // FAIR AUTO-GRADING LOGIC for Written Questions
+    function calculateWrittenScore(studentAnswer, modelAnswer, keywords, totalPts = 10) {
+      const sText = String(studentAnswer || '').trim();
+      const mText = String(modelAnswer || '').trim();
+      const sLower = sText.toLowerCase();
+      const mLower = mText.toLowerCase();
+
+      if (!sText) {
+        return {
+          suggestedScore: 0,
+          explanation: 'بەرسڤ بەتالە (چ پەیڤ نەهاتینە نڤیسین)',
+          foundKeywords: [],
+          missingKeywords: [],
+          isPass: false,
+          similarity: 0,
+          wordCount: 0
+        };
+      }
+
+      // Word count check
+      const studentWords = sText.split(/\s+/).filter(w => w.length > 0);
+      const studentWordCount = studentWords.length;
+
+      // Extract keywords (comma or Arabic comma separated)
+      let rawKeywords = [];
+      if (Array.isArray(keywords)) {
+        rawKeywords = keywords;
+      } else if (typeof keywords === 'string') {
+        rawKeywords = keywords.split(/[,،]+/).map(k => k.trim()).filter(Boolean);
+      }
+
+      // Check keywords existence (case-insensitive, Kurdish/Arabic/Latin support)
+      const foundKeywords = [];
+      const missingKeywords = [];
+      rawKeywords.forEach(k => {
+        const kwLower = k.toLowerCase().trim();
+        if (kwLower && sLower.includes(kwLower)) {
+          foundKeywords.push(k.trim());
+        } else if (kwLower) {
+          missingKeywords.push(k.trim());
+        }
+      });
+
+      // Similarity check: percentage of model answer words present in student answer
+      const modelWords = mLower.split(/[\s,،.؛;!?؟]+/).filter(w => w.length > 2);
+      let matchedModelWords = 0;
+      if (modelWords.length > 0) {
+        modelWords.forEach(w => {
+          if (sLower.includes(w)) matchedModelWords++;
+        });
+      }
+      const similarityPercent = modelWords.length > 0 
+        ? Math.round((matchedModelWords / modelWords.length) * 100) 
+        : 0;
+
+      // Score calculation
+      let score = 0;
+      const kwTotal = rawKeywords.length;
+
+      if (kwTotal > 0) {
+        // Keyword contribution
+        const kwWeight = totalPts * 0.6; // 60% of points for keywords
+        const perKw = kwWeight / kwTotal;
+        score += foundKeywords.length * perKw;
+
+        // Similarity contribution
+        const simWeight = totalPts * 0.4;
+        score += (similarityPercent / 100) * simWeight;
+      } else {
+        // If no keywords defined, rely on similarity and length
+        score = (similarityPercent / 100) * totalPts;
+      }
+
+      // Length penalty: if answer < 10 words, cap score
+      if (studentWordCount < 5) {
+        score = Math.min(score, totalPts * 0.3); // Severe penalty for <5 words
+      } else if (studentWordCount < 10) {
+        score = Math.min(score, totalPts * 0.6); // Penalty for <10 words
+      } else if (studentWordCount >= 15 && similarityPercent >= 70) {
+        score = Math.max(score, totalPts * 0.85); // High score bonus for thoroughness
+      }
+
+      const finalSuggested = Math.max(0, Math.min(totalPts, Math.round(score)));
+
+      // Build Kurdish explanation
+      let explanation = '';
+      if (kwTotal > 0) {
+        explanation = `${foundKeywords.length}/${kwTotal} پەیڤێن سەرەکی هاتنە دیتن: [${foundKeywords.join('، ') || 'چ نینە'}]`;
+        if (missingKeywords.length > 0) {
+          explanation += ` — پەیڤێن کێم: [${missingKeywords.join('، ')}]`;
+        }
+      } else {
+        explanation = `ڕێژەیا هاوشێوەیی دگەل بەرسڤا نمونەیی: ${similarityPercent}% (${studentWordCount} پەیڤ)`;
+      }
+
+      if (studentWordCount < 10) {
+        explanation += ` (ئاگەهداری: کێمتر ژ ١٠ پەیڤانە)`;
+      }
+
+      return {
+        suggestedScore: finalSuggested,
+        explanation: explanation,
+        foundKeywords,
+        missingKeywords,
+        similarity: similarityPercent,
+        wordCount: studentWordCount,
+        isPass: finalSuggested >= (totalPts * 0.5)
+      };
+    }
+
+    function updateStudentWordCount(val) {
+      const el = document.getElementById('studentWordCount');
+      if (!el) return;
+      const words = (val || '').trim().split(/\s+/).filter(Boolean);
+      el.innerText = words.length;
+    }
+
+    function initSeed() {
+      const teachers = DB.getTeachers();
+      let hasDemoTeacher = teachers.some(t => t.id === 'MAM01');
+      if (!hasDemoTeacher) {
+        const demoTeacher = { 
+          id: 'MAM01', 
+          user: 'mamosta', 
+          name: 'مامۆستا دڵدار بادینی', 
+          fullName: 'مامۆستا دڵدار بادینی', 
+          pass: '123456', 
+          subject: 'بیرکاری' 
+        };
+        teachers.push(demoTeacher);
+        DB.saveTeachers(teachers);
+      }
+
+      // Automatically clean up the old preloaded quizzes as requested by the user
+      let quizzes = DB.getQuizzes();
+      const originalQuizzesLength = quizzes.length;
+      quizzes = quizzes.filter(q => q.code !== 'QZ-BAHDINI' && q.code !== 'QZ-AYIN');
+      if (quizzes.length !== originalQuizzesLength) {
+        DB.saveQuizzes(quizzes);
+      }
+
+      let results = DB.getResults();
+      const originalResultsLength = results.length;
+      results = results.filter(r => r.code !== 'QZ-BAHDINI' && r.code !== 'QZ-AYIN');
+      if (results.length !== originalResultsLength) {
+        DB.saveResults(results);
+      }
+    }
+
+    function playPreparedQuiz(code) {
+      window.location.hash = '#/';
+      setTimeout(() => {
+        const codeInput = document.getElementById('f-quizcode');
+        if (codeInput) {
+          codeInput.value = code;
+          const nameInput = document.getElementById('f-name');
+          if (nameInput) {
+            nameInput.focus();
+          }
+          showToast(`کۆدا تاقیکرنێ (${code}) هاتە پڕکرن! ناڤێ خۆ بنڤیسە.`);
+        }
+      }, 150);
+    }
+
+    let activeQuiz = null;
+    let quizTimer = null;
+    let builderDraft = [];
+    let selectedCheckboxes = [];
+    let currentTeacherTab = 'login';
+    let currentDashboardView = 'my_quizzes';
+    let createdQuizSuccess = null;
+
+    // Header Navigation is now statically placed and managed dynamically
+    function renderNav(activeTab = 'home') {
+      return '';
+    }
+
+    function logoutTeacher() {
+      DB.setCurrTeacher(null);
+      showToast('ب سەرفەرازی دەربازبووی');
+      window.location.hash = '#/';
+    }
+
+    // ==========================================
+    // 1. STUDENT LOGIN - 4 FIELDS
+    // 1. نافێ خۆ (محمد)
+    // 2. نافێ بابێ (احمد)
+    // 3. نافێ باپیرێ (حسن)
+    // 4. کودا تاقیکرنێ (QZ-BAHDINI)
+    // ==========================================
+    function renderHome() {
+      const quizzes = DB.getQuizzes();
+      return `
+        ${renderNav('home')}
+
+        <!-- Compact Hero -->
+        <div class="text-center py-1 relative">
+          <h1 class="text-2xl font-black hero-glow-text">QuizKurd</h1>
+          <p class="text-gray-400 text-[10px] mt-0.5">ناڤێ خۆ یێ سێیانی و کۆدا تاقیکرنێ بنڤیسە بۆ دەستپێکرنێ</p>
+        </div>
+
+        <!-- 4 Fields Login Glass Card - Compact p-4 -->
+        <div class="glass-card p-4 relative mt-2">
+          <div class="absolute -top-2.5 right-4 bg-gradient-to-r from-goldDark to-goldBright text-navy text-[9px] font-black px-2.5 py-0.5 rounded-full shadow-md">
+            قوتابی 👤
+          </div>
+
+          <form onsubmit="handleJoinQuiz4Fields(event)" class="space-y-2 pt-0.5">
+            <!-- 1. نافێ خۆ -->
+            <div>
+              <label class="block text-[11px] font-black text-goldBright mb-0.5" for="f-name">
+                ١. نافێ خۆ
+              </label>
+              <div class="input-icon-wrap">
+                <input type="text" id="f-name" class="qk-input-2026" placeholder="محمد" required autofocus autocomplete="off" />
+                <span class="icon" style="right:12px;">👤</span>
+              </div>
+            </div>
+
+            <!-- 2. نافێ بابێ -->
+            <div>
+              <label class="block text-[11px] font-black text-goldBright mb-0.5" for="f-father">
+                ٢. نافێ بابێ
+              </label>
+              <div class="input-icon-wrap">
+                <input type="text" id="f-father" class="qk-input-2026" placeholder="احمد" required autocomplete="off" />
+                <span class="icon" style="right:12px;">👥</span>
+              </div>
+            </div>
+
+            <!-- 3. نافێ باپیرێ -->
+            <div>
+              <label class="block text-[11px] font-black text-goldBright mb-0.5" for="f-grandfather">
+                ٣. نافێ باپیرێ
+              </label>
+              <div class="input-icon-wrap">
+                <input type="text" id="f-grandfather" class="qk-input-2026" placeholder="حسن" required autocomplete="off" />
+                <span class="icon" style="right:12px;">🏛️</span>
+              </div>
+            </div>
+
+            <!-- 4. کودا تاقیکرنێ -->
+            <div>
+              <label class="block text-[11px] font-black text-goldBright mb-0.5" for="f-quizcode">
+                ٤. کودا تاقیکرنێ
+              </label>
+              <div class="input-icon-wrap">
+                <input type="text" id="f-quizcode" class="qk-input-2026 uppercase font-mono font-bold tracking-wider" placeholder="QZ-BAHDINI" required autocomplete="off" />
+                <span class="icon" style="right:12px;">🔑</span>
+              </div>
+            </div>
+
+            <div class="pt-1">
+              <button type="submit" class="btn-gold-gradient w-full py-2.5 text-sm flex items-center justify-center gap-1.5">
+                <span>دەستپێبکە</span>
+                <span>🚀</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-400 font-bold">
+            <span>دەتەوێت ئەنجامێ خۆ ببینی؟</span>
+            <a href="#/encam" class="text-goldBright font-black hover:underline">
+              📊 ئەنجام (#encam)
+            </a>
+          </div>
+        </div>
+
+        <!-- Visible Teacher Portal Gateway in Home Footer - Extremely Compact -->
+        <div class="text-center mt-3 mb-1">
+          <a href="#mamosta-veşarti-2026" class="text-[11px] font-black text-goldBright hover:text-white underline decoration-goldBright/40 underline-offset-4 transition-all">
+            👨‍🏫 مامۆستای؟ لێرە کلیک بکە بوو تومارکرنێ و دروستکرنا تاقیکرنێ
+          </a>
+        </div>
+      `;
+    }
+
+    function handleJoinQuiz4Fields(e) {
+      e.preventDefault();
+      const name = document.getElementById('f-name').value.trim();
+      const father = document.getElementById('f-father').value.trim();
+      const grandfather = document.getElementById('f-grandfather').value.trim();
+      const code = document.getElementById('f-quizcode').value.trim().toUpperCase();
+
+      if (!name || !father || !grandfather || !code) {
+        showToast('تکایە هەمی ٤ خانکان تژی بکە!');
+        return;
+      }
+
+      // Combine as fullName
+      const fullName = `${name} ${father} ${grandfather}`;
+
+      const quizzes = DB.getQuizzes();
+      const quiz = quizzes.find(q => q.code === code);
+      if (!quiz) {
+        showToast('چ تاقیکرن ب ڤێ کۆدێ نەهاتە دیتن!');
+        return;
+      }
+
+      // Check status: Only when status='active' students can enter with QZ code!
+      const status = quiz.status || (quiz.active ? 'active' : 'draft');
+      if (status !== 'active') {
+        if (status === 'closed') {
+          showToast('🔒 ئەڤ تاقیکرنە هاتە داخستن (Closed)');
+        } else {
+          showToast(`⚠️ ئەڤ ئەزموونە هێشتا نەیا چالاکە (Status: ${status})! تەنها دەمێ مامۆستا ئەزموونێ کارا (Active) دکەت دشێی بەشدار بی.`);
+        }
+        return;
+      }
+
+      // 1. Keep QZ-XXXX code ONLY for entering exam. After exam finishes, QZ code becomes invalid for that student!
+      const existingResults = DB.getResults();
+      const cleanStudentName = fullName.toLowerCase().trim();
+      const alreadyTaken = existingResults.find(r => 
+        (r.code === code || r.exam_code_used === code || r.exam_id === code) &&
+        ((r.fullName && r.fullName.toLowerCase().trim() === cleanStudentName) ||
+         (r.student_name && r.student_name.toLowerCase().trim() === cleanStudentName) ||
+         (r.name && r.name.toLowerCase().trim() === cleanStudentName))
+      );
+
+      if (alreadyTaken) {
+        const rc = alreadyTaken.resultCode || alreadyTaken.result_code || 'RS-XXXX-XXXX';
+        showToast('⚠️ تە ئەڤ ئەزموونە ب دووماهی ئینایە! کۆدێ QZ ئێدی کار ناکەت.');
+        const app = document.getElementById('app');
+        if (app) {
+          app.innerHTML = `
+            ${renderNav('home')}
+            <div class="glass-card p-6 text-center space-y-4">
+              <div class="w-16 h-16 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 text-3xl mx-auto flex items-center justify-center">
+                🔒
+              </div>
+              <h2 class="text-base sm:text-lg font-black text-white">تە ئەڤ ئەزموونە پێشتر تەمام کریە!</h2>
+              <div class="p-4 bg-slate-900 rounded-2xl border border-slate-700 text-xs text-slate-300 space-y-2">
+                <p>کۆدێ <span class="font-mono text-yellow-400 font-bold">${code}</span> بتنێ بۆ ئێکجار ئەنجامدانێ یە و ئێدی کار ناکەت.</p>
+                <div class="pt-1">
+                  <span class="text-slate-400 block mb-1">کۆدێ ئەنجامێ تە یێ پاراستی:</span>
+                  <span class="font-mono text-yellow-400 font-black text-lg bg-slate-950 px-3 py-1 rounded-lg border border-yellow-400/50">${rc}</span>
+                </div>
+              </div>
+              <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                <a href="/results?code=${encodeURIComponent(rc)}" class="btn-gold-gradient py-3 px-5 text-xs font-black flex-1 text-center">
+                  دیتنا ئەنجامی ل لاپەرێ /results 📊
+                </a>
+                <a href="#/" class="py-3 px-4 rounded-xl bg-navyLight hover:bg-navyLight/80 text-white font-bold text-xs text-center border border-white/10">
+                  زڤڕین
+                </a>
+              </div>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      // EXAM AUTO-CLOSE SYSTEM check!
+      const isClosed = quiz.isClosed || (quiz.closeAt && new Date() > new Date(quiz.closeAt));
+      if (isClosed) {
+        const rawCloseAt = quiz.closeAt || 'دیارنەکری';
+        const formattedDate = rawCloseAt.replace('T', ' ');
+        showToast('🔒 ئەڤ تاقیکرنە هاتە داخستن');
+        
+        const app = document.getElementById('app');
+        if (app) {
+          app.innerHTML = `
+            ${renderNav('home')}
+            <div class="glass-card p-5 text-center space-y-4">
+              <div class="w-14 h-14 rounded-full bg-red-500/15 text-red-400 border border-red-500/30 text-2xl mx-auto flex items-center justify-center">
+                🔒
+              </div>
+              <div class="text-xs sm:text-sm font-black text-white leading-relaxed p-3.5 bg-red-950/20 rounded-xl border border-red-500/20">
+                🔒 ئەڤ تاقیکرنە هاتە داخستن - دیماهیکا وێ <span class="font-mono text-goldBright">${quiz.code}</span> ل <span class="font-mono text-goldBright">${formattedDate}</span> بوو - پەیوەندی ب مامۆستا بکە
+              </div>
+              <a href="#/" class="btn-gold-gradient inline-block text-xs py-2 px-6 mt-2">زڤڕین بۆ لاپەرێ سەرەکی</a>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      window.location.hash = `#/quiz/${encodeURIComponent(code)}?fullName=${encodeURIComponent(fullName)}`;
+    }
+
+    // ==========================================
+    // 2. RESULTS PAGE (#encam)
+    // Quiz Code + Result Code RS-xxx with Wrong Questions Highlighted
+    // ==========================================
+    let searchedResult = null;
+    let searchStatus = null;
+    let lastSearchedQuizCode = '';
+    let lastSearchedFullName = '';
+
+    function renderResultsPage(presetCode = '') {
+      const quizCodeVal = presetCode || lastSearchedQuizCode;
+      return `
+        ${renderNav('encam')}
+
+        <div class="glass-card p-4 sm:p-5">
+          <div class="text-center mb-4">
+            <span class="text-[10px] font-black text-navy bg-goldBright px-2.5 py-0.5 rounded-full shadow-md">
+              پشکنینا ئەنجامی
+            </span>
+            <h1 class="text-xl font-black text-white mt-1.5">📊 دیتنا ئەنجامێ خۆ</h1>
+            <p class="text-[11px] font-semibold text-gray-300 mt-0.5">
+              کودا تاقیکرنێ و نافێ خۆ یێ سیانی بنڤیسە بۆ دیتنا نمرێ و شلۆڤەیا پرسیاران
+            </p>
+          </div>
+
+          <form onsubmit="handleSearchStudentResult(event)" class="space-y-3 mb-4">
+            <div>
+              <label class="block text-xs font-black text-goldBright mb-1" for="search-quiz-code">کودا تاقیکرنێ</label>
+              <div class="input-icon-wrap">
+                <input 
+                  type="text" 
+                  id="search-quiz-code" 
+                  class="qk-input-2026 uppercase font-mono font-bold" 
+                  placeholder="QZ-BAHDINI" 
+                  value="${quizCodeVal}" 
+                  required 
+                />
+                <span class="icon" style="right:12px;">🔑</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-goldBright mb-1" for="studentFullName">نافێ خۆ + بابێ + باپیرێ</label>
+              <div class="input-icon-wrap">
+                <input 
+                  type="text" 
+                  id="studentFullName" 
+                  class="qk-input-2026" 
+                  placeholder="محمد احمد حسن" 
+                  value="${lastSearchedFullName}"
+                  required 
+                />
+                <span class="icon" style="right:12px;">👤</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-gold-gradient w-full py-2.5 text-sm mt-1">
+              ئەنجامێ من ببینە 🔍
+            </button>
+          </form>
+
+          <div id="result-detail-container">
+            ${renderSearchResultDetail()}
+          </div>
+        </div>
+      `;
+    }
+
+    function handleSearchStudentResult(e) {
+      e.preventDefault();
+      const quizCode = document.getElementById('search-quiz-code')?.value.trim().toUpperCase() || '';
+      const inputFullName = document.getElementById('studentFullName')?.value.trim() || '';
+
+      lastSearchedQuizCode = quizCode;
+      lastSearchedFullName = inputFullName;
+
+      const results = DB.getResults().filter(r => r.code === quizCode);
+      const cleanedInput = inputFullName.toLowerCase().trim();
+      const match = results.find(r => 
+        (r.fullName && r.fullName.toLowerCase().trim() === cleanedInput) ||
+        (!r.fullName && r.name && r.name.toLowerCase().trim() === cleanedInput) ||
+        (r.resultCode && r.resultCode.toLowerCase().trim() === cleanedInput) ||
+        (r.studentCode && ('rs-' + r.studentCode).toLowerCase().trim() === cleanedInput)
+      );
+
+      if (!match) {
+        searchStatus = 'not_found';
+        searchedResult = null;
+      } else if (!match.published) {
+        searchStatus = 'not_published';
+        searchedResult = null;
+      } else {
+        searchStatus = 'found_published';
+        searchedResult = match;
+      }
+
+      renderRoute();
+    }
+
+    function renderSearchResultDetail() {
+      if (!searchStatus) return '';
+
+      if (searchStatus === 'not_found') {
+        return `
+          <div class="p-5 rounded-2xl bg-amber-950/60 border border-gold/40 text-center space-y-2">
+            <div class="text-2xl">❌</div>
+            <div class="text-sm font-black text-goldBright">
+              ناف نەهاتە دیتن - دڵنیابە هەمان نافێ دەمێ تاقیکرنێ بنڤیسی
+            </div>
+          </div>
+        `;
+      }
+
+      if (searchStatus === 'not_published') {
+        return `
+          <div class="p-5 rounded-2xl bg-amber-950/60 border border-gold/40 text-center space-y-2">
+            <div class="text-2xl">⏳</div>
+            <div class="text-sm font-black text-goldBright">
+              ئەنجام هێشتا راگەهاندی نینە
+            </div>
+            <div class="text-xs text-gray-300 font-semibold">
+              ئەو تاقیکرنا تە ئەنجامدای هێشتا ژ لایێ مامۆستای ڤە نەهاتیە راگەهاندن، هیڤیە چاڤەڕێ بە.
+            </div>
+          </div>
+        `;
+      }
+
+      if (searchStatus === 'found_published' && searchedResult) {
+        const r = searchedResult;
+        const quiz = DB.getQuizzes().find(q => q.code === r.code);
+        const total = r.total || 100;
+        const pct = Math.round((r.score / total) * 100);
+
+        let emoji = '🎉';
+        let evaluation = 'زۆر باشە';
+        if (pct >= 90) { emoji = '🏆'; evaluation = 'نایاب و سەرفەراز'; }
+        else if (pct < 50) { emoji = '📚'; evaluation = 'پێتڤی ب هەولدانێ یە'; }
+
+        let correctCount = 0;
+        let wrongCount = 0;
+        (r.answers || []).forEach(ans => {
+          if (ans.isCorrectCalculated === true) correctCount++;
+          else wrongCount++;
+        });
+
+        return `
+          <div class="p-5 rounded-2xl bg-navyDark/90 border border-gold/40 text-right space-y-4">
+            <div class="text-center pb-3 border-b border-white/10">
+              <div class="text-3xl mb-1">${emoji}</div>
+              <h2 class="text-lg font-black text-white">
+                ئەنجامێ تە: <span class="text-goldBright">${r.fullName || r.name}</span>
+              </h2>
+              <div class="text-[11px] font-mono text-gray-400 mt-0.5">کودێ ئەنجامێ تە: ${r.resultCode || ('RS-' + r.studentCode)}</div>
+
+              <div class="text-4xl font-black text-goldBright mt-2">
+                ${r.score} <span class="text-lg font-bold text-gray-400">/ ${total}</span>
+              </div>
+              <div class="text-xs font-black text-gray-300 mt-1">
+                %${pct} ژ سەدێ • ${evaluation}
+              </div>
+            </div>
+
+            <!-- Questions Breakdown with Red/Green Highlights -->
+            <div class="space-y-2.5">
+              <h3 class="text-xs font-black text-goldBright uppercase tracking-wider">وردەکاریێن پرسیاران:</h3>
+              ${(r.answers || []).map((ans, i) => {
+                const q = quiz?.questions[ans.qIndex];
+                if (!q) return '';
+                const isCorrect = ans.isCorrectCalculated === true;
+                const studentAnsText = formatAnswerDisplay(q, ans.answer);
+                const correctAnsText = formatCorrectDisplay(q);
+
+                return `
+                  <div class="p-3.5 rounded-xl border text-xs space-y-1.5 transition-all ${isCorrect ? 'bg-emerald-950/40 border-emerald-500/60' : 'bg-red-950/40 border-red-500/70'}">
+                    <div class="flex items-start justify-between gap-2">
+                      <span class="font-bold text-white leading-relaxed">${i+1}. ${q.text}</span>
+                      <span class="font-black px-2 py-0.5 rounded-full text-[10px] shrink-0 ${isCorrect ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-red-500/20 text-red-300 border border-red-500/40'}">
+                        ${isCorrect ? `+${ans.pts} نمرە ✅` : '٠ نمرە ❌'}
+                      </span>
+                    </div>
+
+                    <div class="pt-1 text-[11px] space-y-1">
+                      <div class="${isCorrect ? 'text-emerald-300' : 'text-red-300 font-bold'}">
+                        <span>بەرسڤا تە: </span>
+                        <span>${studentAnsText}</span>
+                        <span>${isCorrect ? '✅' : '❌'}</span>
+                      </div>
+                      ${!isCorrect ? `
+                        <div class="text-emerald-300 font-bold">
+                          <span>بەرسڤا دروست: </span>
+                          <span>${correctAnsText}</span>
+                          <span>✅</span>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="p-3 rounded-xl bg-navy/80 border border-gold/30 text-center font-black text-xs text-white">
+              پرسیارێن خەلەت: <span class="text-red-400 font-mono">${wrongCount}</span> • درست: <span class="text-emerald-400 font-mono">${correctCount}</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function formatAnswerDisplay(q, ans) {
+      if (ans === null || ans === undefined) return 'چ نەهاتیە بەرسڤدان';
+      if (q.type === 'taka') return q.opts[ans] || `هەلبژارتنا ${ans + 1}`;
+      if (q.type === 'chand') {
+        if (!Array.isArray(ans)) return String(ans);
+        return ans.map(idx => q.opts[idx] || `هەلبژارتنا ${idx + 1}`).join('، ');
+      }
+      if (q.type === 'rast') return ans === true ? 'راست' : 'خەلەت';
+      return String(ans);
+    }
+
+    function formatCorrectDisplay(q) {
+      if (q.type === 'taka') return q.opts[q.cor] || `هەلبژارتنا ${q.cor + 1}`;
+      if (q.type === 'chand') {
+        if (!Array.isArray(q.cor)) return '';
+        return q.cor.map(idx => q.opts[idx] || `هەلبژارتنا ${idx + 1}`).join('، ');
+      }
+      if (q.type === 'rast') return q.cor === true ? 'راست' : 'خەلەت';
+      if (q.type === 'nivisin') {
+        if (q.mode === 'keyword') return (q.keywords || []).join('، ');
+        return 'ب هەڵسەنگاندنا مامۆستای';
+      }
+      return '';
+    }
+
+    // ==========================================
+    // 3. QUIZ PLAYER - SILENT EXAM MODE
+    // ==========================================
+    function renderQuizPlayer(code, fullName) {
+      const quiz = DB.getQuizzes().find(q => q.code === code);
+      if (!quiz) {
+        return `
+          ${renderNav()}
+          <div class="glass-card text-center py-12">
+            <h2 class="text-lg font-black text-white">تاقیکرن نەهاتە دیتن</h2>
+            <a href="#/" class="btn-gold-gradient inline-block text-xs py-2 px-4 mt-3">زڤڕین</a>
+          </div>
+        `;
+      }
+
+      const quizStatus = quiz.status || (quiz.active ? 'active' : 'draft');
+      if (quizStatus !== 'active') {
+        return `
+          ${renderNav()}
+          <div class="glass-card p-6 text-center space-y-4">
+            <div class="w-14 h-14 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 text-2xl mx-auto flex items-center justify-center">
+              ⚠️
+            </div>
+            <div class="text-xs sm:text-sm font-black text-white leading-relaxed p-3.5 bg-amber-950/20 rounded-xl border border-amber-500/20">
+              ${quizStatus === 'closed'
+                ? `🔒 ئەڤ تاقیکرنە هاتیە داخستن (Closed)`
+                : `⚠️ ئەڤ ئەزموونە نەیا کارایە (Status: ${quizStatus})! تەنها دەمێ مامۆستا ئەزموونێ چالاک (Active) دکەت قوتابی دشێن دەستپێبکەن.`}
+            </div>
+            <a href="#/" class="btn-gold-gradient inline-block text-xs py-2.5 px-6 mt-2">زڤڕین بۆ لاپەرێ سەرەکی</a>
+          </div>
+        `;
+      }
+
+      const isClosed = quiz.isClosed || (quiz.closeAt && new Date() > new Date(quiz.closeAt));
+      if (isClosed) {
+        const rawCloseAt = quiz.closeAt || 'دیارنەکری';
+        const formattedDate = rawCloseAt.replace('T', ' ');
+        return `
+          ${renderNav()}
+          <div class="glass-card p-5 text-center space-y-4">
+            <div class="w-14 h-14 rounded-full bg-red-500/15 text-red-400 border border-red-500/30 text-2xl mx-auto flex items-center justify-center">
+              🔒
+            </div>
+            <div class="text-xs sm:text-sm font-black text-white leading-relaxed p-3.5 bg-red-950/20 rounded-xl border border-red-500/20">
+              🔒 ئەڤ تاقیکرنە هاتە داخستن - دیماهیکا وێ <span class="font-mono text-goldBright">${quiz.code}</span> ل <span class="font-mono text-goldBright">${formattedDate}</span> بوو - پەیوەندی ب مامۆستا بکە
+            </div>
+            <a href="#/" class="btn-gold-gradient inline-block text-xs py-2.5 px-6 mt-2">زڤڕین بۆ لاپەرێ سەرەکی</a>
+          </div>
+        `;
+      }
+
+      if (!activeQuiz || activeQuiz.code !== code || activeQuiz.fullName !== fullName) {
+        const genResultCode = generateResultCode();
+        activeQuiz = {
+          code,
+          fullName,
+          studentCode: genResultCode.replace('RS-', ''),
+          resultCode: genResultCode,
+          quiz,
+          idx: 0,
+          cheats: 0,
+          startTime: Date.now(),
+          studentAnswers: [],
+          resultId: 'RES_' + Date.now() + Math.random().toString(36).substring(2, 5)
+        };
+        selectedCheckboxes = [];
+        setupAntiCheat();
+        startTimer();
+      }
+
+      if (activeQuiz.finished) {
+        return renderExamSubmittedScreen(activeQuiz);
+      }
+
+      const q = quiz.questions[activeQuiz.idx];
+      const percent = Math.round(((activeQuiz.idx) / quiz.questions.length) * 100);
+
+      return `
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <div class="text-xs font-bold text-gray-400">قوتابی: <strong class="text-goldBright">${activeQuiz.fullName}</strong></div>
+            <div class="text-[10px] text-gray-400 font-mono">${quiz.title} • کۆد: ${activeQuiz.resultCode}</div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-full bg-goldBright text-navy text-[11px] font-black shadow-md">
+            پرسیارا ${activeQuiz.idx + 1} ژ ${quiz.questions.length}
+          </span>
+        </div>
+
+        <div class="w-full h-2 bg-navyLight rounded-full mb-2.5 overflow-hidden border border-gold/20">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-gold to-goldBright rounded-full transition-all duration-300" style="width: ${percent}%;"></div>
+        </div>
+
+        <div class="flex items-center justify-between mb-2 text-xs font-bold">
+          <span class="px-2 py-0.5 rounded-full ${activeQuiz.cheats > 0 ? 'bg-red-900/60 text-red-200 border border-red-500' : 'bg-navyLight text-gold border border-gold/20'} text-[10px]">
+            🛡️ چاڤدێری: ${activeQuiz.cheats} دەرکەفتن
+          </span>
+          <span class="text-goldBright font-black text-xs">${q.pts || 10} نمرە</span>
+        </div>
+
+        <!-- If question has diagram image, show it prominently -->
+        ${q.image ? `
+          <div class="glass-card p-2.5 mb-3 text-center space-y-2">
+            <img src="${q.image}" alt="Diagram" class="max-h-56 mx-auto rounded-xl object-contain shadow-lg border border-white/10">
+            <div class="pt-1 border-t border-white/10 flex items-center justify-between text-xs text-gray-300">
+              <span class="text-[11px] text-goldBright font-bold">⚡ دیاگرامێ زانستی</span>
+              <button type="button" onclick="toggleStudentScratchpad()" class="px-2.5 py-1 rounded-lg bg-navyLight border border-gold/30 text-goldBright hover:text-white text-[11px] font-bold">
+                🎨 تابلۆیێ وێنەکێشانێ (Scratchpad Canvas)
+              </button>
+            </div>
+            <div id="student-scratchpad-wrap" class="hidden pt-2 border-t border-white/10 text-right space-y-1.5">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-gray-400">تابلۆیێ وێنەکێشان و شیکاریا دیاگرامێ:</span>
+                <button type="button" onclick="clearStudentCanvas()" class="text-red-400 hover:underline">سڕینەوە 🗑️</button>
+              </div>
+              <canvas id="student-scratch-canvas" width="450" height="180" class="w-full bg-navyDark rounded-xl border border-white/10 touch-none cursor-crosshair"></canvas>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Question Box + Compact Timer Grid Side-by-Side to eliminate 80% empty space -->
+        <div class="grid grid-cols-4 gap-2 mb-3">
+          <div class="col-span-3 glass-card p-3 flex items-center border-r-4 border-r-goldBright">
+            <h2 class="text-xs sm:text-sm font-black text-white leading-relaxed formula-renderable">${q.text}</h2>
+          </div>
+          <div class="col-span-1 glass-card p-2 flex flex-col items-center justify-center text-center">
+            <div class="text-xl font-black text-goldBright animate-pulse" id="time-display">${activeQuiz.timeLeft || q.sec || 30}</div>
+            <div class="text-[8px] font-bold text-gray-400 uppercase">چرکە</div>
+          </div>
+        </div>
+
+        <div id="opts-box" class="space-y-2">${renderStudentExamOptions(q)}</div>
+      `;
+    }
+
+    function renderStudentExamOptions(q) {
+      if (q.type === 'taka' || q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+        const letters = ['أ', 'ب', 'ج', 'د'];
+        const options = q.options || q.opts || [];
+        return `
+          <div class="space-y-2">
+            ${options.map((opt, i) => `
+              <button onclick="handleExamTaka(${i})" class="w-full flex items-center p-3.5 bg-navyLight/70 hover:bg-navyLight rounded-xl border border-gold/20 hover:border-goldBright active:scale-98 font-bold text-xs sm:text-sm text-white transition-all shadow-md">
+                <span class="w-6 h-6 rounded-lg bg-goldBright text-navy font-black text-xs flex items-center justify-center ml-2.5 shrink-0">${letters[i] || (i+1)}</span>
+                <span class="formula-renderable">${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      }
+      if (q.type === 'truefalse') {
+        return `
+          <div class="grid grid-cols-2 gap-3 py-1">
+            <button onclick="handleExamTrueFalse(true)" class="py-4 rounded-xl border-2 border-emerald-500/50 hover:border-emerald-400 bg-emerald-950/30 hover:bg-emerald-950/60 font-black text-emerald-300 text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+              <span>دگ (True)</span>
+              <span>✅</span>
+            </button>
+            <button onclick="handleExamTrueFalse(false)" class="py-4 rounded-xl border-2 border-rose-500/50 hover:border-rose-400 bg-rose-950/30 hover:bg-rose-950/60 font-black text-rose-300 text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+              <span>نەدگ (False)</span>
+              <span>❌</span>
+            </button>
+          </div>
+        `;
+      }
+      if (q.type === 'matching') {
+        const pairs = q.pairs || [];
+        const rightOpts = [...pairs.map(p => p.right)].sort(() => Math.random() - 0.5);
+        return `
+          <form onsubmit="submitExamMatching(event)" class="space-y-3">
+            <div class="p-2 bg-navyLight/40 rounded-xl border border-gold/20 text-xs text-goldBright font-bold">
+              بۆ هەر بڕگەیەکێ ل ستوونا A، بەرسڤا دروست ژ ستوونا B هەڵبژێرە:
+            </div>
+            <div class="space-y-2">
+              ${pairs.map((p, idx) => `
+                <div class="p-3 bg-navyLight/70 rounded-xl border border-gold/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                  <div class="font-bold text-white">
+                    <span class="text-goldBright ml-1.5">${idx + 1}.</span>
+                    <span class="formula-renderable">${p.left}</span>
+                  </div>
+                  <select 
+                    id="student_match_${idx}"
+                    data-left="${p.left.replace(/"/g, '&quot;')}"
+                    required
+                    class="h-9 px-2.5 bg-navyDark border border-gold/40 rounded-lg text-xs text-emerald-300 font-bold focus:outline-none focus:border-goldBright"
+                  >
+                    <option value="">-- هەڵبژێرە --</option>
+                    ${rightOpts.map(ro => `<option value="${ro.replace(/"/g, '&quot;')}">${ro}</option>`).join('')}
+                  </select>
+                </div>
+              `).join('')}
+            </div>
+            <button type="submit" class="btn-gold-gradient w-full py-2.5 text-xs font-black">پشتڕاستکرنا هەڤبەرکرنێ ✓</button>
+          </form>
+        `;
+      }
+      if (q.type === 'numerical') {
+        return `
+          <form onsubmit="submitExamNumerical(event)" class="space-y-3">
+            <div class="p-2 bg-navyLight/40 rounded-xl border border-gold/20 text-xs text-goldBright font-bold">
+              ئەنجامێ ژمارەیی یێ ڤەکۆلینێ بنڤیسە:
+            </div>
+            <div class="flex items-center gap-2">
+              <input 
+                id="student-numerical" 
+                type="number" 
+                step="any" 
+                required 
+                class="qk-input-2026 font-mono text-center text-sm sm:text-base font-black flex-1 !p-3" 
+                placeholder="ژمارەیێ ل ڤێرێ بنڤیسە..." 
+                autocomplete="off" 
+              />
+              ${q.unit ? `<span class="h-11 px-3.5 bg-navyLight border border-gold/40 text-goldBright font-black text-xs sm:text-sm rounded-xl flex items-center justify-center">${q.unit}</span>` : ''}
+            </div>
+            <button type="submit" class="btn-gold-gradient w-full py-2.5 text-xs font-black">تۆمارکرن و چوونا پرسیارا داهاتی ↵</button>
+          </form>
+        `;
+      }
+      if (q.type === 'chand') {
+        const letters = ['أ', 'ب', 'ج', 'د'];
+        const options = q.options || q.opts || [];
+        return `
+          <div class="space-y-2">
+            ${options.map((opt, i) => {
+              const sel = selectedCheckboxes.includes(i);
+              return `
+                <div onclick="toggleExamCheck(${i})" class="w-full flex items-center p-3 rounded-xl border ${sel ? 'border-goldBright bg-navyLight' : 'border-gold/20 bg-navyLight/60'} cursor-pointer font-bold text-xs text-white select-none transition-all">
+                  <span class="w-6 h-6 rounded-lg ${sel ? 'bg-goldBright text-navy' : 'bg-navyDark text-gray-300'} font-black text-xs flex items-center justify-center ml-2.5 shrink-0">
+                    ${sel ? '✓' : letters[i]}
+                  </span>
+                  <span class="formula-renderable">${opt}</span>
+                </div>
+              `;
+            }).join('')}
+            <button onclick="submitExamChand()" class="btn-gold-gradient w-full py-2.5 text-xs font-black mt-1">پشتڕاستکرنا بەرسڤێ ✓</button>
+          </div>
+        `;
+      }
+      if (q.type === 'rast') {
+        return `
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="handleExamRast(true)" class="py-4 rounded-xl border border-gold/20 hover:border-emerald-400 bg-navyLight/70 font-black text-emerald-300 text-base flex items-center justify-center gap-1.5">
+              <span>راست</span><span>✓</span>
+            </button>
+            <button onclick="handleExamRast(false)" class="py-4 rounded-xl border border-gold/20 hover:border-red-400 bg-navyLight/70 font-black text-red-300 text-base flex items-center justify-center gap-1.5">
+              <span>خەلەت</span><span>✗</span>
+            </button>
+          </div>
+        `;
+      }
+      if (q.type === 'blank') {
+        const displaySentence = (q.text || '').replace('___', '<span class="text-goldBright font-bold px-2 py-0.5 bg-goldBright/10 rounded border border-goldBright/30">________</span>');
+        return `
+          <form onsubmit="submitExamNivisin(event)" class="space-y-2">
+            <p class="text-xs sm:text-sm text-slate-200 font-bold mb-1 formula-renderable leading-relaxed">${displaySentence}</p>
+            <input id="student-nivisin" type="text" class="qk-input-2026 font-semibold text-xs !p-3" placeholder="بۆشایی پر بکە..." required autocomplete="off" />
+            <button type="submit" class="btn-gold-gradient w-full py-2.5 text-xs font-black">تۆمارکرن و چوونا پرسیارا داهاتی ↵</button>
+          </form>
+        `;
+      }
+      if (q.type === 'nivisin' || q.type === 'writing') {
+        const rubricHint = q.grading_rubric ? `<div class="p-2.5 rounded-xl bg-navyDark/80 border border-gold/30 text-[11px] text-goldBright"><span>📌 ڕێنمایا مامۆستای:</span> ${q.grading_rubric}</div>` : '';
+        const ptsBadge = `<span class="px-2 py-0.5 rounded-full bg-gold/15 border border-gold/40 text-goldBright font-mono text-[11px] font-black">${q.pts || q.points || 10} نمرە</span>`;
+        return `
+          <form onsubmit="submitExamNivisin(event)" class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-300 font-bold">✍️ بەرسڤا نڤیسینێ بەرفرەهـ بکە:</span>
+              ${ptsBadge}
+            </div>
+            ${rubricHint}
+            <div class="relative">
+              <textarea 
+                id="student-nivisin" 
+                rows="6" 
+                oninput="updateStudentWordCount(this.value)" 
+                class="qk-input-2026 font-medium text-xs sm:text-sm !p-3.5 leading-relaxed resize-y w-full bg-navyDark/90 border-2 border-gold/40 focus:border-goldBright text-white rounded-xl shadow-inner" 
+                placeholder="مامۆستایێ هێژا، بەرسڤا خۆ ب ووردی و بەرفرەهی ل ڤێرێ بنڤیسە..." 
+                required
+              ></textarea>
+              <div class="flex items-center justify-between text-[11px] text-gray-400 mt-1 px-1">
+                <span>ژمارەیا پەیڤان: <strong id="studentWordCount" class="text-goldBright font-mono">0</strong> پەیڤ</span>
+                <span class="text-[10px] text-slate-400">سەحکرنا دادپەروەر: پەیڤێن سەرەکی و واتا</span>
+              </div>
+            </div>
+            <button type="submit" class="btn-gold-gradient w-full py-3 text-xs font-black shadow-lg">
+              تۆمارکرن و چوونا پرسیارا داهاتی ↵
+            </button>
+          </form>
+        `;
+      }
+    }
+
+    function startTimer() {
+      if (quizTimer) clearInterval(quizTimer);
+      if (!activeQuiz || activeQuiz.finished) return;
+
+      const q = activeQuiz.quiz.questions[activeQuiz.idx];
+      activeQuiz.timeLeft = q.sec || 30;
+
+      quizTimer = setInterval(() => {
+        if (!activeQuiz || activeQuiz.finished) { clearInterval(quizTimer); return; }
+        activeQuiz.timeLeft--;
+        const el = document.getElementById('time-display');
+        if (el) el.textContent = activeQuiz.timeLeft;
+
+        if (activeQuiz.timeLeft <= 0) {
+          clearInterval(quizTimer);
+          showToast('دەمێ پرسیارێ ب دووماهی هات!');
+          recordAndAdvance(null);
+        }
+      }, 1000);
+    }
+
+    function handleExamTaka(chosenIdx) {
+      clearInterval(quizTimer);
+      recordAndAdvance(chosenIdx);
+    }
+
+    function toggleExamCheck(idx) {
+      if (selectedCheckboxes.includes(idx)) {
+        selectedCheckboxes = selectedCheckboxes.filter(i => i !== idx);
+      } else {
+        selectedCheckboxes.push(idx);
+        selectedCheckboxes.sort();
+      }
+      const q = activeQuiz.quiz.questions[activeQuiz.idx];
+      const box = document.getElementById('opts-box');
+      if (box) box.innerHTML = renderStudentExamOptions(q);
+    }
+
+    function submitExamChand() {
+      clearInterval(quizTimer);
+      const chosen = [...selectedCheckboxes];
+      selectedCheckboxes = [];
+      recordAndAdvance(chosen);
+    }
+
+    function handleExamTrueFalse(val) {
+      clearInterval(quizTimer);
+      recordAndAdvance(val);
+    }
+
+    function submitExamMatching(e) {
+      if (e) e.preventDefault();
+      clearInterval(quizTimer);
+      const q = activeQuiz.quiz.questions[activeQuiz.idx];
+      const pairs = q.pairs || [];
+      const studentMap = {};
+      pairs.forEach((p, idx) => {
+        const sel = document.getElementById(`student_match_${idx}`);
+        if (sel) {
+          studentMap[p.left] = sel.value;
+        }
+      });
+      recordAndAdvance(studentMap);
+    }
+
+    function submitExamNumerical(e) {
+      if (e) e.preventDefault();
+      clearInterval(quizTimer);
+      const val = document.getElementById('student-numerical')?.value || '';
+      recordAndAdvance(val);
+    }
+
+    function submitExamNivisin(e) {
+      if (e) e.preventDefault();
+      clearInterval(quizTimer);
+      const text = document.getElementById('student-nivisin')?.value || '';
+      recordAndAdvance(text);
+    }
+
+    function recordAndAdvance(answerVal) {
+      const q = activeQuiz.quiz.questions[activeQuiz.idx];
+      const isCorrectCalculated = checkAnswer(q, answerVal);
+      const pts = (isCorrectCalculated === true) ? (q.pts || 10) : 0;
+
+      activeQuiz.studentAnswers.push({
+        qIndex: activeQuiz.idx,
+        answer: answerVal,
+        isCorrectCalculated,
+        pts
+      });
+
+      activeQuiz.idx++;
+      if (activeQuiz.idx >= activeQuiz.quiz.questions.length) {
+        finishExamQuiz();
+      } else {
+        renderRoute();
+        startTimer();
+      }
+    }
+
+    function finishExamQuiz() {
+      if (quizTimer) clearInterval(quizTimer);
+      activeQuiz.finished = true;
+
+      const totalPts = activeQuiz.quiz.questions.reduce((a, b) => a + (b.pts || 10), 0);
+      const autoScore = activeQuiz.studentAnswers.reduce((sum, a) => sum + (a.pts || 0), 0);
+      const sec = Math.max(1, Math.round((Date.now() - activeQuiz.startTime) / 1000));
+      const percent = Math.round((autoScore / totalPts) * 100);
+
+      // Format answers for detailed review on /results & /teacher/grading
+      let hasWrittenQuestions = false;
+      const formattedAnswers = (activeQuiz.studentAnswers || []).map((a, i) => {
+        const q = activeQuiz.quiz.questions[a.qIndex !== undefined ? a.qIndex : i] || {};
+        let expected = q.model_answer || q.correctAnswer || '';
+        if (q.type === 'mcq' || q.type === 'taka') {
+          const opts = q.options || q.opts || [];
+          expected = opts[q.correct !== undefined ? q.correct : q.cor] || '';
+        }
+
+        const isWritten = (q.type === 'writing' || q.type === 'nivisin');
+        if (isWritten) hasWrittenQuestions = true;
+
+        let writtenAnalysis = null;
+        if (isWritten) {
+          writtenAnalysis = calculateWrittenScore(
+            a.answer, 
+            q.model_answer || q.correctAnswer || '', 
+            q.keywords || '', 
+            q.pts || q.points || 10
+          );
+        }
+
+        const autoItemScore = isWritten 
+          ? (writtenAnalysis ? writtenAnalysis.suggestedScore : 0)
+          : (a.isCorrectCalculated === true ? (q.pts || 10) : 0);
+
+        return {
+          question: q.text || `پرسیارا ${i + 1}`,
+          type: q.type || 'mcq',
+          userAns: typeof a.answer === 'object' ? JSON.stringify(a.answer) : String(a.answer || '—'),
+          expected: expected,
+          model_answer: q.model_answer || expected,
+          keywords: q.keywords || '',
+          grading_rubric: q.grading_rubric || '',
+          isCorrect: a.isCorrectCalculated === true,
+          pts: q.pts || q.points || 10,
+          auto_score: autoItemScore,
+          suggestedScore: autoItemScore,
+          explanation: writtenAnalysis ? writtenAnalysis.explanation : '',
+          foundKeywords: writtenAnalysis ? writtenAnalysis.foundKeywords : [],
+          missingKeywords: writtenAnalysis ? writtenAnalysis.missingKeywords : [],
+          similarity: writtenAnalysis ? writtenAnalysis.similarity : 0,
+          wordCount: writtenAnalysis ? writtenAnalysis.wordCount : 0,
+          teacher_comment: '',
+          final_score: autoItemScore,
+          isWritten: isWritten
+        };
+      });
+
+      const totalAutoScore = formattedAnswers.reduce((sum, a) => sum + (a.auto_score !== undefined ? a.auto_score : (a.pts || 0)), 0);
+      const computedPercent = Math.round((totalAutoScore / totalPts) * 100);
+
+      const record = {
+        id: activeQuiz.resultId,
+        submission_id: activeQuiz.resultId,
+        code: activeQuiz.code,
+        exam_id: activeQuiz.code,
+        exam_code_used: activeQuiz.code,
+        fullName: activeQuiz.fullName,
+        student_name: activeQuiz.fullName,
+        name: activeQuiz.fullName,
+        resultCode: activeQuiz.resultCode,
+        result_code: activeQuiz.resultCode,
+        answers: formattedAnswers,
+        auto_score: totalAutoScore,
+        final_score: totalAutoScore,
+        score: `${totalAutoScore}/${totalPts}`,
+        total: totalPts,
+        percent: computedPercent,
+        hasWrittenQuestions: hasWrittenQuestions,
+        status: hasWrittenQuestions ? 'pending_teacher_review' : 'graded',
+        teacher_comment: '',
+        student_question: '',
+        time: `${sec} چرکە`,
+        cheat: activeQuiz.cheats,
+        published: true,
+        date: new Date().toLocaleString('ar-IQ'),
+        created_at: new Date().toLocaleString('ar-IQ')
+      };
+
+      const results = DB.getResults();
+      results.unshift(record);
+      DB.saveResults(results);
+
+      // Save to submissions
+      const rawSubmissions = localStorage.getItem('qk_submissions') || '[]';
+      let submissions = JSON.parse(rawSubmissions);
+      submissions.unshift(record);
+      localStorage.setItem('qk_submissions', JSON.stringify(submissions));
+
+      // POST to /api/save
+      fetch('/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(record)
+      }).catch(() => {});
+
+      renderRoute();
+    }
+
+    function renderExamSubmittedScreen(state) {
+      return `
+        ${renderNav()}
+        <div class="glass-card p-5 sm:p-7 text-center space-y-4">
+          <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-3xl mx-auto flex items-center justify-center">
+            ✅
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white">
+            تاقیکرنا تە ب سەرکەفتی هاتە ناردن
+          </h2>
+          <div class="text-xs text-gray-300 font-semibold">
+            دەستخۆش قوتابیێ هێژا: <span class="text-goldBright font-bold">${state.fullName}</span>
+          </div>
+
+          <!-- Exact Requested Big Banner -->
+          <div class="p-5 sm:p-6 rounded-2xl bg-slate-900 border-2 border-yellow-400 text-center space-y-2.5 my-3 shadow-2xl">
+            <p class="text-emerald-400 font-black text-base sm:text-lg">
+              🎉 ئەنجامێ تە هاتە پاراستن!
+            </p>
+            <p class="text-xs text-slate-300 font-bold">
+              کودێ ئەنجامێ تە:
+            </p>
+            <div class="text-2xl sm:text-3xl font-black font-mono text-yellow-400 tracking-wider bg-slate-950 py-3 px-4 rounded-xl border border-yellow-400/60 select-all">
+              ${state.resultCode}
+            </div>
+            <p class="text-amber-300 text-xs sm:text-sm font-black pt-1">
+              ئەڤێ کودی ب پارێزە بۆ دیتنا ئەنجامێ تە
+            </p>
+
+            ${(state.quiz && state.quiz.questions && state.quiz.questions.some(q => q.type === 'writing' || q.type === 'nivisin')) ? `
+              <div class="p-3 bg-amber-500/20 border border-amber-400/50 rounded-xl text-amber-300 text-xs font-black flex items-center justify-center gap-2">
+                <span>⏳</span>
+                <span>بەرسڤا تە هاتە ناردن بۆ ماموستای بۆ سەحکرنێ</span>
+              </div>
+            ` : ''}
+
+            <p class="text-[11px] text-slate-400">
+              * کۆدێ ئەزموونێ (${state.code}) ئێدی کار ناکەت. تنێ ب ڤی کۆدێ RS دێ شێی ئەنجامێ خۆ ببینی.
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-2 pt-1">
+            <a href="/results?code=${encodeURIComponent(state.resultCode)}" class="btn-gold-gradient flex-1 py-3.5 text-xs text-center font-black">
+              📊 دیتنا ئەنجامی ل لاپەرێ /results
+            </a>
+            <button onclick="navigator.clipboard.writeText('${state.resultCode}'); showToast('کۆدێ ${state.resultCode} هاتە کۆپیکرن!');" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold text-xs text-center border border-slate-700 transition-colors">
+              📋 کۆپیکردنا کۆدی
+            </button>
+            <a href="#/" onclick="activeQuiz = null;" class="py-3.5 px-4 rounded-xl bg-navyLight hover:bg-navyLight/80 text-white font-bold text-xs text-center border border-white/10">
+              لاپەرێ سەرەکی
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function setupAntiCheat() {
+      document.onvisibilitychange = () => {
+        if (document.hidden && activeQuiz && !activeQuiz.finished) {
+          activeQuiz.cheats++;
+          showToast('ئاگەهداری: دەرکەفتن ژ لاپەری هاتە تۆمارکرن!');
+        }
+      };
+      window.onblur = () => {
+        if (activeQuiz && !activeQuiz.finished) {
+          activeQuiz.cheats++;
+        }
+      };
+    }
+
+    // ==========================================
+    // 4. TEACHER DASHBOARD & RESULTS
+    // ==========================================
+    let activeResultTab = 'unpublished';
+    let isTeacherGateUnlocked = sessionStorage.getItem('teacher_gate_unlocked') === 'true';
+    let registrationSuccessMsg = '';
+
+    function checkTeacherGate(e) {
+      if (e) e.preventDefault();
+      const codeInput = document.getElementById('gate-passcode');
+      if (!codeInput) return;
+      const val = codeInput.value.trim().toLowerCase();
+      if (val === 'mamosta' || val === '#mamosta' || val === 'bahdini-mamosta-2026') {
+        isTeacherGateUnlocked = true;
+        sessionStorage.setItem('teacher_gate_unlocked', 'true');
+        showToast('دەروازە ب سەرکەفتی هاتە ڤەکرن 🔓');
+        renderRoute();
+      } else {
+        showToast('کۆدێ دەروازەی خەلەتە! ئەڤە تنێ بۆ مامۆستایانە.');
+      }
+    }
+
+    function renderTeacherRoute() {
+      const teacher = DB.getCurrTeacher();
+      if (teacher) return renderTeacherDashboard(teacher);
+
+      if (!isTeacherGateUnlocked) {
+        return `
+          ${renderNav('mamosta')}
+          <div class="w-full max-w-[500px] mx-auto p-6 glass-card text-white relative">
+            <div class="text-center mb-3">
+              <div class="w-10 h-10 rounded-xl bg-navyDark border-2 border-goldBright mx-auto flex items-center justify-center text-xl mb-1">🔐</div>
+              <h2 class="text-xl font-black">کۆدێ دەروازێ مامۆستا</h2>
+              <p class="text-[11px] text-gray-300 mt-0.5">بۆ دیتنا لاپەرێ تۆمارکرنێ و چوونا ژوور، پێدڤیە کۆدێ تایبەت بنڤیسی</p>
+            </div>
+
+            <form onsubmit="checkTeacherGate(event)">
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="gate-passcode">کۆدێ دەروازەیی</label>
+                <div class="input-icon-wrap">
+                  <input type="password" id="gate-passcode" class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="••••••••" required autocomplete="off" />
+                  <span class="icon" style="right:12px;">🔒</span>
+                </div>
+              </div>
+              <button type="submit" class="btn-gold-gradient w-full h-[52px] text-[16px] font-bold mt-1 flex items-center justify-center gap-2">
+                پێشڤەچوون و ڤەکرن 🔓
+              </button>
+            </form>
+
+            <div class="mt-3 text-center">
+              <a href="#/" class="text-xs text-gray-400 hover:text-white">← زڤڕین بۆ لاپەرێ سەرەکی</a>
+            </div>
+          </div>
+        `;
+      }
+
+      const quizzes = DB.getQuizzes();
+      const lockUntil = DB.getLockTime();
+      const isLocked = lockUntil && lockUntil > Date.now();
+      const leftSec = isLocked ? Math.ceil((lockUntil - Date.now()) / 1000) : 0;
+
+      return `
+        ${renderNav('mamosta')}
+        <div class="w-full max-w-[500px] mx-auto p-6 glass-card text-white relative">
+          <div class="text-center mb-3">
+            <div class="w-10 h-10 rounded-xl bg-navyDark border-2 border-goldBright mx-auto flex items-center justify-center text-xl mb-1">👨‍🏫</div>
+            <h2 class="text-xl font-black">ژوورا مامۆستایان</h2>
+            <p class="text-[11px] text-gray-300 mt-0.5">برێڤەبرنا نمرە، بابەت و تاقیکرنان</p>
+
+            ${isLocked ? `
+              <div class="mt-2 p-2 bg-red-950/80 border border-red-500 rounded-lg text-[10px] font-bold text-red-200">
+                ⚠️ ٣ جارا خەلەت - ٥ خولەکا داهێ قفلە (${leftSec} چرکە مان)
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Tabs for Login / Register -->
+          <div class="flex border-b border-white/10 mb-3">
+            <button onclick="currentTeacherTab='login'; renderRoute();" class="flex-1 py-2 text-center font-black text-xs border-b-2 ${currentTeacherTab === 'login' ? 'border-goldBright text-goldBright bg-white/5' : 'border-transparent text-gray-400 hover:text-white'} rounded-t-lg transition-all">
+              🔑 چوونا ژوور (Login)
+            </button>
+            <button onclick="currentTeacherTab='register'; renderRoute();" class="flex-1 py-2 text-center font-black text-xs border-b-2 ${currentTeacherTab === 'register' ? 'border-goldBright text-goldBright bg-white/5' : 'border-transparent text-gray-400 hover:text-white'} rounded-t-lg transition-all">
+              📝 تومارکرن (Register)
+            </button>
+          </div>
+
+          ${currentTeacherTab === 'login' ? `
+            <!-- Tab A: Login -->
+            ${registrationSuccessMsg ? `
+              <div class="p-2 mb-3 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold text-center">
+                ✅ ${registrationSuccessMsg}
+              </div>
+            ` : ''}
+            <form onsubmit="handleTeacherLogin(event)">
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="login-username">نافێ بکارهێنەر یان ناڤێ خۆ</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="login-username" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="محمد" required />
+                  <span class="icon" style="right:12px;">👤</span>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="login-password">پاسۆرد</label>
+                <div class="input-icon-wrap">
+                  <input type="password" id="login-password" minlength="6" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="••••••" required />
+                  <span class="icon" style="right:12px;">🔒</span>
+                </div>
+              </div>
+              <button type="submit" ${isLocked ? 'disabled' : ''} class="btn-gold-gradient w-full h-[52px] text-[16px] font-bold disabled:opacity-50 flex items-center justify-center gap-2">
+                چوونا ژوور 🔑
+              </button>
+            </form>
+          ` : `
+            <!-- Tab B: Register -->
+            <form onsubmit="handleTeacherRegister(event)">
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="reg-name">نافێ خۆ</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="reg-name" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="محمد" required />
+                  <span class="icon" style="right:12px;">👤</span>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="reg-father">نافێ بابێ</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="reg-father" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="احمد" required />
+                  <span class="icon" style="right:12px;">👥</span>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="reg-subject">بابەت</label>
+                <div class="input-icon-wrap">
+                  <select id="reg-subject" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white appearance-none focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" required>
+                    <option value="بیرکاری">بیرکاری</option>
+                    <option value="زانست">زانست</option>
+                    <option value="کوردی">کوردی</option>
+                    <option value="عەرەبی">عەرەبی</option>
+                    <option value="ئینگلیزی">ئینگلیزی</option>
+                    <option value="مێژوو">مێژوو</option>
+                    <option value="ئایین">ئایین</option>
+                    <option value="کۆمپیوتەر">کۆمپیوتەر</option>
+                    <option value="یێ دی">یێ دی</option>
+                  </select>
+                  <span class="icon" style="right:12px;">📚</span>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="reg-invite">کودێ نهێنی یێ مامۆستا بنڤیسە</label>
+                <div class="input-icon-wrap">
+                  <input type="password" id="reg-invite" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="••••••••" required />
+                  <span class="icon" style="right:12px;">🔑</span>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-[14px] font-bold mb-2 text-yellow-400" for="reg-password">پاسۆرد (٦ پیت کێمتر نەبیت)</label>
+                <div class="input-icon-wrap">
+                  <input type="password" id="reg-password" minlength="6" ${isLocked ? 'disabled' : ''} class="w-full h-[54px] py-4 px-4 text-[16px] rounded-xl bg-slate-800 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400" placeholder="••••••" required />
+                  <span class="icon" style="right:12px;">🔒</span>
+                </div>
+              </div>
+              <button type="submit" ${isLocked ? 'disabled' : ''} class="btn-gold-gradient w-full h-[52px] text-[16px] font-bold disabled:opacity-50 flex items-center justify-center gap-2">
+                تۆمارکرنا هەژمارێ 📝
+              </button>
+            </form>
+          `}
+
+          <div class="mt-3 text-center">
+            <a href="#/" class="text-xs text-gray-400 hover:text-white">← زڤڕین بۆ لاپەرێ سەرەکی</a>
+          </div>
+        </div>
+
+        <!-- Prepared Quizzes list in Teacher area only -->
+        ${quizzes.length > 0 ? `
+          <div class="mt-3 glass-card p-3 text-right">
+            <div class="text-[10px] font-black text-goldBright mb-1.5 flex items-center justify-between">
+              <span>تاقیکرنێن بەرهەڤکری:</span>
+            </div>
+            <div class="space-y-1.5">
+              ${quizzes.map(q => `
+                <div class="flex items-center justify-between p-2 rounded-xl bg-navyDark/60 border border-gold/10 hover:border-goldBright transition-all text-right">
+                  <div>
+                    <div class="text-[11px] font-black text-white">${q.title || q.name}</div>
+                    <div class="text-[9px] font-mono text-gray-400">${q.code} • ${q.questions.length} پرسیار</div>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <button onclick="playPreparedQuiz('${q.code}')" class="px-2 py-1 rounded-lg bg-goldBright hover:bg-goldBright/90 text-navy font-black text-[9px] transition-all shadow-sm">
+                      📝 ئەنجامدان
+                    </button>
+                    <button onclick="deleteQuiz('${q.code}')" class="px-1.5 py-1 rounded-lg bg-red-950/40 border border-red-500/30 hover:border-red-500 text-red-400 font-bold text-[9px] transition-all">
+                      🗑️ ژێبرن
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    function handleTeacherRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const father = document.getElementById('reg-father').value.trim();
+      const subject = document.getElementById('reg-subject').value.trim();
+      const invite = document.getElementById('reg-invite').value.trim();
+      const pass = document.getElementById('reg-password').value.trim();
+
+      const inviteLower = invite.toLowerCase();
+      if (inviteLower !== MASTER_CODE.toLowerCase() && inviteLower !== 'mamosta' && inviteLower !== '#mamosta') {
+        showToast('کودێ نهێنی خەلەتە - ئەو تنێ ل دەف مامۆستایانە');
+        return;
+      }
+
+      if (pass.length < 6) {
+        showToast('پەیڤا نهێنی پێتڤیە ل ٦ پیتان کێمتر نەبیت');
+        return;
+      }
+
+      const teachers = DB.getTeachers();
+      if (teachers.some(t => t.user && t.user.toLowerCase() === name.toLowerCase())) {
+        showToast('ئەڤ ناڤە یێ تۆمارکریە! ناڤەکێ دی هەلبژێرە.');
+        return;
+      }
+
+      const fullName = `${name} ${father}`;
+      const newTeacher = {
+        id: 'MAM_' + Date.now().toString().slice(-4),
+        user: name,
+        name: fullName,
+        fullName: fullName,
+        pass: pass,
+        subject: subject
+      };
+
+      teachers.push(newTeacher);
+      DB.saveTeachers(teachers);
+      DB.clearFails();
+      
+      // Notify registration was successful, set green notice text, and switch to Login tab
+      registrationSuccessMsg = `تۆمارکرن ب سەرکەفتی هاتە ئەنجامدان! نها ناڤێ خۆ (${name}) یان ناڤێ سێیانی ل دەک پاودێ بنڤیسە بۆ چوونا ژوور ل بەشێ چوونا ژوورێ.`;
+      showToast('هەژمارا تە ب سەرکەفتی هاتیە تۆمارکرن 👨‍🏫');
+      currentTeacherTab = 'login';
+      renderRoute();
+    }
+
+    function handleTeacherLogin(e) {
+      e.preventDefault();
+      const userVal = document.getElementById('login-username').value.trim();
+      const passVal = document.getElementById('login-password').value.trim();
+
+      const lockUntil = DB.getLockTime();
+      if (lockUntil && lockUntil > Date.now()) {
+        showToast('٣ جارا خەلەت - ٥ خولەکا داهێ قفلە');
+        return;
+      }
+
+      const teachers = DB.getTeachers();
+      const teacher = teachers.find(t => 
+        (t.user && t.user.toLowerCase() === userVal.toLowerCase()) ||
+        (t.fullName && t.fullName.toLowerCase() === userVal.toLowerCase()) ||
+        (t.name && t.name.toLowerCase() === userVal.toLowerCase())
+      );
+
+      if (!teacher) {
+        showToast('ئەڤ مامۆستایە نەهاتیە تۆمارکرن!');
+        return;
+      }
+
+      if (teacher.pass !== passVal) {
+        const fails = DB.getFails() + 1;
+        DB.setFails(fails);
+        if (fails >= 3) {
+          DB.setLockTime(Date.now() + LOCK_MINUTES * 60 * 1000);
+          showToast('٣ جارا خەلەت - ٥ خولەکا داهێ قفلە');
+          renderRoute();
+        } else {
+          showToast(`پەیڤا نهێنی یا خەلەتە! مانا سەربوردان: ${3 - fails}`);
+        }
+        return;
+      }
+
+      DB.clearFails();
+      registrationSuccessMsg = ''; // Reset registration notice on login
+      showToast('ب خێرهاتیەڤە مامۆستا ' + (teacher.fullName || teacher.name));
+      DB.setCurrTeacher(teacher);
+      currentDashboardView = 'my_quizzes';
+      renderRoute();
+    }
+
+    function renderTeacherDashboard(teacher) {
+      const myQuizzes = DB.getQuizzes().filter(q => q.teacherId === teacher.id || q.teacherId === 'MAM01');
+      const numTeachers = DB.getTeachers().length;
+      const numQuizzes = DB.getQuizzes().length;
+      const numStudents = DB.getResults().length;
+
+      if (builderDraft.length === 0) {
+        builderDraft = [{
+          type: 'taka',
+          text: '',
+          opts: ['', '', '', ''],
+          cor: 0,
+          pts: 10,
+          sec: 30
+        }];
+      }
+
+      let subViewHTML = '';
+      if (currentDashboardView === 'create_quiz') {
+        if (createdQuizSuccess) {
+          subViewHTML = `
+            <!-- BIG SUCCESS CARD -->
+            <div class="glass-card p-6 text-center space-y-4">
+              <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-3xl mx-auto flex items-center justify-center animate-bounce">
+                ✅
+              </div>
+              <h2 class="text-xl sm:text-2xl font-black text-white">
+                تاقیکرن هاتە دروستکرن!
+              </h2>
+              <p class="text-xs text-gray-300 font-semibold">
+                تاقیکرن ب سەرکەفتیانە هاتە تۆمارکرن و بەرهەڤە بۆ ناردنێ بۆ قوتابیان
+              </p>
+
+              <div class="p-5 rounded-2xl bg-navyDark/80 border border-gold/40 text-xs text-white my-4 space-y-2 text-center">
+                <div class="font-bold text-gray-400">کودا تاقیکرنێ (Quiz Code):</div>
+                <div class="text-2xl font-black font-mono text-goldBright tracking-widest">${createdQuizSuccess.code}</div>
+                <div class="text-[11px] text-gray-400">بابەت: ${createdQuizSuccess.subject || 'بیرکاری'}</div>
+              </div>
+
+              <div class="flex flex-col gap-2.5 pt-2">
+                <button onclick="copyQuizLink('${createdQuizSuccess.code}')" class="btn-gold-gradient py-3 text-xs font-black shadow-md flex items-center justify-center gap-1.5 w-full">
+                  <span>📋</span> <span>کۆپی بکە</span>
+                </button>
+                <a href="https://wa.me/?text=${encodeURIComponent('کودا تاقیکرنێ: ' + createdQuizSuccess.code + '\nهیڤیە ڤێ تاقیکرنێ ئەنجام بدەن.')}" target="_blank" class="py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs text-center flex items-center justify-center gap-1.5 transition-all w-full">
+                  <span>📤</span> <span>فرێکە ب واتساپ</span>
+                </a>
+                <button onclick="createdQuizSuccess = null; currentDashboardView = 'my_quizzes'; renderRoute();" class="py-3 px-4 rounded-xl bg-navyLight hover:bg-navyLight/80 text-white font-bold text-xs text-center border border-white/10 w-full">
+                  زڤڕین بۆ لیستێ ↩
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          subViewHTML = `
+            <!-- Quiz Builder Section -->
+            <div class="glass-card p-6" id="b-section">
+              <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+                <h2 class="text-base font-black text-white">➕ دروست بکە: تاقیکرنا نوی</h2>
+                <span class="text-xs text-goldBright font-bold">٤ جۆرێن پرسیاران</span>
+              </div>
+
+              <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block text-xs font-black text-goldBright mb-1.5">ناڤێ تاقیکرنێ *</label>
+                    <input type="text" id="b-title" class="qk-input-2026" placeholder="بۆ نموونە: تاقیکرنا مێژوویێ" required />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-black text-goldBright mb-1.5">بابەتێ تاقیکرنێ</label>
+                    <div class="input-icon-wrap">
+                      <select id="b-subject" class="qk-input-2026 appearance-none bg-navy text-white !py-2.5">
+                        <option value="بیرکاری" ${teacher.subject === 'بیرکاری' ? 'selected' : ''}>بیرکاری</option>
+                        <option value="زانست" ${teacher.subject === 'زانست' ? 'selected' : ''}>زانست</option>
+                        <option value="کوردی" ${teacher.subject === 'کوردی' ? 'selected' : ''}>کوردی</option>
+                        <option value="عەرەبی" ${teacher.subject === 'عەرەبی' ? 'selected' : ''}>عەرەبی</option>
+                        <option value="ئینگلیزی" ${teacher.subject === 'ئینگلیزی' ? 'selected' : ''}>ئینگلیزی</option>
+                        <option value="مێژوو" ${teacher.subject === 'مێژوو' ? 'selected' : ''}>مێژوو</option>
+                        <option value="ئایین" ${teacher.subject === 'ئایین' ? 'selected' : ''}>ئایین</option>
+                        <option value="کۆمپیوتەر" ${teacher.subject === 'کۆمپیوتەر' ? 'selected' : ''}>کۆمپیوتەر</option>
+                        <option value="یێ دی" ${teacher.subject === 'یێ دی' ? 'selected' : ''}>یێ دی</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-black text-goldBright mb-1.5">دەمێ داخستنێ (ئیختیاری)</label>
+                    <input type="datetime-local" id="b-closeAt" class="qk-input-2026 text-center !py-2.5 bg-navy text-white font-mono" />
+                  </div>
+                </div>
+
+                <div class="space-y-4">
+                  ${builderDraft.map((q, idx) => renderBuilderItem(q, idx)).join('')}
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                  <button onclick="builderDraft.push({type:'taka', text:'', opts:['','','',''], cor:0, pts:10, sec:30}); renderRoute();" class="text-xs font-black py-2.5 px-4 rounded-xl bg-navyDark text-white border border-white/20">
+                    + پرسیارەکا دی
+                  </button>
+                  <button onclick="saveCreatedQuiz('${teacher.id}')" class="btn-gold-gradient flex-1 py-3 text-sm">
+                    پاراستن و چێکرنا تاقیکرنێ ✨
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      } else if (currentDashboardView === 'my_quizzes') {
+        subViewHTML = `
+          <!-- My Quizzes Table -->
+          <div class="glass-card p-6">
+            <h3 class="text-base font-black text-white mb-3">📋 تاقیکرنێن من (${myQuizzes.length})</h3>
+            ${myQuizzes.length === 0 ? `
+              <div class="text-center py-8 text-gray-400 text-xs">چ تاقیکرن نەهاتینە دروست کرن</div>
+            ` : `
+              <div class="overflow-x-auto border border-white/10 rounded-2xl text-xs">
+                <table class="w-full text-right">
+                  <thead class="bg-navyDark/80 text-goldBright font-black border-b border-white/10">
+                    <tr>
+                      <th class="p-3 text-right">ناڤ</th>
+                      <th class="p-3 text-right">بابەت</th>
+                      <th class="p-3 text-right">کود</th>
+                      <th class="p-3 text-right">پرسیار</th>
+                      <th class="p-3 text-center">دۆخ</th>
+                      <th class="p-3 text-center">کردار</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-white/5 font-semibold text-white">
+                    ${myQuizzes.map(q => {
+                      const res = DB.getResults().filter(r => r.code === q.code);
+                      const isClosed = q.isClosed || (q.closeAt && new Date() > new Date(q.closeAt));
+                      return `
+                        <tr class="hover:bg-white/5">
+                          <td class="p-3 font-bold text-white max-w-[120px] truncate">${q.title || q.name}</td>
+                          <td class="p-3 text-gray-300">${q.subject || 'بیرکاری'}</td>
+                          <td class="p-3 font-mono font-black text-goldBright">${q.code}</td>
+                          <td class="p-3 text-gray-300">${q.questions.length}</td>
+                          <td class="p-3 text-center">
+                            <span class="px-2 py-0.5 rounded text-[10px] ${isClosed ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}">
+                              ${isClosed ? '🔒 داخستی' : '🔓 ڤەکری'}
+                            </span>
+                          </td>
+                          <td class="p-3 text-center">
+                            <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                              <a href="#/mamosta-veşarti-2026/results/${q.code}" class="p-2 rounded-lg bg-goldBright text-navy font-bold flex items-center justify-center gap-1 shrink-0" title="👁️ ئەنجام">
+                                👁️ <span class="hidden sm:inline">ئەنجام (${res.length})</span>
+                              </a>
+                              <button onclick="toggleQuizStatus('${q.code}')" class="p-2 rounded-lg bg-navyLight border border-white/10 hover:border-goldBright text-white shrink-0 font-bold" title="${isClosed ? '🔓 ڤەکرن' : '🔒 داخستن'}">
+                                ${isClosed ? '🔓 ڤەکرن' : '🔒 داخستن'}
+                              </button>
+                              <button onclick="deleteQuiz('${q.code}')" class="p-2 rounded-lg bg-red-950/40 border border-red-500/20 hover:border-red-500 text-red-400 shrink-0 font-bold" title="🗑️ ژێبرن">
+                                🗑️ <span class="hidden sm:inline">ژێبرن</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            `}
+          </div>
+        `;
+      } else if (currentDashboardView === 'all_results') {
+        subViewHTML = `
+          <!-- All Results Summary -->
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2 border-b border-white/10 pb-3">
+              <h3 class="text-base font-black text-white">📊 نمرە و ئەنجامێن قوتابیان</h3>
+              <button onclick="exportAllResultsToCSV()" class="btn-gold-gradient text-xs py-2 px-3 shadow-sm font-black flex items-center gap-1.5 shrink-0">
+                <span>📤</span> <span>هەمی ئەنجامان Export بکە Excel</span>
+              </button>
+            </div>
+            ${myQuizzes.length === 0 ? `
+              <div class="text-center py-8 text-gray-400 text-xs">چ تاقیکرن نینن بۆ دیتنا ئەنجامان</div>
+            ` : `
+              <div class="space-y-3.5">
+                ${myQuizzes.map(q => {
+                  const res = DB.getResults().filter(r => r.code === q.code);
+                  const unpub = res.filter(r => !r.published).length;
+                  return `
+                    <div class="p-4 rounded-2xl bg-navyDark/80 border border-gold/30 flex items-center justify-between flex-wrap gap-2">
+                      <div>
+                        <div class="font-black text-white text-xs">${q.title}</div>
+                        <div class="text-[10px] text-gray-400 font-mono mt-0.5">کۆد: ${q.code} • بابەت: ${q.subject || 'بیرکاری'}</div>
+                        <div class="text-[11px] mt-1.5 flex items-center gap-2">
+                          <span class="text-gray-300">بەشداربووی: <strong>${res.length}</strong></span>
+                          ${unpub > 0 ? `<span class="text-amber-400 font-bold">(${unpub} نەگەهاندی)</span>` : '<span class="text-emerald-400 font-bold">(هەمی راگەهاندی ✓)</span>'}
+                        </div>
+                      </div>
+                      <a href="#/mamosta-veşarti-2026/results/${q.code}" class="btn-gold-gradient text-xs py-2 px-3 shadow-sm font-black">
+                        دیتن و برێڤەبرن 📊
+                      </a>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </div>
+        `;
+      }
+
+      return `
+        ${renderNav('mamosta')}
+        <div class="glass-card p-3 mb-3 border-gold/40 flex items-center justify-between flex-wrap gap-2 text-white">
+          <div>
+            <div class="text-[9px] font-black text-goldBright uppercase">داشبۆردا مامۆستایان</div>
+            <div class="text-sm font-black text-white mt-0.5">
+              بخێرهاتی مامۆستا <span class="text-goldBright">${teacher.fullName || teacher.name}</span>
+            </div>
+            <div class="text-[9px] text-gray-400 font-mono mt-0.5">ناسنامە: ${teacher.id} • بابەت: ${teacher.subject || 'بیرکاری'}</div>
+          </div>
+          <div class="bg-black/60 px-2.5 py-1.5 rounded-xl flex gap-3 text-[11px] border border-white/10 text-white font-bold shrink-0">
+            <span>👨‍🏫 مامۆستا: <b id="countTeachers">${numTeachers}</b></span>
+            <span>📝 تاقیکرن: <b id="countQuizzes">${numQuizzes}</b></span>
+            <span>👨‍🎓 قوتابی: <b id="countStudents">${numStudents}</b></span>
+          </div>
+        </div>
+
+        <!-- Dashboard Tabs Selector -->
+        <div class="grid grid-cols-3 gap-1.5 mb-3">
+          <button onclick="currentDashboardView='create_quiz'; createdQuizSuccess=null; renderRoute();" class="py-2 px-1 rounded-xl text-center font-black text-[11px] transition-all flex items-center justify-center gap-1 border ${currentDashboardView === 'create_quiz' ? 'bg-goldBright text-navy border-goldBright shadow-md' : 'bg-navyLight/70 text-gray-300 border-gold/20 hover:text-white'}">
+            <span>➕</span> <span class="truncate">تاقیکرنا نوی</span>
+          </button>
+          <button onclick="currentDashboardView='my_quizzes'; renderRoute();" class="py-2 px-1 rounded-xl text-center font-black text-[11px] transition-all flex items-center justify-center gap-1 border ${currentDashboardView === 'my_quizzes' ? 'bg-goldBright text-navy border-goldBright shadow-md' : 'bg-navyLight/70 text-gray-300 border-gold/20 hover:text-white'}">
+            <span>📋</span> <span class="truncate">تاقیکرنێن من</span>
+          </button>
+          <button onclick="currentDashboardView='all_results'; renderRoute();" class="py-2 px-1 rounded-xl text-center font-black text-[11px] transition-all flex items-center justify-center gap-1 border ${currentDashboardView === 'all_results' ? 'bg-goldBright text-navy border-goldBright shadow-md' : 'bg-navyLight/70 text-gray-300 border-gold/20 hover:text-white'}">
+            <span>📊</span> <span class="truncate">ئەنجام</span>
+          </button>
+        </div>
+
+        <!-- Rendered Subview -->
+        ${subViewHTML}
+      `;
+    }
+
+    function renderBuilderItem(q, idx) {
+      return `
+        <div class="p-4 rounded-2xl bg-navyDark/90 border border-gold/30 border-r-4 border-r-goldBright text-xs">
+          <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+            <span class="font-black text-goldBright">پرسیارا ${idx + 1}</span>
+            <div class="flex items-center gap-1.5">
+              <select onchange="updateQType(${idx}, this.value)" class="p-1 rounded-lg border bg-navy text-white text-xs">
+                <option value="taka" ${q.type === 'taka' ? 'selected' : ''}>تاکە هەلبژارتن</option>
+                <option value="chand" ${q.type === 'chand' ? 'selected' : ''}>چەند هەلبژارتن</option>
+                <option value="rast" ${q.type === 'rast' ? 'selected' : ''}>راست/خەلەت</option>
+                <option value="nivisin" ${q.type === 'nivisin' ? 'selected' : ''}>نڤیسینا چەند ڕێزی</option>
+              </select>
+              <span>نمرە:</span>
+              <input type="number" value="${q.pts || 10}" onchange="builderDraft[${idx}].pts = parseInt(this.value)||10" class="w-12 p-1 text-center rounded bg-navy text-white border" />
+              <span>چرکە:</span>
+              <input type="number" value="${q.sec || 30}" onchange="builderDraft[${idx}].sec = parseInt(this.value)||30" class="w-12 p-1 text-center rounded bg-navy text-white border" />
+              ${builderDraft.length > 1 ? `<button onclick="builderDraft.splice(${idx}, 1); renderRoute();" class="text-red-400 font-black mr-1">ژێبرن</button>` : ''}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <input type="text" value="${q.text}" oninput="builderDraft[${idx}].text = this.value" placeholder="دەقێ پرسیارێ بنڤیسە..." class="qk-input-2026 !p-2.5 text-xs font-bold" />
+          </div>
+
+          ${renderTypeSpecificBuilder(q, idx)}
+        </div>
+      `;
+    }
+
+    function updateQType(idx, type) {
+      if (type === 'taka') builderDraft[idx] = { type, text: builderDraft[idx].text, opts: ['', '', '', ''], cor: 0, pts: 10, sec: 30 };
+      else if (type === 'chand') builderDraft[idx] = { type, text: builderDraft[idx].text, opts: ['', '', '', ''], cor: [0], pts: 10, sec: 30 };
+      else if (type === 'rast') builderDraft[idx] = { type, text: builderDraft[idx].text, cor: true, pts: 10, sec: 20 };
+      else if (type === 'nivisin') builderDraft[idx] = { type, mode: 'keyword', text: builderDraft[idx].text, keywords: ['کوردستان'], required: 1, pts: 15, sec: 60 };
+      renderRoute();
+    }
+
+    function renderTypeSpecificBuilder(q, idx) {
+      if (q.type === 'taka') {
+        return `
+          <div class="space-y-1.5">
+            <div class="text-[11px] text-gray-400 font-bold">هەلبژارتن (خالا بەرسڤا دروست دیاربکە):</div>
+            ${[0, 1, 2, 3].map(i => `
+              <div class="flex items-center gap-2">
+                <input type="radio" name="rad_${idx}" ${q.cor === i ? 'checked' : ''} onchange="builderDraft[${idx}].cor = ${i}" />
+                <input type="text" value="${q.opts[i] || ''}" oninput="builderDraft[${idx}].opts[${i}] = this.value" placeholder="هەلبژارتنا ${i+1}" class="qk-input-2026 !p-2 text-xs flex-1" />
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+      if (q.type === 'chand') {
+        const cors = q.cor || [];
+        return `
+          <div class="space-y-1.5">
+            <div class="text-[11px] text-gray-400 font-bold">چەند هەلبژارتن (بەرسڤێن دروست تیک بکە):</div>
+            ${[0, 1, 2, 3].map(i => `
+              <div class="flex items-center gap-2">
+                <input type="checkbox" ${cors.includes(i) ? 'checked' : ''} onchange="toggleBuilderCheck(${idx}, ${i})" />
+                <input type="text" value="${q.opts[i] || ''}" oninput="builderDraft[${idx}].opts[${i}] = this.value" placeholder="هەلبژارتنا ${i+1}" class="qk-input-2026 !p-2 text-xs flex-1" />
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+      if (q.type === 'rast') {
+        return `
+          <div class="flex items-center gap-4 text-xs font-black">
+            <span>بەرسڤا دروست:</span>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" name="rast_${idx}" ${q.cor === true ? 'checked' : ''} onchange="builderDraft[${idx}].cor = true" />
+              <span class="text-emerald-400">راست ✓</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" name="rast_${idx}" ${q.cor === false ? 'checked' : ''} onchange="builderDraft[${idx}].cor = false" />
+              <span class="text-red-400">خەلەت ✗</span>
+            </label>
+          </div>
+        `;
+      }
+      if (q.type === 'nivisin') {
+        return `
+          <div class="bg-navy p-3 rounded-xl border border-white/10 text-xs space-y-2">
+            <div class="font-bold text-goldBright">شێوازێ نمرەدانێ:</div>
+            <div class="flex gap-4">
+              <label class="flex items-center gap-1.5 cursor-pointer">
+                <input type="radio" name="mode_${idx}" ${q.mode === 'keyword' ? 'checked' : ''} onchange="builderDraft[${idx}].mode = 'keyword'; renderRoute();" />
+                <span>ب پەیڤێن کلیلی (ئۆتۆماتیک)</span>
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer">
+                <input type="radio" name="mode_${idx}" ${q.mode === 'manual' ? 'checked' : ''} onchange="builderDraft[${idx}].mode = 'manual'; renderRoute();" />
+                <span>ب دەستی</span>
+              </label>
+            </div>
+            ${q.mode === 'keyword' ? `
+              <div class="pt-1 space-y-1.5">
+                <input type="text" value="${(q.keywords || []).join(', ')}" oninput="builderDraft[${idx}].keywords = this.value.split(',').map(s=>s.trim()).filter(Boolean)" placeholder="پەیڤ: گارە, کوردستان" class="qk-input-2026 !p-2 text-xs" />
+                <div class="flex items-center gap-2">
+                  <span>چەند پەیڤ دڤێت هەبن؟</span>
+                  <input type="number" min="1" value="${q.required || 1}" onchange="builderDraft[${idx}].required = parseInt(this.value)||1" class="w-16 p-1 border rounded bg-navy text-white text-xs text-center" />
+                </div>
+              </div>
+            ` : '<div class="text-[11px] text-gray-400">مامۆستا پشتی نمرێ ددەت.</div>'}
+          </div>
+        `;
+      }
+    }
+
+    function toggleBuilderCheck(qIdx, optIdx) {
+      let cors = builderDraft[qIdx].cor || [];
+      if (cors.includes(optIdx)) cors = cors.filter(x => x !== optIdx);
+      else cors.push(optIdx);
+      if (cors.length === 0) cors = [optIdx];
+      builderDraft[qIdx].cor = cors;
+    }
+
+    function saveCreatedQuiz(teacherId) {
+      const title = document.getElementById('b-title')?.value.trim();
+      if (!title) { showToast('هیڤیە ناڤونیشانێ تاقیکرنێ بنڤیسە'); return; }
+      
+      const subject = document.getElementById('b-subject')?.value || 'بیرکاری';
+      const closeAt = document.getElementById('b-closeAt')?.value || null;
+
+      // Generate a nice random code e.g. QZ-A4D2X
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let randomCode = '';
+      for (let i = 0; i < 5; i++) {
+        randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      const code = 'QZ-' + randomCode;
+
+      const newQuiz = { 
+        code, 
+        teacherId, 
+        title, 
+        name: title,
+        subject,
+        questions: JSON.parse(JSON.stringify(builderDraft)),
+        date: new Date().toLocaleDateString('ku-IQ'),
+        created: new Date().toISOString(),
+        closeAt,
+        isClosed: false
+      };
+
+      const quizzes = DB.getQuizzes();
+      quizzes.unshift(newQuiz);
+      DB.saveQuizzes(quizzes);
+
+      builderDraft = [];
+      createdQuizSuccess = newQuiz;
+      showToast('تاقیکرن ب سەرکەفتیانە هاتە دروست کرن: ' + code);
+      renderRoute();
+    }
+
+    function copyQuizLink(code) {
+      const url = window.location.origin + window.location.pathname + '#/quiz/' + code;
+      navigator.clipboard.writeText(url).then(() => showToast('لینکا تاقیکرنێ هاتە کۆپیکرن!'));
+    }
+
+    function toggleQuizStatus(code) {
+      const quizzes = DB.getQuizzes();
+      const q = quizzes.find(x => x.code === code);
+      if (q) {
+        q.isClosed = !q.isClosed;
+        DB.saveQuizzes(quizzes);
+        showToast(q.isClosed ? 'تاقیکرن هاتە داخستن 🔒' : 'تاقیکرن هاتە ڤەکرن 🔓');
+        renderRoute();
+      }
+    }
+
+    function deleteQuiz(code) {
+      if (!confirm('دڵنیای دێ ژێبەی؟ هەمی ئەنجام دێ چن!')) return;
+      DB.saveQuizzes(DB.getQuizzes().filter(x => x.code !== code));
+      DB.saveResults(DB.getResults().filter(x => x.code !== code));
+      showToast('تاقیکرن و ئەنجامێن وێ هاتنە ژێبرن 🗑️');
+      renderRoute();
+    }
+
+    // Teacher Results View with WhatsApp Copy
+    function renderTeacherResultsPage(code) {
+      const quiz = DB.getQuizzes().find(q => q.code === code) || { title: 'تاقیکرن', code, questions: [] };
+      const allResults = DB.getResults().filter(r => r.code === code);
+      const unpub = allResults.filter(r => !r.published);
+      const pub = allResults.filter(r => r.published);
+
+      return `
+        ${renderNav('home')}
+        <div class="glass-card p-6 mb-6">
+          <div class="flex items-center justify-between pb-4 border-b border-white/10 flex-wrap gap-2">
+            <div>
+              <a href="#mamosta-veşarti-2026" class="text-xs font-black text-goldBright hover:underline">← زڤڕین بۆ داشبۆردێ</a>
+              <h1 class="text-base font-black text-white mt-1">${quiz.title}</h1>
+              <div class="text-xs font-mono text-gray-400">کۆد: ${quiz.code}</div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <a href="/teacher/grading" class="btn-gold-gradient text-xs py-2 px-3 shadow-sm flex items-center gap-1 font-black">
+                <span>✍️</span><span>داشبۆردا نمرەدانێ (Grading)</span>
+              </a>
+              <button onclick="copyAllStudentResultCodes('${code}')" class="py-2 px-3 rounded-xl bg-slate-800 text-yellow-300 border border-slate-700 text-xs font-bold" title="کۆپیکرن بۆ واتسئاپێ">
+                📋 کۆپیکرنا کودێن ئەنجامان
+              </button>
+              <button onclick="publishAllResults('${code}')" class="text-xs font-black py-2 px-3 rounded-xl bg-navyDark text-white border border-white/20">
+                📢 راگەهاندنا هەمیا
+              </button>
+            </div>
+          </div>
+
+          <div class="flex border-b border-white/10 mt-4 mb-4">
+            <button onclick="activeResultTab='unpublished'; renderRoute();" class="py-2 px-3 font-black text-xs border-b-2 ${activeResultTab === 'unpublished' ? 'border-goldBright text-goldBright' : 'border-transparent text-gray-400'}">
+              ⏳ چاڤەڕێی نمرەدانێ (${unpub.length})
+            </button>
+            <button onclick="activeResultTab='published'; renderRoute();" class="py-2 px-3 font-black text-xs border-b-2 ${activeResultTab === 'published' ? 'border-goldBright text-goldBright' : 'border-transparent text-gray-400'}">
+              ✅ راگەهاندی (${pub.length})
+            </button>
+          </div>
+
+          ${renderResultsTable(activeResultTab === 'unpublished' ? unpub : pub, quiz)}
+        </div>
+      `;
+    }
+
+    function renderResultsTable(list, quiz) {
+      if (list.length === 0) return '<div class="text-center py-8 text-gray-400 text-xs">چ ئەنجام ل ڤێرێ نینن</div>';
+
+      return `
+        <div class="overflow-x-auto border border-white/10 rounded-2xl text-xs">
+          <table class="w-full text-right">
+            <thead class="bg-navyDark/80 text-goldBright font-black border-b border-white/10">
+              <tr>
+                <th class="p-3">نافێ قوتابی</th>
+                <th class="p-3">کودێ ئەنجامێ</th>
+                <th class="p-3">نمرە</th>
+                <th class="p-3">کردار</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+              ${list.map(r => `
+                <tr class="hover:bg-white/5">
+                  <td class="p-3 font-bold text-white">${r.fullName || r.name}</td>
+                  <td class="p-3 font-mono font-black text-goldBright">${r.resultCode || ('RS-' + r.studentCode)}</td>
+                  <td class="p-3 font-black text-white">${r.score} / ${r.total}</td>
+                  <td class="p-3">
+                    ${!r.published ? `
+                      <button onclick="publishSingleResult('${r.id}')" class="px-2.5 py-1 rounded-lg bg-goldBright text-navy font-black text-[11px]">
+                        📢 راگەهاندن
+                      </button>
+                    ` : '<span class="text-emerald-400 font-bold">راگەهاندی ✓</span>'}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function copyAllStudentResultCodes(code) {
+      const results = DB.getResults().filter(r => r.code === code);
+      if (results.length === 0) { showToast('چ قوتابی نینن!'); return; }
+
+      let msg = `📋 کودێن ئەنجامێن تاقیکرنێ (${code}):\n`;
+      results.forEach(r => {
+        const rc = r.resultCode || ('RS-' + r.studentCode);
+        msg += `قوتابی ${r.fullName || r.name}: کودێ ئەنجام ${rc}\n`;
+      });
+
+      navigator.clipboard.writeText(msg).then(() => {
+        showToast('کودێن ئەنجامان هاتینە کۆپیکرن بۆ واتسئاپێ!');
+      });
+    }
+
+    function publishSingleResult(resultId) {
+      const results = DB.getResults();
+      const r = results.find(x => x.id === resultId);
+      if (r) {
+        r.published = true;
+        DB.saveResults(results);
+        showToast('ئەنجام هاتە راگەهاندن!');
+        renderRoute();
+      }
+    }
+
+    function publishAllResults(code) {
+      const results = DB.getResults();
+      results.forEach(r => { if (r.code === code) r.published = true; });
+      DB.saveResults(results);
+      showToast('هەمی ئەنجام هاتینە راگەهاندن!');
+      activeResultTab = 'published';
+      renderRoute();
+    }
+
+    function exportAllResultsToCSV() {
+      const results = DB.getResults();
+      if (results.length === 0) {
+        showToast('چ ئەنجام د بەردەست نینن بۆ ناردنێ!');
+        return;
+      }
+
+      const quizzes = DB.getQuizzes();
+      const headers = ['ناڤێ تاقیکرنێ', 'کۆدا تاقیکرنێ', 'ناڤێ قوتابی یێ سیانی', 'کۆدا ئەنجامی', 'نمرە', 'نمرەیا گشتی', 'دەمی', 'چاڤدێری (دەرکەفتن)', 'بەروار'];
+      
+      let csvContent = '\uFEFF'; // UTF-8 BOM for Excel Kurdish rendering
+      csvContent += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(',') + '\n';
+
+      results.forEach(r => {
+        const quiz = quizzes.find(q => q.code === r.code) || {};
+        const quizTitle = quiz.title || quiz.name || 'تاقیکرن';
+        const code = r.code || '';
+        const name = r.fullName || r.name || '';
+        const rc = r.resultCode || ('RS-' + r.studentCode);
+        const score = r.score !== undefined ? r.score : 0;
+        const total = r.total !== undefined ? r.total : 100;
+        const timeTaken = r.time || '';
+        const cheatCount = r.cheat !== undefined ? r.cheat : 0;
+        const date = r.date || '';
+
+        const row = [
+          quizTitle,
+          code,
+          name,
+          rc,
+          score,
+          total,
+          timeTaken,
+          cheatCount,
+          date
+        ];
+
+        csvContent += row.map(val => `"${String(val).replace(/"/g, '""')}"`).join(',') + '\n';
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `QuizKurd_All_Results_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('📤 ئەنجام ب سەرکەفتی هاتنە هەناردەکرن!');
+    }
+
+    function updateHeaderLogout() {
+      const teacher = DB.getCurrTeacher();
+      const wrap = document.getElementById('header-logout-wrap');
+      if (wrap) {
+        if (teacher) {
+          wrap.innerHTML = `<button onclick="logoutTeacher()" class="text-[10px] font-bold px-2.5 py-1.5 bg-navyDark border border-white/10 rounded-xl text-gray-400 hover:text-white transition-all">ده‌ربازبوون</button>`;
+        } else {
+          wrap.innerHTML = `<div class="w-2"></div>`;
+        }
+      }
+    }
+
+    function showPage(page) {
+      const secHome = document.getElementById('sec-home');
+      const secEncam = document.getElementById('sec-encam');
+      const secMamosta = document.getElementById('sec-mamosta');
+      const secQuiz = document.getElementById('sec-quiz');
+      const header = document.querySelector('header');
+
+      if (secHome) secHome.classList.add('hidden');
+      if (secEncam) secEncam.classList.add('hidden');
+      if (secMamosta) secMamosta.classList.add('hidden');
+      if (secQuiz) secQuiz.classList.add('hidden');
+
+      // Update tab buttons to inactive state exactly as required in request 10
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.className = "tab-btn text-gray-400 px-3 py-1.5 rounded-xl text-xs font-black transition-all hover:text-goldBright";
+      });
+
+      if (page === 'mamosta') {
+        if (secMamosta) secMamosta.classList.remove('hidden');
+        const btn = document.getElementById('btn-mamosta');
+        if (btn) btn.className = "tab-btn bg-yellow-400 text-black px-3 py-1.5 rounded-xl text-xs font-black transition-all shadow-sm";
+        if (header) header.classList.remove('hidden');
+      } else if (page === 'encam') {
+        if (secEncam) secEncam.classList.remove('hidden');
+        const btn = document.getElementById('btn-encam');
+        if (btn) btn.className = "tab-btn bg-yellow-400 text-black px-3 py-1.5 rounded-xl text-xs font-black transition-all shadow-sm";
+        if (header) header.classList.remove('hidden');
+      } else if (page === 'quiz') {
+        if (secQuiz) secQuiz.classList.remove('hidden');
+        if (header) header.classList.add('hidden'); // hide navigation during live quiz
+      } else {
+        if (secHome) secHome.classList.remove('hidden');
+        const btn = document.getElementById('btn-taqikirin');
+        if (btn) btn.className = "tab-btn bg-yellow-400 text-black px-3 py-1.5 rounded-xl text-xs font-black transition-all shadow-sm";
+        if (header) header.classList.remove('hidden');
+      }
+
+      updateHeaderLogout();
+    }
+
+    // Router
+    function renderRoute() {
+      const hash = window.location.hash || '#/';
+      const [rawPath, q] = hash.split('?');
+      const path = decodeURIComponent(rawPath);
+      const params = new URLSearchParams(q || '');
+
+      if (path === '' || path === '#' || path === '#/') {
+        const homeContent = document.getElementById('home-content');
+        if (homeContent) homeContent.innerHTML = renderHome();
+        showPage('home');
+        return;
+      }
+      if (path === '#encam' || path === '#/encam') {
+        const encamContent = document.getElementById('encam-content');
+        if (encamContent) encamContent.innerHTML = renderResultsPage();
+        showPage('encam');
+        return;
+      }
+      const encamCodeMatch = path.match(/^#\/?encam\/([^/]+)$/);
+      if (encamCodeMatch) {
+        const c = decodeURIComponent(encamCodeMatch[1]);
+        const encamContent = document.getElementById('encam-content');
+        if (encamContent) encamContent.innerHTML = renderResultsPage(c);
+        showPage('encam');
+        return;
+      }
+      if (path === '#mamosta-veşarti-2026' || path === '#/mamosta-veşarti-2026' || path === '#mamosta' || path === '#/mamosta') {
+        const mamostaContent = document.getElementById('mamosta-content');
+        if (mamostaContent) mamostaContent.innerHTML = renderTeacherRoute();
+        showPage('mamosta');
+        return;
+      }
+      const resMatch = path.match(/^#\/?mamosta-veşarti-2026\/results\/([^/]+)$/) || path.match(/^#\/?mamosta\/results\/([^/]+)$/);
+      if (resMatch) {
+        const mamostaContent = document.getElementById('mamosta-content');
+        if (mamostaContent) mamostaContent.innerHTML = renderTeacherResultsPage(decodeURIComponent(resMatch[1]));
+        showPage('mamosta');
+        return;
+      }
+      const qMatch = path.match(/^#\/?quiz\/([^/]+)$/);
+      if (qMatch) {
+        const code = decodeURIComponent(qMatch[1]);
+        const fullName = params.get('fullName') || 'قوتابی';
+        const quizContent = document.getElementById('quiz-content');
+        if (quizContent) quizContent.innerHTML = renderQuizPlayer(code, fullName);
+        showPage('quiz');
+        return;
+      }
+
+      // Default fallback
+      const homeContent = document.getElementById('home-content');
+      if (homeContent) homeContent.innerHTML = renderHome();
+      showPage('home');
+
+      // Auto-render STEM formulas with KaTeX across questions & options
+      setTimeout(() => {
+        if (window.renderMathInElement) {
+          try {
+            renderMathInElement(document.body, {
+              delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      }, 50);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initSeed();
+      renderRoute();
+    });
+
+    window.addEventListener('hashchange', () => {
+      if (!window.location.hash.startsWith('#/quiz')) {
+        if (quizTimer) clearInterval(quizTimer);
+      }
+      searchStatus = null;
+      renderRoute();
+    });
+  </script>
+</body>
+</html>

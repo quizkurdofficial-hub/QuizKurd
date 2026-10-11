@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizKurd | داشبۆردا نمرەدانێ و سەحکرنا دادپەروەر</title>
+  <link rel="manifest" href="/manifest.json">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    * { font-family: 'Noto Sans Arabic', sans-serif; box-sizing: border-box; }
+    body { background-color: #020617; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen p-3 md:p-6 flex flex-col items-center">
+  <div class="w-full max-w-5xl space-y-5">
+    
+    <!-- Top Header -->
+    <header class="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-xl shadow-md">
+          Q
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-black text-white">Quiz<span class="text-yellow-400">Kurd</span></h1>
+          <p class="text-[11px] text-yellow-400/90 font-bold">داشبۆردا نمرەدانێ بۆ مامۆستایان (Teacher Grading Dashboard)</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/teacher.html" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-yellow-400 transition-colors">
+          ⚙️ دروستکرنا ئەزموونێ
+        </a>
+        <a href="/" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-slate-200 transition-colors">
+          ڕووپەلێ قوتابی
+        </a>
+        <a href="/results.html" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-slate-300 transition-colors">
+          دیتنا ئەنجامان
+        </a>
+      </div>
+    </header>
+
+    <!-- Filter & Info Banner -->
+    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div class="space-y-0.5">
+        <h2 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+          <span>⚖️</span>
+          <span>هەڵسەنگاندنا دادپەروەر بۆ پرسیارێن نڤیسینێ (Fair Grading System)</span>
+        </h2>
+        <p class="text-xs text-slate-400">
+          بەرسڤێن نڤیسینێ یێن قوتابیان سەحبکە، نمرەیا ئۆتۆماتیکی پێداچوون بکە، شلۆڤەکرن بنڤیسە و پەسەند بکە.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <label for="examFilterSelect" class="text-xs font-bold text-slate-300 whitespace-nowrap">فلتەری ئەزموونێ:</label>
+        <select 
+          id="examFilterSelect" 
+          onchange="filterSubmissionsByExam(this.value)" 
+          class="h-10 px-3 bg-slate-800 border border-slate-700 rounded-xl text-yellow-300 text-xs font-bold focus:outline-none focus:border-yellow-400"
+        >
+          <option value="ALL">هەمی ئەزموون (All Exams)</option>
+        </select>
+        <button 
+          onclick="loadGradingData()" 
+          class="h-10 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-bold transition-colors"
+          title="نویکردن"
+        >
+          🔄
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab navigation: 1. All Students Master List, 2. Written Questions, 3. Disputes -->
+    <div class="flex flex-wrap gap-2 border-b border-slate-800 pb-2">
+      <button 
+        id="tabBtnAllStudents" 
+        onclick="switchTab('all_students')" 
+        class="px-4 py-2 rounded-xl text-xs font-black transition-all bg-yellow-400 text-slate-950 shadow"
+      >
+        <span>👥</span> هەمی قوتابی (Master List: <span id="allStudentsCount">0</span>)
+      </button>
+      <button 
+        id="tabBtnGrading" 
+        onclick="switchTab('grading')" 
+        class="px-4 py-2 rounded-xl text-xs font-black transition-all bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+      >
+        <span>📝</span> بەرسڤێن نڤیسینێ (<span id="writtenSubCount">0</span>)
+      </button>
+      <button 
+        id="tabBtnDisputes" 
+        onclick="switchTab('disputes')" 
+        class="px-4 py-2 rounded-xl text-xs font-black transition-all bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+      >
+        <span>🗣️</span> سندوقا گازندەکان (Disputes: <span id="disputesCount">0</span>)
+      </button>
+    </div>
+
+    <!-- TAB 1: Master List of All Students -->
+    <div id="tabAllStudentsSection" class="space-y-4">
+      <div class="bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-2xl shadow-xl space-y-3">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+          <h3 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+            <span>📋</span>
+            <span>لیستا گشتی یا بەشداربووان و ئەنجامان (Master Submissions List)</span>
+          </h3>
+          <span class="text-xs text-slate-400">کلیک ل سەر هەر قوتابیەکێ بکە دا شیکاریا تەواو یا خەلەت و درستان ببینی</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-right text-xs">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-800">
+                <th class="py-2.5 px-3">ناڤێ قوتابی</th>
+                <th class="py-2.5 px-3">کۆدێ ئەزموونێ</th>
+                <th class="py-2.5 px-3">کۆدێ ئەنجامێ (Result Token)</th>
+                <th class="py-2.5 px-3">نمرە</th>
+                <th class="py-2.5 px-3">ژ سەدێ</th>
+                <th class="py-2.5 px-3">دۆخ</th>
+                <th class="py-2.5 px-3 text-center">کردار</th>
+              </tr>
+            </thead>
+            <tbody id="allStudentsTbody" class="divide-y divide-slate-800 text-white">
+              <tr>
+                <td colspan="7" class="text-center py-6 text-slate-500">بارکرنا لیستا گشتی...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Grading Section (Written Questions) -->
+    <div id="tabGradingSection" class="hidden space-y-4">
+      <div id="submissionsListContainer" class="space-y-4">
+        <div class="p-8 text-center text-slate-500 text-xs bg-slate-900 rounded-2xl border border-slate-800">
+          بارکردنا زانیاریێن نمرەدانێ...
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Disputes Section -->
+    <div id="tabDisputesSection" class="hidden space-y-4">
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <h3 class="text-sm font-black text-amber-300 flex items-center gap-2">
+            <span>📥</span>
+            <span>گازندەیێن قوتابیان دەربارەی نمرەیان</span>
+          </h3>
+          <span class="text-xs text-slate-400">قوتابی دشێت گازندەیێ بکەت پشتی دیتنا نمرەیا خۆ</span>
+        </div>
+        <div id="disputesListContainer" class="divide-y divide-slate-800 mt-3">
+          <p class="text-xs text-slate-500 text-center py-6">چ گازندە هێشتا نینن.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let allSubmissions = [];
+    let allDisputes = [];
+    let currentFilter = 'ALL';
+
+    async function loadGradingData() {
+      try {
+        const rawSub = localStorage.getItem('qk_submissions') || '[]';
+        allSubmissions = JSON.parse(rawSub);
+
+        const rawDisp = localStorage.getItem('qk_grade_disputes') || '[]';
+        allDisputes = JSON.parse(rawDisp);
+
+        populateExamFilterOptions();
+        renderGradingSubmissions();
+        renderDisputes();
+      } catch (err) {
+        console.error("Error loading grading data:", err);
+      }
+    }
+
+    function populateExamFilterOptions() {
+      const select = document.getElementById('examFilterSelect');
+      if (!select) return;
+      const exams = new Set();
+      allSubmissions.forEach(s => {
+        const code = s.exam_id || s.code || s.exam_code_used;
+        if (code) exams.add(code);
+      });
+
+      const currentVal = select.value;
+      select.innerHTML = '<option value="ALL">هەمی ئەزموون (All Exams)</option>';
+      exams.forEach(code => {
+        const opt = document.createElement('option');
+        opt.value = code;
+        opt.innerText = code;
+        select.appendChild(opt);
+      });
+      if (currentVal && exams.has(currentVal)) select.value = currentVal;
+    }
+
+    function filterSubmissionsByExam(val) {
+      currentFilter = val;
+      renderAllStudentsTable();
+      renderGradingSubmissions();
+    }
+
+    function switchTab(tab) {
+      const allSec = document.getElementById('tabAllStudentsSection');
+      const gSec = document.getElementById('tabGradingSection');
+      const dSec = document.getElementById('tabDisputesSection');
+      const allBtn = document.getElementById('tabBtnAllStudents');
+      const gBtn = document.getElementById('tabBtnGrading');
+      const dBtn = document.getElementById('tabBtnDisputes');
+
+      allSec.classList.add('hidden');
+      gSec.classList.add('hidden');
+      dSec.classList.add('hidden');
+      allBtn.className = "px-4 py-2 rounded-xl text-xs font-black transition-all bg-slate-900 border border-slate-800 text-slate-300 hover:text-white";
+      gBtn.className = "px-4 py-2 rounded-xl text-xs font-black transition-all bg-slate-900 border border-slate-800 text-slate-300 hover:text-white";
+      dBtn.className = "px-4 py-2 rounded-xl text-xs font-black transition-all bg-slate-900 border border-slate-800 text-slate-300 hover:text-white";
+
+      if (tab === 'all_students') {
+        allSec.classList.remove('hidden');
+        allBtn.className = "px-4 py-2 rounded-xl text-xs font-black transition-all bg-yellow-400 text-slate-950 shadow";
+        renderAllStudentsTable();
+      } else if (tab === 'grading') {
+        gSec.classList.remove('hidden');
+        gBtn.className = "px-4 py-2 rounded-xl text-xs font-black transition-all bg-yellow-400 text-slate-950 shadow";
+        renderGradingSubmissions();
+      } else {
+        dSec.classList.remove('hidden');
+        dBtn.className = "px-4 py-2 rounded-xl text-xs font-black transition-all bg-yellow-400 text-slate-950 shadow";
+        renderDisputes();
+      }
+    }
+
+    function renderAllStudentsTable() {
+      const tbody = document.getElementById('allStudentsTbody');
+      const countEl = document.getElementById('allStudentsCount');
+      if (!tbody) return;
+
+      let list = allSubmissions;
+      if (currentFilter !== 'ALL') {
+        list = list.filter(s => (s.exam_id || s.code || s.exam_code_used) === currentFilter);
+      }
+
+      if (countEl) countEl.innerText = list.length;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-500">چ بەشداربوون نەهاتینە دیتن بۆ ڤێ ئەزموونێ.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map((s, idx) => {
+        const studentName = s.student_name || s.name || s.fullName || 'قوتابی';
+        const rCode = s.result_code || s.resultCode || s.id;
+        const examCode = s.exam_id || s.code || '—';
+        const score = s.score || (s.total ? `${s.auto_score || 0}/${s.total}` : '—');
+        const percent = s.percent !== undefined ? s.percent : 0;
+        const isGraded = s.status === 'graded';
+
+        return `
+          <tr class="hover:bg-slate-800/50 transition-colors cursor-pointer" onclick="openStudentDetailReviewModal('${rCode}')">
+            <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-slate-800 text-yellow-400 font-mono text-[11px] font-black flex items-center justify-center">${idx + 1}</span>
+              <span>${studentName}</span>
+            </td>
+            <td class="py-3 px-3 font-mono text-slate-400">${examCode}</td>
+            <td class="py-3 px-3 font-mono font-bold text-yellow-400">${rCode}</td>
+            <td class="py-3 px-3 font-mono font-black ${percent >= 50 ? 'text-emerald-400' : 'text-rose-400'}">${score}</td>
+            <td class="py-3 px-3 font-mono font-bold text-slate-300">${percent}%</td>
+            <td class="py-3 px-3">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${isGraded ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-400/40'}">
+                ${isGraded ? 'پەسەندکراو' : 'چاوەڕوان'}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button 
+                type="button" 
+                onclick="event.stopPropagation(); openStudentDetailReviewModal('${rCode}')" 
+                class="px-2.5 py-1 bg-yellow-400 hover:bg-yellow-300 text-slate-950 rounded-lg text-[11px] font-black transition-transform active:scale-95 shadow"
+              >
+                🔍 شیکاریا خەلەتان
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openStudentDetailReviewModal(resultCode) {
+      const sub = allSubmissions.find(s => (s.result_code || s.resultCode || s.id) === resultCode);
+      if (!sub) {
+        alert("ئەنجام نەهاتە دیتن!");
+        return;
+      }
+
+      const modal = document.getElementById('studentDetailModal');
+      const nameEl = document.getElementById('detailStudentName');
+      const codeEl = document.getElementById('detailResultCode');
+      const scoreEl = document.getElementById('detailStudentScore');
+      const container = document.getElementById('detailQuestionsContainer');
+
+      const studentName = sub.student_name || sub.name || sub.fullName || 'قوتابی';
+      const rCode = sub.result_code || sub.resultCode || resultCode;
+      const score = sub.score || '—';
+      const percent = sub.percent !== undefined ? sub.percent : 0;
+
+      if (nameEl) nameEl.innerText = studentName;
+      if (codeEl) codeEl.innerText = rCode;
+      if (scoreEl) {
+        scoreEl.innerText = `${score} (${percent}%)`;
+        scoreEl.className = percent >= 50 ? "font-mono font-black text-emerald-400 text-sm" : "font-mono font-black text-rose-400 text-sm";
+      }
+
+      let answers = sub.answers || [];
+      if (typeof answers === 'string') {
+        try { answers = JSON.parse(answers); } catch(e){ answers = []; }
+      }
+
+      if (answers.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">چ وردەکاریێن پرسیاران نینن.</p>`;
+      } else {
+        container.innerHTML = answers.map((ans, idx) => {
+          const isCorrect = ans.isCorrect === true || ans.isCorrectCalculated === true;
+          const qText = ans.question || ans.text || `پرسیارا ${idx + 1}`;
+          const studentAns = ans.userAns || ans.answer || ans.studentAnswer || '—';
+          const expected = ans.model_answer || ans.expected || ans.correctAnswer || '—';
+          const pts = ans.final_score !== undefined ? ans.final_score : (ans.auto_score !== undefined ? ans.auto_score : (ans.pts || 0));
+          const maxPts = ans.pts || 10;
+          const comment = ans.teacher_comment || '';
+
+          return `
+            <div class="p-3.5 rounded-xl border text-xs space-y-2 transition-all ${isCorrect ? 'bg-emerald-950/20 border-emerald-500/40 text-emerald-200' : 'bg-rose-950/20 border-rose-500/50 text-rose-200'}">
+              <div class="flex items-start justify-between gap-2 border-b border-slate-800 pb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded bg-slate-900 border border-slate-700 text-white font-mono font-bold flex items-center justify-center text-[10px]">${idx + 1}</span>
+                  <span class="font-bold text-white text-xs leading-relaxed formula-renderable">${qText}</span>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${isCorrect ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'}">
+                    ${isCorrect ? `✅ راست (+${pts}/${maxPts})` : `❌ خەلەت (${pts}/${maxPts})`}
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
+                <div class="p-2.5 rounded-lg bg-slate-950/80 border ${isCorrect ? 'border-emerald-500/30' : 'border-rose-500/40'}">
+                  <span class="text-slate-400 block mb-0.5 font-bold">بەرسڤا قوتابی:</span>
+                  <div class="${isCorrect ? 'text-emerald-300 font-bold' : 'text-rose-300 font-black'} formula-renderable">${studentAns}</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-950/80 border border-emerald-500/30">
+                  <span class="text-slate-400 block mb-0.5 font-bold">بەرسڤا دروست (Correct Answer):</span>
+                  <div class="text-emerald-400 font-bold formula-renderable">${expected}</div>
+                </div>
+              </div>
+
+              ${comment ? `
+                <div class="p-2 rounded-lg bg-sky-950/30 border border-sky-500/30 text-[11px] text-sky-200">
+                  <strong class="text-sky-400">شلوڤەکرنا مامۆستای:</strong> ${comment}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (modal) modal.classList.remove('hidden');
+
+      // KaTeX rendering inside modal
+      setTimeout(() => {
+        if (window.renderMathInElement && container) {
+          try {
+            renderMathInElement(container, {
+              delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      }, 50);
+    }
+
+    function closeStudentDetailModal() {
+      const modal = document.getElementById('studentDetailModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function renderGradingSubmissions() {
+      const container = document.getElementById('submissionsListContainer');
+      const countEl = document.getElementById('writtenSubCount');
+
+      let list = allSubmissions;
+      if (currentFilter !== 'ALL') {
+        list = list.filter(s => (s.exam_id || s.code || s.exam_code_used) === currentFilter);
+      }
+
+      // Filter submissions that contain written questions
+      const writtenSubmissions = list.filter(s => {
+        let ans = s.answers || [];
+        if (typeof ans === 'string') {
+          try { ans = JSON.parse(ans); } catch(e){ ans = []; }
+        }
+        return ans.some(a => a.isWritten || a.type === 'writing' || a.type === 'nivisin' || a.model_answer);
+      });
+
+      if (countEl) countEl.innerText = writtenSubmissions.length;
+
+      if (writtenSubmissions.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-slate-900 rounded-2xl border border-slate-800 text-slate-400 space-y-2">
+            <span class="text-3xl block">🎉</span>
+            <p class="font-bold text-sm text-white">چ بەرسڤێن نڤیسینێ یێن نەپێداچووی نینن!</p>
+            <p class="text-xs text-slate-500">دەمێ قوتابی بەرسڤا پرسیارەکا نڤیسینێ بدەت، ل ڤێرێ بۆ سەحکرنێ دێ دیار بیت.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = writtenSubmissions.map((sub, sIdx) => {
+        const studentName = sub.student_name || sub.name || sub.fullName || 'قوتابی';
+        const rCode = sub.result_code || sub.resultCode || sub.id;
+        const examCode = sub.exam_id || sub.code || '—';
+        const isGraded = sub.status === 'graded';
+
+        let answers = sub.answers || [];
+        if (typeof answers === 'string') {
+          try { answers = JSON.parse(answers); } catch(e){ answers = []; }
+        }
+
+        const writtenItems = answers
+          .map((a, originalIdx) => ({ ...a, originalIdx }))
+          .filter(a => a.isWritten || a.type === 'writing' || a.type === 'nivisin' || a.model_answer);
+
+        return `
+          <div class="bg-slate-900 border-2 ${isGraded ? 'border-emerald-500/40' : 'border-amber-400/50'} rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+            
+            <!-- Student Header Banner -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-lg font-black text-yellow-400">
+                  👤
+                </div>
+                <div>
+                  <h3 class="font-black text-white text-base">${studentName}</h3>
+                  <div class="flex items-center gap-2 text-xs font-mono">
+                    <span class="text-slate-400">کۆدێ ئەزموونێ: <strong class="text-white">${examCode}</strong></span>
+                    <span class="text-slate-500">|</span>
+                    <span class="text-yellow-400 font-bold">کۆدێ ئەنجامی: <strong>${rCode}</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full text-xs font-black ${isGraded ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-400/40'}">
+                  ${isGraded ? '✓ پەسەندکراو (Graded)' : '⏳ چاوەڕێی پەسەندکردنێ (Pending)'}
+                </span>
+                <span class="text-xs font-mono font-bold text-slate-300 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                  نمرەیا گشتی: ${sub.score || '—'}
+                </span>
+              </div>
+            </div>
+
+            <!-- List of Written Questions for this Student -->
+            <div class="space-y-4">
+              ${writtenItems.map(item => {
+                const qIdx = item.originalIdx;
+                const maxPts = item.pts || 10;
+                const currentScore = item.final_score !== undefined ? item.final_score : (item.auto_score !== undefined ? item.auto_score : 0);
+                const suggested = item.suggestedScore !== undefined ? item.suggestedScore : currentScore;
+                const explanation = item.explanation || 'هەڵسەنگاندنا خودکار ئەنجام درا';
+                const modelAns = item.model_answer || item.expected || 'بەرسڤا نمونەیی نەهاتیە دیارکرن';
+                const studentAns = item.userAns || item.answer || '—';
+                const commentVal = item.teacher_comment || sub.teacher_comment || '';
+
+                return `
+                  <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3">
+                    
+                    <!-- Question & Model Answer Grid -->
+                    <div class="space-y-2">
+                      <div class="flex items-center justify-between text-xs">
+                        <span class="font-black text-yellow-400">❓ پرسیار: ${item.question}</span>
+                        <span class="text-[11px] font-mono text-slate-400">نمرا تەواو: ${maxPts} خال</span>
+                      </div>
+                      
+                      <!-- Model Answer -->
+                      <div class="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs">
+                        <span class="font-bold text-emerald-400 block mb-0.5">بەرسڤا نمونەیی (Model Answer):</span>
+                        <p class="text-emerald-200 leading-relaxed font-sans">${modelAns}</p>
+                      </div>
+
+                      <!-- Student Answer -->
+                      <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-xs space-y-1">
+                        <div class="flex items-center justify-between">
+                          <span class="font-bold text-slate-300">بەرسڤا قوتابی (Student Answer):</span>
+                          <span class="text-[10px] text-slate-400 font-mono">${(studentAns.split(/\s+/).filter(Boolean).length)} پەیڤ</span>
+                        </div>
+                        <p class="text-white leading-relaxed font-sans whitespace-pre-wrap">${studentAns}</p>
+                      </div>
+                    </div>
+
+                    <!-- Auto Suggested Score & Reason -->
+                    <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-400/30 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <span class="font-black text-amber-300">💡 پێشنیارا سیستەمی: ${suggested} / ${maxPts} خال</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">${explanation}</p>
+                      </div>
+                      <div class="flex items-center gap-2 shrink-0">
+                        <label for="score_${rCode}_${qIdx}" class="font-bold text-xs text-yellow-400">نمرەیا دووماهیێ (مامۆستا):</label>
+                        <input 
+                          id="score_${rCode}_${qIdx}" 
+                          type="number" 
+                          min="0" 
+                          max="${maxPts}" 
+                          value="${currentScore}" 
+                          class="w-16 h-9 px-2 bg-slate-900 border border-yellow-400/60 rounded-lg text-center font-mono font-black text-yellow-300 text-sm focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- Teacher Feedback Field -->
+                    <div>
+                      <label for="comment_${rCode}_${qIdx}" class="block text-xs font-bold text-sky-400 mb-1 flex items-center gap-1.5">
+                        <span>✍️</span>
+                        <span>شلوڤەکرن بۆ قوتابی (Teacher Feedback):</span>
+                      </label>
+                      <textarea 
+                        id="comment_${rCode}_${qIdx}" 
+                        rows="2" 
+                        placeholder="مامۆستایێ هێژا، بنڤیسە بۆچی نمرە کێمە، نموونە: تە بەس ٢ خال نڤیسینە، خالا سێیە یا کێمە..." 
+                        class="w-full p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-sky-400 text-xs font-sans leading-relaxed"
+                      >${commentVal}</textarea>
+                    </div>
+
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Approve & Save Button -->
+            <div class="pt-2 flex flex-col sm:flex-row justify-end gap-2 border-t border-slate-800">
+              <button 
+                type="button" 
+                onclick="approveAndSubmitGrading('${rCode}')" 
+                class="px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition-transform active:scale-95 shadow-lg flex items-center justify-center gap-2"
+              >
+                <span>✅</span>
+                <span>پەسەندکرن و ناردنا ئەنجامی (Approve & Update Result)</span>
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function approveAndSubmitGrading(resultCode) {
+      const subIdx = allSubmissions.findIndex(s => (s.result_code || s.resultCode) === resultCode);
+      if (subIdx < 0) {
+        alert("ئەنجام نەهاتە دیتن!");
+        return;
+      }
+
+      const sub = allSubmissions[subIdx];
+      let answers = sub.answers || [];
+      if (typeof answers === 'string') {
+        try { answers = JSON.parse(answers); } catch(e){ answers = []; }
+      }
+
+      let mainTeacherComment = '';
+      let totalNewScore = 0;
+
+      answers.forEach((item, idx) => {
+        const scoreInput = document.getElementById(`score_${resultCode}_${idx}`);
+        const commentInput = document.getElementById(`comment_${resultCode}_${idx}`);
+
+        if (scoreInput) {
+          const newScore = parseInt(scoreInput.value, 10);
+          item.final_score = isNaN(newScore) ? (item.auto_score || 0) : newScore;
+        }
+
+        if (commentInput) {
+          const comm = commentInput.value.trim();
+          item.teacher_comment = comm;
+          if (comm && !mainTeacherComment) mainTeacherComment = comm;
+        }
+
+        totalNewScore += (item.final_score !== undefined ? item.final_score : (item.auto_score || 0));
+      });
+
+      sub.answers = answers;
+      sub.teacher_comment = mainTeacherComment;
+      sub.final_score = totalNewScore;
+      sub.score = `${totalNewScore}/${sub.total || 100}`;
+      sub.percent = Math.round((totalNewScore / (sub.total || 100)) * 100);
+      sub.status = 'graded';
+      sub.graded_at = new Date().toLocaleString('ar-IQ');
+
+      allSubmissions[subIdx] = sub;
+      localStorage.setItem('qk_submissions', JSON.stringify(allSubmissions));
+
+      // Sync into qk_results_v11 / DB results
+      const rawResults = localStorage.getItem('qk_results_v11') || '[]';
+      let results = JSON.parse(rawResults);
+      const rIdx = results.findIndex(r => (r.result_code || r.resultCode) === resultCode);
+      if (rIdx >= 0) {
+        results[rIdx] = { ...results[rIdx], ...sub };
+        localStorage.setItem('qk_results_v11', JSON.stringify(results));
+      }
+
+      // POST to backend if available
+      try {
+        await fetch('/api/grading', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            result_code: resultCode,
+            submission_id: sub.id,
+            answers: answers,
+            teacher_comment: mainTeacherComment,
+            final_score: totalNewScore
+          })
+        });
+      } catch(e) {}
+
+      alert(`نمرەیا قوتابی ب سەرکەفتیانە هاتە پەسەندکرن و پاراستن! قوتابی نها دشێت ب کۆدێ (${resultCode}) ئەنجامێ نویکری ببینیت.`);
+      renderGradingSubmissions();
+    }
+
+    function renderDisputes() {
+      const container = document.getElementById('disputesListContainer');
+      const countEl = document.getElementById('disputesCount');
+      if (countEl) countEl.innerText = allDisputes.length;
+
+      if (allDisputes.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">چ گازندە هێشتا نینن.</p>`;
+        return;
+      }
+
+      container.innerHTML = allDisputes.map((disp, idx) => `
+        <div class="py-3.5 space-y-2 text-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-amber-400 text-slate-950 font-black flex items-center justify-center text-[10px]">${idx + 1}</span>
+              <span class="font-bold text-white">${disp.student_name || 'قوتابی'}</span>
+              <span class="text-slate-500 font-mono">(${disp.result_code || '—'})</span>
+            </div>
+            <span class="text-[11px] text-slate-400">${disp.created_at || ''}</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
+            <span class="text-slate-400 font-bold block mb-1">پرسیار: ${disp.question_text || '—'}</span>
+            <div class="text-amber-200 font-bold leading-relaxed">🗣️ پەیاما قوتابی: "${disp.student_message || ''}"</div>
+          </div>
+
+          ${disp.teacher_reply ? `
+            <div class="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-emerald-300">
+              <span class="font-bold block mb-0.5">بەرسڤا مامۆستای:</span>
+              <p>${disp.teacher_reply}</p>
+            </div>
+          ` : `
+            <div class="flex items-center gap-2 pt-1">
+              <input 
+                id="reply_${disp.id}" 
+                type="text" 
+                placeholder="بەرسڤا گازندەیێ بنڤیسە..." 
+                class="flex-1 h-9 px-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-yellow-400"
+              />
+              <button 
+                onclick="replyToDispute('${disp.id}')" 
+                class="h-9 px-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-lg text-xs"
+              >
+                بەرسڤدان ↵
+              </button>
+            </div>
+          `}
+        </div>
+      `).join('');
+    }
+
+    function replyToDispute(dispId) {
+      const input = document.getElementById(`reply_${dispId}`);
+      const text = input ? input.value.trim() : '';
+      if (!text) {
+        alert("تکایە بەرسڤەکێ بنڤیسە!");
+        return;
+      }
+      const item = allDisputes.find(d => d.id === dispId);
+      if (item) {
+        item.teacher_reply = text;
+        item.status = 'resolved';
+        localStorage.setItem('qk_grade_disputes', JSON.stringify(allDisputes));
+        alert("بەرسڤا تە هاتە تۆمارکرن!");
+        renderDisputes();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadGradingData();
+    });
+  </script>
+
+  <!-- Detailed Student Error Breakdown Modal -->
+  <div id="studentDetailModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 md:p-5">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl p-5 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl relative text-right">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-sm shadow">
+            👤
+          </div>
+          <div>
+            <h3 id="detailStudentName" class="font-black text-white text-base">قوتابی</h3>
+            <div class="flex items-center gap-2 text-xs font-mono">
+              <span class="text-slate-400">کۆدێ ئەنجامێ (Result Token): <strong id="detailResultCode" class="text-yellow-400"></strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="text-left bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+            <span class="text-[10px] text-slate-400 block font-sans">نمرەیا گشتی:</span>
+            <span id="detailStudentScore" class="font-mono font-black text-emerald-400 text-sm">--</span>
+          </div>
+          <button onclick="closeStudentDetailModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1">✕</button>
+        </div>
+      </div>
+
+      <!-- Banner -->
+      <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-300 font-bold flex items-center gap-1.5">
+          <span>📊</span>
+          <span>پشکنینا ووردا خەلەت و درستان (Question-by-Question Breakdown)</span>
+        </span>
+        <div class="flex items-center gap-2 text-[11px]">
+          <span class="text-emerald-400 font-bold">✅ بەرسڤا دروست</span>
+          <span class="text-rose-400 font-bold">❌ بەرسڤا خەلەت</span>
+        </div>
+      </div>
+
+      <!-- Questions List Container -->
+      <div id="detailQuestionsContainer" class="space-y-3">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button 
+          type="button" 
+          onclick="closeStudentDetailModal()" 
+          class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl border border-slate-700"
+        >
+          داخستن ✕
+        </button>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

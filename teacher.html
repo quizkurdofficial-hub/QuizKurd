@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizKurd V7 - 2026 | پانێلا مامۆستای</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <meta name="theme-color" content="#facc15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- KaTeX for STEM formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <style>
+    * { font-family: 'Noto Sans Arabic', sans-serif; box-sizing: border-box; }
+    body { background-color: #020617; }
+    .katex { direction: ltr !important; unicode-bidi: isolate; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen p-3 md:p-6 flex flex-col items-center">
+  <div class="w-full max-w-3xl space-y-4">
+    <!-- Header -->
+    <header class="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-xl">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg shadow-md">
+          Q
+        </div>
+        <div>
+          <h1 class="text-base md:text-lg font-black text-white">Quiz<span class="text-yellow-400">Kurd</span></h1>
+          <p class="text-[11px] text-yellow-400/80 font-bold">پانێلا مامۆستای - دروستکرن و نویکردنا ئەزموونێ V11</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/teacher/grading" class="px-3 py-1.5 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-xs rounded-lg transition-transform active:scale-95 shadow flex items-center gap-1.5">
+          <span>✍️</span>
+          <span>داشبۆردا نمرەدانێ (Grading)</span>
+        </a>
+        <a href="/" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-700 text-slate-200">
+          ڕووپەلێ قوتابی
+        </a>
+        <a href="/results.html" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-700 text-yellow-400">
+          دیتنا ئەنجامان
+        </a>
+      </div>
+    </header>
+
+    <!-- 1. Top Section: Load Exam for Editing / Update (Exact requested input & button) -->
+    <div class="bg-slate-900 border-2 border-yellow-400/50 p-4 rounded-2xl shadow-xl space-y-2">
+      <div class="flex items-center justify-between">
+        <label for="loadCode" class="text-xs font-bold text-yellow-400 flex items-center gap-1.5">
+          <span>🔄</span>
+          <span>دەستکاریکردنا ئەزموونا بەرهەڤکری (Load & Edit Exam):</span>
+        </label>
+        <span class="text-[11px] text-slate-400">کۆدی بنڤیسە دا ئەزموون بۆ دەستکاری بهێتە بارکرن</span>
+      </div>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <input 
+          id="loadCode" 
+          type="text"
+          dir="ltr"
+          placeholder="QZ-XXXX بۆ دەستکاری" 
+          class="flex-1 h-11 px-4 rounded-xl bg-slate-800 border border-slate-700 text-yellow-400 font-mono font-bold text-sm focus:outline-none focus:border-yellow-400 uppercase text-center"
+        >
+        <button 
+          type="button"
+          onclick="loadExam()" 
+          class="h-11 px-5 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition-all shadow-md shrink-0 active:scale-95 flex items-center justify-center gap-2"
+        >
+          <span>📥</span>
+          <span>ئەزمونێ بینە بۆ دەستکاری</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz Meta Information -->
+    <div class="bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl space-y-3">
+      <h2 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+        <span>📝</span>
+        <span>زانیاریێن ئەزموونێ</span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">ناڤونیشانێ ئەزموونێ:</label>
+          <input 
+            id="examTitle" 
+            type="text" 
+            placeholder="نموونە: تاقیکرنا هەیڤانە یا بیرکاریێ" 
+            value="تاقیکرنا بهێز یا بەهدینی"
+            class="w-full h-11 px-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-sm"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">کۆدێ ئەزموونێ (دیاریکری یان خۆکار):</label>
+          <div class="flex gap-2">
+            <input 
+              id="examCode" 
+              type="text" 
+              dir="ltr"
+              placeholder="QZ-XXXX"
+              class="w-full h-11 px-3 rounded-xl bg-slate-800 border border-slate-700 text-yellow-400 font-mono font-bold uppercase text-center focus:outline-none focus:border-yellow-400 text-sm"
+            />
+            <button 
+              type="button" 
+              onclick="generateNewCode()" 
+              class="px-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs text-yellow-400 font-bold shrink-0"
+            >
+              کۆدێ نوی
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Builder Box (Add Question) -->
+    <div class="bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <h2 id="builderHeading" class="text-sm font-black text-yellow-400 flex items-center gap-2">
+          <span>➕</span>
+          <span>زێدەکرنا پرسیارێ</span>
+        </h2>
+        <span id="editingBadge" class="hidden text-xs bg-yellow-400 text-slate-950 font-black px-2 py-0.5 rounded-full">
+          دەمێ دەستکاریکردنێ
+        </span>
+      </div>
+
+      <!-- Question Type Selector (Dropdown: جورێ پرسیارێ with 7 STEM options) -->
+      <div>
+        <label for="questionTypeSelect" class="block text-xs font-bold text-yellow-400 mb-1.5 flex items-center justify-between">
+          <span>جۆرێ پرسیارێ (جورێ پرسیارێ):</span>
+          <span class="text-[10px] text-slate-400 font-mono">7 جۆرێن پێشکەفتی یێن STEM</span>
+        </label>
+        <select 
+          id="questionTypeSelect" 
+          onchange="setQuestionType(this.value)"
+          class="w-full h-11 px-3 rounded-xl bg-slate-800 border-2 border-yellow-400 text-yellow-300 font-black focus:outline-none focus:ring-2 focus:ring-yellow-400/50 text-xs sm:text-sm shadow-md cursor-pointer"
+        >
+          <option value="math">📐 بیرکاری - Math (LaTeX)</option>
+          <option value="chemical">🧪 کیمیا - Chemical</option>
+          <option value="diagram">⚡ فیزیا - Diagram</option>
+          <option value="truefalse">⚖️ دگ یا نەدگ - True/False</option>
+          <option value="blank">✍️ ڤالاهی پر بکە - Fill in blank</option>
+          <option value="matching">🔗 هەڤبەرکرن - Matching</option>
+          <option value="numerical">🔢 هەژمارتن - Numerical</option>
+          <option value="writing">📝 نڤیسین - Written (هەڵسەنگاندنا دادپەروەر)</option>
+        </select>
+      </div>
+
+      <!-- Quick STEM Toolbars for Math & Chemistry -->
+      <div id="mathChemToolbar" class="space-y-2">
+        <!-- Math formula shortcuts -->
+        <div id="mathShortcuts" class="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px] text-yellow-400 font-bold">
+            <span>🧮 کورتەبڕێن بیرکاریێ (Math Formula Quick-Insert):</span>
+            <span class="text-[10px] text-slate-400">کلیک بکە دا ڕاستەوخۆ بچیتە دەقێ پرسیارێ</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-xs">
+            <button type="button" onclick="insertFormulaToText('$$x^2 + y^2 = z^2$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">$$x^2 + y^2 = z^2$$</button>
+            <button type="button" onclick="insertFormulaToText('$$x^2$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">x²</button>
+            <button type="button" onclick="insertFormulaToText('\\frac{a}{b}')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">\frac{a}{b}</button>
+            <button type="button" onclick="insertFormulaToText('\\sqrt{x}')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">√x</button>
+            <button type="button" onclick="insertFormulaToText('\\pi')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">π</button>
+            <button type="button" onclick="insertFormulaToText('\\pm')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">±</button>
+            <button type="button" onclick="insertFormulaToText('\\le')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">≤</button>
+            <button type="button" onclick="insertFormulaToText('\\ge')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">≥</button>
+            <button type="button" onclick="insertFormulaToText('\\neq')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">≠</button>
+            <button type="button" onclick="insertFormulaToText('\\alpha')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">α</button>
+            <button type="button" onclick="insertFormulaToText('\\beta')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">β</button>
+            <button type="button" onclick="insertFormulaToText('\\theta')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">θ</button>
+            <button type="button" onclick="insertFormulaToText('\\int')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-mono text-[11px]">∫</button>
+          </div>
+        </div>
+
+        <!-- Chemistry shortcuts & Periodic Table Helper -->
+        <div id="chemShortcuts" class="hidden p-2.5 bg-slate-800/80 rounded-xl border border-slate-700 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-emerald-400 font-bold">🧪 کەرەستەیێن کیمیایێ (Chemical Helper):</span>
+            <button 
+              type="button" 
+              onclick="openPeriodicTableModal()"
+              class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-lg shadow transition-transform active:scale-95 flex items-center gap-1.5"
+            >
+              <span>🔬</span>
+              <span>خشتەی خولی (Periodic Table Helper)</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-xs">
+            <button type="button" onclick="insertFormulaToText('$$H_2O$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$H_2O$$ (ئاو)</button>
+            <button type="button" onclick="insertFormulaToText('$$CO_2$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$CO_2$$</button>
+            <button type="button" onclick="insertFormulaToText('$$O_2$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$O_2$$</button>
+            <button type="button" onclick="insertFormulaToText('$$NaCl$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$NaCl$$</button>
+            <button type="button" onclick="insertFormulaToText('$$H_2SO_4$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$H_2SO_4$$</button>
+            <button type="button" onclick="insertFormulaToText('$$HCl$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$HCl$$</button>
+            <button type="button" onclick="insertFormulaToText('$$CH_4$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$CH_4$$</button>
+            <button type="button" onclick="insertFormulaToText('$$CaCO_3$$')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-mono text-[11px]">$$CaCO_3$$</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Text -->
+      <div>
+        <label id="qTextLabel" class="block text-xs font-bold text-slate-300 mb-1">دەقێ پرسیارێ:</label>
+        <textarea 
+          id="qText" 
+          rows="2" 
+          placeholder="دەقێ پرسیارێ یان هاوکێشەیێ بنڤیسە (نموونە: $$x^2 + y^2 = z^2$$ یان $$H_2O$$)..." 
+          oninput="updateFormulaLivePreview()"
+          class="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-sm font-sans"
+        ></textarea>
+      </div>
+
+      <!-- Live Preview of Formula (When Math/Chem selected) -->
+      <div id="formulaLivePreview" class="p-3 bg-slate-950 rounded-xl border border-yellow-400/40 space-y-1">
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="font-bold text-yellow-400 flex items-center gap-1.5">
+            <span>✨</span>
+            <span>پێشبینیا ڕاستەوخۆ یا هاوکێشەیێ (KaTeX Formula Live Preview):</span>
+          </span>
+          <span class="text-[10px] text-slate-500 font-mono">KaTeX Engine Active</span>
+        </div>
+        <div id="formulaPreviewContent" class="min-h-10 p-2.5 bg-slate-900 rounded-lg text-white text-base flex items-center justify-center overflow-x-auto text-center border border-slate-800">
+          <span class="text-xs text-slate-500 italic">ل دەقێ سەرێ بنڤیسە دا هاوکێشە ب شێوەیەکێ جوان ب KaTeX بهێتە رێندەرکرن...</span>
+        </div>
+      </div>
+
+      <!-- Diagram Upload Fields (When Physics/Diagram is selected) -->
+      <div id="diagramFields" class="hidden p-3.5 bg-slate-800/80 rounded-xl border border-slate-700 space-y-3">
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-bold text-sky-400 flex items-center gap-1.5">
+            <span>⚡</span>
+            <span>وێنەیێ دیاگرامێ (سێرکیت، هێز، تاقیگەهـ):</span>
+          </label>
+          <span class="text-[10px] text-slate-400">PNG, JPG, SVG پشتگیری دکەت</span>
+        </div>
+
+        <input 
+          type="file" 
+          id="diagramFileInput" 
+          accept="image/*" 
+          onchange="handleDiagramFileUpload(event)"
+          class="hidden"
+        />
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <button 
+            type="button" 
+            onclick="document.getElementById('diagramFileInput').click()"
+            class="h-10 px-4 bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs rounded-xl flex items-center justify-center gap-2 shadow transition-all active:scale-95 shrink-0"
+          >
+            <span>📁</span>
+            <span>بارکردنا وێنەیێ پرسیارێ (Upload)</span>
+          </button>
+          <span class="text-xs text-slate-400 text-center sm:text-right">یان</span>
+          <div class="flex-1 relative">
+            <input 
+              id="diagramUrlInput" 
+              type="url" 
+              placeholder="لینکا وێنەی (Image URL): https://..." 
+              oninput="handleDiagramUrlInput(this.value)"
+              class="w-full h-10 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-sky-400 text-xs font-sans"
+            />
+          </div>
+        </div>
+        <div class="text-[10px] text-slate-400 truncate" id="diagramFileName">چ وێنە نەهاتیە دیارکرن</div>
+
+        <div id="diagramImagePreviewContainer" class="hidden relative p-2 bg-slate-950 rounded-xl border border-sky-500/40 text-center">
+          <img id="diagramImagePreview" src="" alt="Diagram Preview" class="max-h-52 mx-auto rounded-lg object-contain shadow-lg">
+          <button 
+            type="button" 
+            onclick="removeDiagramImage()"
+            class="absolute top-3 right-3 px-2.5 py-1 bg-rose-500/90 hover:bg-rose-600 text-white text-xs font-black rounded-lg shadow flex items-center gap-1"
+          >
+            <span>🗑️</span>
+            <span>ژێبرنا وێنەی</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MCQ / Math / Chem / Diagram Options Dynamic Fields -->
+      <div id="mcqFields" class="space-y-3">
+        <label class="block text-xs font-bold text-yellow-400 flex items-center justify-between">
+          <span>هەڵبژاردن (٤ هەلبژاردن دانی و بەرسڤا راست دیاربکە):</span>
+          <span class="text-[10px] text-slate-400">دشێی هاوکێشەیێن $$...$$ د هەلبژاردنان ژی دا بنڤیسی</span>
+        </label>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+            <input type="radio" name="mcqCorrect" value="0" checked class="w-4 h-4 accent-yellow-400 cursor-pointer">
+            <span class="text-xs font-bold text-yellow-400 w-5">١.</span>
+            <input id="opt0" type="text" oninput="updateFormulaLivePreview()" placeholder="هەلبژاردنا ئێکێ (نموونە: $$x = 2$$ یان $$H_2O$$)" class="flex-1 bg-transparent text-sm text-white focus:outline-none">
+          </div>
+          <div class="flex items-center gap-2 bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+            <input type="radio" name="mcqCorrect" value="1" class="w-4 h-4 accent-yellow-400 cursor-pointer">
+            <span class="text-xs font-bold text-yellow-400 w-5">٢.</span>
+            <input id="opt1" type="text" oninput="updateFormulaLivePreview()" placeholder="هەلبژاردنا دووێ" class="flex-1 bg-transparent text-sm text-white focus:outline-none">
+          </div>
+          <div class="flex items-center gap-2 bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+            <input type="radio" name="mcqCorrect" value="2" class="w-4 h-4 accent-yellow-400 cursor-pointer">
+            <span class="text-xs font-bold text-yellow-400 w-5">٣.</span>
+            <input id="opt2" type="text" oninput="updateFormulaLivePreview()" placeholder="هەلبژاردنا سیێ" class="flex-1 bg-transparent text-sm text-white focus:outline-none">
+          </div>
+          <div class="flex items-center gap-2 bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+            <input type="radio" name="mcqCorrect" value="3" class="w-4 h-4 accent-yellow-400 cursor-pointer">
+            <span class="text-xs font-bold text-yellow-400 w-5">٤.</span>
+            <input id="opt3" type="text" oninput="updateFormulaLivePreview()" placeholder="هەلبژاردنا چارێ" class="flex-1 bg-transparent text-sm text-white focus:outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- True/False Dynamic Fields (دگ یا نەدگ) -->
+      <div id="trueFalseFields" class="hidden space-y-2 p-3 bg-slate-800/80 rounded-xl border border-slate-700">
+        <label class="block text-xs font-bold text-yellow-400">بەرسڤا دروست دەستنیشان بکە:</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center justify-center gap-2 p-3 rounded-xl border border-emerald-500/50 bg-emerald-950/30 hover:bg-emerald-950/50 cursor-pointer transition-all">
+            <input type="radio" name="tfCorrect" value="true" checked class="w-4 h-4 accent-emerald-400">
+            <span class="font-black text-emerald-400 text-sm">دگ (True) ✅</span>
+          </label>
+          <label class="flex items-center justify-center gap-2 p-3 rounded-xl border border-rose-500/50 bg-rose-950/30 hover:bg-rose-950/50 cursor-pointer transition-all">
+            <input type="radio" name="tfCorrect" value="false" class="w-4 h-4 accent-rose-400">
+            <span class="font-black text-rose-400 text-sm">نەدگ (False) ❌</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Blank Dynamic Fields (ڤالاهی پر بکە) -->
+      <div id="blankFields" class="hidden space-y-2">
+        <label class="block text-xs font-bold text-yellow-400">بەرسڤا دروستا بۆشاییێ (وشەیا دروست):</label>
+        <p class="text-[11px] text-slate-400">تکایە د دەقێ پرسیارێ دا هێما سێ خەتان (___) بکاربینە بۆ جهێ بەتال (نموونە: پایتەختێ کوردستانێ ___ یە).</p>
+        <input 
+          id="blankAnswer" 
+          type="text" 
+          placeholder="وشەیا راست یا بۆشاییێ (نموونە: هەولێر)" 
+          class="w-full h-11 px-3 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-sm"
+        />
+      </div>
+
+      <!-- Matching Dynamic Fields (هەڤبەرکرن) -->
+      <div id="matchingFields" class="hidden space-y-3 p-3.5 bg-slate-800/80 rounded-xl border border-slate-700">
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-bold text-yellow-400">جووتێن هەڤبەرکرنێ (ستوونا A و ستوونا B):</label>
+          <button 
+            type="button" 
+            onclick="addMatchingPairInput()" 
+            class="px-2.5 py-1 bg-yellow-400 text-slate-950 font-black text-xs rounded-lg hover:bg-yellow-300 transition-transform active:scale-95"
+          >
+            ➕ زێدەکرنا جووتێ
+          </button>
+        </div>
+        <div id="matchingPairsContainer" class="space-y-2">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Numerical Dynamic Fields (هەژمارتن) -->
+      <div id="numericalFields" class="hidden space-y-3 p-3.5 bg-slate-800/80 rounded-xl border border-slate-700">
+        <label class="block text-xs font-bold text-yellow-400">بەرسڤا ژمارەیی و مەودایێ دروستیێ (Numerical with Tolerance):</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">ژمارەیا دروست (Correct Value):</label>
+            <input 
+              id="numCorrectValue" 
+              type="number" 
+              step="any" 
+              placeholder="نموونە: 9.81" 
+              class="w-full h-11 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-sm font-mono"
+            />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">مەودایێ لێبوردەییێ (Tolerance ±):</label>
+            <input 
+              id="numTolerance" 
+              type="number" 
+              step="any" 
+              value="0.1" 
+              placeholder="نموونە: 0.1" 
+              class="w-full h-11 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-sm font-mono"
+            />
+          </div>
+          <div>
+            <label class="block text-[11px] text-slate-300 font-bold mb-1">یەکا پێڤانێ (Unit - بژاردە):</label>
+            <input 
+              id="numUnit" 
+              type="text" 
+              placeholder="نموونە: m/s² یان N" 
+              class="w-full h-11 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-sm font-sans"
+            />
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400">
+          💡 سیستەم دێ پشکنین کەت کا بەرسڤا قوتابی د ناڤبەرا (Value ± Tolerance) دایە، نموونە: 9.81 ± 0.1 دەلیڤەیا [9.71 هەتا 9.91] راست دهەژمێریت.
+        </p>
+      </div>
+
+      <!-- Writing Dynamic Fields (Fair Grading for Written Questions) -->
+      <div id="writingFields" class="hidden space-y-3 p-3.5 bg-slate-800/80 rounded-xl border border-slate-700">
+        <div class="flex items-center justify-between pb-1 border-b border-slate-700">
+          <label class="block text-xs font-black text-yellow-400 flex items-center gap-1.5">
+            <span>📝</span>
+            <span>ڕێکخستنێن سەحکرنا دادپەروەر بۆ پرسیارا نڤیسینێ (Fair Grading System):</span>
+          </label>
+          <span class="text-[10px] text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/30 font-bold">Auto + Teacher Review</span>
+        </div>
+
+        <!-- 1. Model Answer -->
+        <div>
+          <label for="writingModelAnswer" class="block text-[11px] font-bold text-slate-200 mb-1">
+            بەرسڤا نمونەیی (Model Answer) <span class="text-rose-400">*</span>:
+          </label>
+          <textarea 
+            id="writingModelAnswer" 
+            rows="3" 
+            placeholder="مامۆستایێ هێژا بەرسڤا تەمام و بێ کێماسی ل ڤێرێ بنڤیسە..." 
+            class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-xs sm:text-sm font-sans"
+          ></textarea>
+        </div>
+
+        <!-- 2. Keywords -->
+        <div>
+          <label for="writingKeywords" class="block text-[11px] font-bold text-slate-200 mb-1 flex items-center justify-between">
+            <span>پەیڤێن سەرەکی (Keywords - 5 points each):</span>
+            <span class="text-[10px] text-slate-400">ب فاریزە جیا بکە (Comma-separated)</span>
+          </label>
+          <input 
+            id="writingKeywords" 
+            type="text" 
+            placeholder="نموونە: mitosis, nucleus, division یان دابەشبوون, ناوک, خانە" 
+            class="w-full h-10 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-xs sm:text-sm font-sans"
+          />
+          <p class="text-[10px] text-slate-400 mt-1">
+            💡 سیستەم دێ ل پەیڤێن سەرەکی د ناڤ بەرسڤا قوتابی دا گەڕێت (کوردی/ئینگلیزی/عەرەبی)، هەر پەیڤەک دهێتە خەڵاتکرن ب خالان.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- 3. Points per Question -->
+          <div>
+            <label for="writingPoints" class="block text-[11px] font-bold text-slate-200 mb-1">
+              نمرا هەر پسیارێ (Points):
+            </label>
+            <input 
+              id="writingPoints" 
+              type="number" 
+              min="1" 
+              max="100" 
+              value="10" 
+              placeholder="نموونە: 10" 
+              class="w-full h-10 px-3 rounded-xl bg-slate-900 border border-slate-700 text-yellow-400 font-mono font-bold focus:outline-none focus:border-yellow-400 text-xs sm:text-sm"
+            />
+          </div>
+
+          <!-- 4. Grading Rubric -->
+          <div>
+            <label for="writingRubric" class="block text-[11px] font-bold text-slate-200 mb-1">
+              رێنمایا سەحکرنێ (Grading Rubric):
+            </label>
+            <input 
+              id="writingRubric" 
+              type="text" 
+              placeholder="نموونە: ٣ خال بۆ پەیڤان، ٤ خال بۆ تێگەهشتنێ، ٣ بۆ ڕێزمانێ" 
+              class="w-full h-10 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-yellow-400 text-xs sm:text-sm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <button 
+          type="button" 
+          id="btnAddQuestion" 
+          onclick="addOrUpdateQuestion()" 
+          class="flex-1 h-11 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+        >
+          <span>➕</span>
+          <span id="btnActionText">زێدەکرنا پرسیارێ ل لیستێ</span>
+        </button>
+        <button 
+          type="button" 
+          id="btnCancelEdit" 
+          onclick="cancelEditing()" 
+          class="hidden px-4 h-11 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-sm border border-slate-700 transition-colors"
+        >
+          پەشیمانبوون
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. Questions List (render with Delete: questions.splice(i,1) & Edit prompt) -->
+    <div class="bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <h2 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+          <span>📋</span>
+          <span>لیستا پرسیاران (<span id="qCount">0</span>)</span>
+        </h2>
+        <div class="flex gap-2">
+          <button 
+            type="button" 
+            onclick="togglePreviewModal()" 
+            class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-yellow-400 rounded-lg border border-slate-700 transition-colors flex items-center gap-1"
+          >
+            <span>👁️</span>
+            <span>پێشاندانا تاقیکرنێ (Modal)</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="questionsContainer" class="space-y-3">
+        <p id="emptyQuestionsMsg" class="text-xs text-slate-500 text-center py-6">
+          هێشتا چ پرسیار نەهاتینە زێدەکرن. پرسیارەکێ ل سەرێ زێدە بکە!
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Preview Div (Directly shows how student will see it) -->
+    <div id="livePreviewBox" class="bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <h2 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+          <span>👁️</span>
+          <span>پێشاندانا ڕاستەوخۆ (چەوا دەف قوتابی دیار دبیت - Preview):</span>
+        </h2>
+        <span id="previewExamTitle" class="text-xs text-yellow-400 font-bold"></span>
+      </div>
+      <div id="livePreviewContainer" class="space-y-3"></div>
+    </div>
+
+    <!-- 4. Publish Button, Status & 2 Teacher Preview Action Buttons -->
+    <div class="bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl space-y-4 text-center">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <h2 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+          <span>🚀</span>
+          <span>بەلاڤکردن و دۆخێ ئەزموونێ</span>
+        </h2>
+        <div id="examStatusDisplay" class="px-3 py-1 rounded-full text-xs font-black border bg-amber-500/10 border-amber-500/30 text-amber-400 flex items-center gap-1.5 transition-all">
+          <span>📝</span>
+          <span id="examStatusText">دۆخ: ڕەشنووس (draft)</span>
+        </div>
+      </div>
+
+      <button 
+        type="button" 
+        onclick="publish()" 
+        id="btnPublish"
+        class="w-full h-12 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-base transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+      >
+        <span>🚀</span>
+        <span>تۆمارکردن / نویکردنا ئەزموونێ (Save Exam)</span>
+      </button>
+
+      <!-- 2 Main Required Buttons: 1. "👁️ پێداچوون و تاقیکرن"  2. "📢 ئاگەهدارکرنا قوتابیان" -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <button 
+          type="button" 
+          onclick="startTeacherPreviewModal()" 
+          id="btnPreviewExam"
+          class="h-12 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+        >
+          <span>👁️</span>
+          <span>پێداچوون و تاقیکرن</span>
+        </button>
+        <button 
+          type="button" 
+          onclick="activateExamForStudents()" 
+          id="btnActivateExam"
+          class="h-12 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+        >
+          <span>📢</span>
+          <span>ئاگەهدارکرنا قوتابیان</span>
+        </button>
+      </div>
+
+      <div id="publishSuccessBox" class="hidden bg-emerald-950/40 border border-emerald-500/50 p-4 rounded-xl text-center space-y-3">
+        <p class="text-emerald-400 text-sm font-bold">🎉 ئەزموون ب سەرکەفتیانە هاتە تومارکرن!</p>
+        <p class="text-xs text-slate-300">کۆدێ ئەزموونێ:</p>
+        <div class="flex items-center justify-center gap-2">
+          <span id="publishedCodeDisplay" class="text-2xl font-black font-mono text-yellow-400 bg-slate-950 px-4 py-1.5 rounded-xl border border-yellow-400"></span>
+          <button onclick="copyExamCode()" class="p-2 bg-yellow-400 text-slate-950 rounded-lg text-xs font-black">کۆپی بکە</button>
+        </div>
+        <p class="text-[11px] text-slate-400">نها پێداچوونێ بکە بەری بدەی قوتابیان. دەمێ دلنیا بوی کلیک ل «ئاگەهدارکرنا قوتابیان» بکە دا بچیتە دۆخێ Active.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          <button 
+            type="button" 
+            onclick="startTeacherPreviewModal()" 
+            class="h-10 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-lg text-xs transition-all flex items-center justify-center gap-1.5"
+          >
+            <span>👁️</span>
+            <span>پێداچوون و تاقیکرن</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="activateExamForStudents()" 
+            class="h-10 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black rounded-lg text-xs transition-all flex items-center justify-center gap-1.5"
+          >
+            <span>📢</span>
+            <span>ئاگەهدارکرنا قوتابیان</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast for Teacher -->
+    <div id="teacherLiveNotification" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-emerald-950 border-2 border-emerald-400 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all">
+      <span class="text-2xl">📢</span>
+      <div>
+        <p class="text-xs font-mono font-bold text-emerald-400 uppercase">Exam is now live for students</p>
+        <p class="text-xs font-black text-white">ئەزموون نها یا چالاکە بۆ قوتابیان!</p>
+      </div>
+    </div>
+
+    <!-- Results Table of students -->
+    <div class="bg-slate-900 border border-slate-800 p-4 md:p-5 rounded-2xl shadow-xl space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <h2 class="text-sm font-black text-yellow-400 flex items-center gap-2">
+          <span>📊</span>
+          <span>ئەنجامێن قوتابیان</span>
+        </h2>
+        <button onclick="loadTeacherResults()" class="text-xs text-slate-400 hover:text-yellow-400">نویکردن 🔄</button>
+      </div>
+      <div id="resultsTableWrap" class="overflow-x-auto">
+        <table class="w-full text-right text-xs">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-800">
+              <th class="py-2">ناڤێ قوتابی</th>
+              <th class="py-2">کۆدێ ئەزمونێ</th>
+              <th class="py-2">کۆدێ ئەنجامێ</th>
+              <th class="py-2">نمرە</th>
+              <th class="py-2">ژ سەدێ</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTbody" class="divide-y divide-slate-800 text-white">
+            <tr>
+              <td colspan="5" class="text-center py-4 text-slate-500">بارکرنا ئەنجامان...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Preview Modal (Student View + Working Timer + Banner: PREVIEW MODE - Results will not be saved) -->
+  <div id="previewModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 md:p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-5 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl relative">
+      <!-- Mandatory Banner: PREVIEW MODE - Results will not be saved -->
+      <div class="bg-amber-500/20 border-2 border-amber-400 text-amber-300 p-2.5 rounded-xl text-center font-black text-xs md:text-sm shadow-md flex items-center justify-center gap-2">
+        <span class="text-base">⚠️</span>
+        <span>PREVIEW MODE - Results will not be saved</span>
+      </div>
+
+      <!-- Preview Header with Timer & Close -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 id="previewModalTitle" class="font-black text-yellow-400 text-sm">تاقیکرن</h3>
+          <span id="previewProgressText" class="text-[11px] text-slate-400 font-bold">پرسیارا 1 ژ 3</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- Working Timer Display -->
+          <div class="flex items-center gap-1.5 bg-slate-800 border border-yellow-400/50 px-3 py-1 rounded-xl text-yellow-400">
+            <span class="text-xs">⏱️</span>
+            <span id="previewTimerDisplay" class="font-mono font-black text-sm">30</span>
+            <span class="text-[10px] text-slate-400">چرکە</span>
+          </div>
+          <button onclick="closePreviewModal()" class="text-slate-400 hover:text-white text-lg font-bold p-1">✕</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+        <div id="previewProgressBar" class="bg-yellow-400 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <!-- Student View Interactive Body -->
+      <div id="previewInteractiveCard" class="space-y-4">
+        <!-- Question Text -->
+        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+          <p id="previewQuestionText" class="text-sm md:text-base font-bold text-white leading-relaxed"></p>
+        </div>
+
+        <!-- Question Answer Component -->
+        <div id="previewAnswerArea" class="space-y-2"></div>
+
+        <!-- Feedback indicator for teacher test -->
+        <div id="previewFeedbackBox" class="hidden p-2.5 rounded-xl text-xs font-bold"></div>
+
+        <!-- Next Question Button -->
+        <button 
+          id="btnPreviewNext"
+          onclick="previewSubmitAndNext()" 
+          class="w-full h-11 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2"
+        >
+          <span>پرسیارا دویفدا</span>
+          <span>➔</span>
+        </button>
+      </div>
+
+      <!-- End of Preview Screen -->
+      <div id="previewFinishedCard" class="hidden text-center space-y-4 py-2">
+        <div class="w-14 h-14 bg-yellow-400/20 text-yellow-400 rounded-full flex items-center justify-center text-2xl mx-auto border border-yellow-400/40">
+          🏆
+        </div>
+        <h3 class="text-lg font-black text-white">دووماهیا پێداچوونا ئەزموونێ</h3>
+        <p id="previewFinalScore" class="text-2xl font-black font-mono text-yellow-400"></p>
+        <p class="text-xs text-slate-300">ئەڤە تەنها پێشاندان بوو. چ ئەنجام د داتابەیسێ دا نەهاتینە تومارکرن.</p>
+
+        <!-- Question Review List to see if questions have errors -->
+        <div id="previewErrorsSummary" class="text-right space-y-2 max-h-48 overflow-y-auto p-2 bg-slate-950 rounded-xl border border-slate-800"></div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+          <button 
+            onclick="restartPreviewTest()" 
+            class="h-11 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl text-xs border border-slate-700 transition-colors"
+          >
+            🔄 تاقیکرنا دووبارە
+          </button>
+          <button 
+            onclick="closePreviewModal(); activateExamForStudents();" 
+            class="h-11 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5"
+          >
+            <span>📢</span>
+            <span>ئاگەهدارکرنا قوتابیان (Active)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800">
+        <button onclick="closePreviewModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-400 transition-colors">
+          داخستنا پێشاندانێ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Static Review Modal fallback -->
+  <div id="staticPreviewModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl p-5 max-h-[85vh] overflow-y-auto space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="font-black text-yellow-400 text-sm flex items-center gap-2">
+          <span>👁️</span>
+          <span>لیستا پرسیاران</span>
+        </h3>
+        <button onclick="toggleStaticPreviewModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <div id="previewContent" class="space-y-4"></div>
+      <button onclick="toggleStaticPreviewModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-300">
+        داخستن
+      </button>
+  <!-- Periodic Table Helper Modal for Chemistry Questions -->
+  <div id="periodicTableModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 md:p-5">
+    <div class="bg-slate-900 border border-emerald-500/50 w-full max-w-2xl rounded-2xl p-5 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-base">🧪</span>
+          <div>
+            <h3 class="font-black text-emerald-400 text-sm md:text-base">خشتەی خولی و کەرەستەیێن کیمیایێ (Periodic Table Helper)</h3>
+            <p class="text-[11px] text-slate-400">کلیک ل سەر هەر هێما یان ئاوێتەیەکێ بکە دا ئێکسەر بچیتە ناڤ پرسیارێ</p>
+          </div>
+        </div>
+        <button onclick="closePeriodicTableModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1">✕</button>
+      </div>
+
+      <!-- Quick Compounds -->
+      <div class="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+        <h4 class="text-xs font-black text-emerald-400">🔥 ئاوێتە و پێکهاتەیێن سەرەکی (Common Compounds):</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs">
+          <button type="button" onclick="insertPeriodicElement('$$H_2O$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">H₂O</span>
+            <span class="text-[10px] text-slate-400">ئاو (Water)</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$CO_2$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">CO₂</span>
+            <span class="text-[10px] text-slate-400">دووەم ئۆکسیدی کاربۆن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$NaCl$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">NaCl</span>
+            <span class="text-[10px] text-slate-400">خوێیا چێشتێ</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$CH_4$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">CH₄</span>
+            <span class="text-[10px] text-slate-400">گازی میسان</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$H_2SO_4$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">H₂SO₄</span>
+            <span class="text-[10px] text-slate-400">ترشی گۆگرد</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$HCl$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">HCl</span>
+            <span class="text-[10px] text-slate-400">ترشی هایدرۆکلۆریک</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$CaCO_3$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">CaCO₃</span>
+            <span class="text-[10px] text-slate-400">کالسیۆم کاربۆنات</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('$$C_6H_{12}O_6$$')" class="p-2 rounded-lg bg-slate-900 hover:bg-emerald-950 text-emerald-300 border border-slate-700 text-right">
+            <span class="font-bold block font-mono">C₆H₁₂O₆</span>
+            <span class="text-[10px] text-slate-400">گلوکۆز</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subscript & Reaction Symbols -->
+      <div class="space-y-1 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+        <h4 class="text-[11px] font-bold text-yellow-400">هێما و بننووس (Subscripts & Reaction Symbols):</h4>
+        <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+          <button type="button" onclick="insertPeriodicElement('_2')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">_2 (₂)</button>
+          <button type="button" onclick="insertPeriodicElement('_3')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">_3 (₃)</button>
+          <button type="button" onclick="insertPeriodicElement('_4')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">_4 (₄)</button>
+          <button type="button" onclick="insertPeriodicElement('^+')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">⁺</button>
+          <button type="button" onclick="insertPeriodicElement('^-')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">⁻</button>
+          <button type="button" onclick="insertPeriodicElement('^{2+}')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">²⁺</button>
+          <button type="button" onclick="insertPeriodicElement('^{2-}')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">²⁻</button>
+          <button type="button" onclick="insertPeriodicElement('\\rightarrow ')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">→ تیر</button>
+          <button type="button" onclick="insertPeriodicElement('\\rightleftharpoons ')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-700 text-yellow-300 border border-slate-700 font-bold">⇌ هاوسەنگ</button>
+        </div>
+      </div>
+
+      <!-- Periodic Elements Grid -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-300">
+          <span>کەرەستەیێن خشتەیێ خولی (Elements):</span>
+          <span class="text-[10px] text-slate-500">سەرەکیترین توخمەکان</span>
+        </div>
+        <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5 text-center text-xs font-mono">
+          <button type="button" onclick="insertPeriodicElement('H')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">1</span>
+            <span class="font-black text-sm text-yellow-400">H</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">هایدرۆجین</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('He')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">2</span>
+            <span class="font-black text-sm text-yellow-400">He</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">هێلیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Li')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">3</span>
+            <span class="font-black text-sm text-yellow-400">Li</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">لیتیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Be')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">4</span>
+            <span class="font-black text-sm text-yellow-400">Be</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">بێریلیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('B')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">5</span>
+            <span class="font-black text-sm text-yellow-400">B</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">بۆرۆن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('C')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">6</span>
+            <span class="font-black text-sm text-yellow-400">C</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">کاربۆن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('N')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">7</span>
+            <span class="font-black text-sm text-yellow-400">N</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">نایترۆجین</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('O')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">8</span>
+            <span class="font-black text-sm text-yellow-400">O</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">ئۆکسجین</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('F')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">9</span>
+            <span class="font-black text-sm text-yellow-400">F</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">فلۆرین</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Ne')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">10</span>
+            <span class="font-black text-sm text-yellow-400">Ne</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">نیۆن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Na')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">11</span>
+            <span class="font-black text-sm text-yellow-400">Na</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">سۆدیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Mg')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">12</span>
+            <span class="font-black text-sm text-yellow-400">Mg</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">مەگنیسیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Al')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">13</span>
+            <span class="font-black text-sm text-yellow-400">Al</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">ئەلەمنیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Si')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">14</span>
+            <span class="font-black text-sm text-yellow-400">Si</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">سیلیکۆن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('P')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">15</span>
+            <span class="font-black text-sm text-yellow-400">P</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">فۆسفۆر</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('S')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">16</span>
+            <span class="font-black text-sm text-yellow-400">S</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">گۆگرد</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Cl')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">17</span>
+            <span class="font-black text-sm text-yellow-400">Cl</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">کلۆرین</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Ar')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">18</span>
+            <span class="font-black text-sm text-yellow-400">Ar</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">ئارگۆن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('K')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">19</span>
+            <span class="font-black text-sm text-yellow-400">K</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">پۆتاسیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Ca')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">20</span>
+            <span class="font-black text-sm text-yellow-400">Ca</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">کالسیۆم</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Fe')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">26</span>
+            <span class="font-black text-sm text-yellow-400">Fe</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">ئاسن</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Cu')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">29</span>
+            <span class="font-black text-sm text-yellow-400">Cu</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">مس</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Zn')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">30</span>
+            <span class="font-black text-sm text-yellow-400">Zn</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">زینک</span>
+          </button>
+          <button type="button" onclick="insertPeriodicElement('Au')" class="p-2 rounded bg-slate-800 hover:bg-emerald-500 hover:text-black border border-slate-700 transition-colors">
+            <span class="text-[9px] text-slate-400 block font-sans">79</span>
+            <span class="font-black text-sm text-yellow-400">Au</span>
+            <span class="text-[8px] text-slate-400 block font-sans truncate">زێڕ</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800">
+        <button type="button" onclick="closePeriodicTableModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold">
+          داخستنی خشتەی خولی
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Hybrid API Interceptor (works locally and with Cloudflare Pages D1)
+    const _origFetch = window.fetch;
+    window.fetch = async function(input, init) {
+      try {
+        const urlStr = typeof input === 'string' ? input : (input instanceof Request ? input.url : String(input));
+        const urlObj = new URL(urlStr, window.location.origin);
+
+        if (urlObj.pathname === '/api/exam') {
+          try {
+            const resp = await _origFetch(input, init);
+            if (resp.status !== 404) return resp;
+          } catch(e) {}
+
+          const rawStore = localStorage.getItem('qk_Q2') || '[]';
+          let quizzes = JSON.parse(rawStore);
+
+          if (init && init.method === 'POST') {
+            let data = {};
+            try { data = typeof init.body === 'string' ? JSON.parse(init.body) : init.body; } catch(e){}
+            const rand = Math.floor(1000 + Math.random() * 9000);
+            const id = (data.id || data.code || `QZ-${rand}`).toUpperCase();
+            const status = data.status || 'draft';
+            
+            const existingIdx = quizzes.findIndex(q => (q.code || q.id) === id);
+            const quizItem = {
+              id: id,
+              code: id,
+              title: data.title || 'تاقیکرن',
+              name: data.title || 'تاقیکرن',
+              status: status,
+              active: (status === 'active'),
+              questions: data.questions || [],
+              updated_at: new Date().toISOString()
+            };
+
+            if (existingIdx >= 0) quizzes[existingIdx] = quizItem;
+            else quizzes.unshift(quizItem);
+            
+            localStorage.setItem('qk_Q2', JSON.stringify(quizzes));
+            localStorage.setItem('quiz_exams_v11', JSON.stringify(quizzes));
+
+            return new Response(JSON.stringify({ 
+              success: true, 
+              id, 
+              code: id, 
+              status, 
+              title: quizItem.title, 
+              questions: quizItem.questions 
+            }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+
+          // GET /api/exam?code=...
+          const code = (urlObj.searchParams.get('code') || '').toUpperCase().trim();
+          const role = (urlObj.searchParams.get('role') || '').toLowerCase().trim();
+          const found = quizzes.find(q => (q.code || q.id) === code);
+          if (found) {
+            let parsedQs = found.questions;
+            if (typeof parsedQs === 'string') {
+              try { parsedQs = JSON.parse(parsedQs); } catch(e) { parsedQs = []; }
+            }
+            const examStatus = found.status || (found.active ? 'active' : 'draft');
+
+            // Enforce: Only when status='active' students can enter with QZ code.
+            if (role !== 'teacher' && role !== 'preview' && examStatus !== 'active') {
+              return new Response(JSON.stringify({
+                error: examStatus === 'closed'
+                  ? '🔒 ئەڤ تاقیکرنە هاتە داخستن (Status: Closed)'
+                  : `⚠️ ئەڤ ئەزموونە هێشتا نەهاتیە کاراکرن ژ لایێ مامۆستای ڤە (Status: ${examStatus})! Only active exams can be entered.`,
+                status: examStatus,
+                notActive: true
+              }), {
+                status: 403,
+                headers: { 'Content-Type': 'application/json' }
+              });
+            }
+
+            return new Response(JSON.stringify({
+              id: found.id || found.code,
+              code: found.code || found.id,
+              title: found.title || found.name || 'تاقیکرن',
+              status: examStatus,
+              questions: parsedQs
+            }), {
+              status: 200,
+              headers: { 'Content-Type': 'application/json' }
+            });
+          }
+          return new Response(JSON.stringify({ error: 'کۆدێ ئەزمونێ نەهاتە دیتن!' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        if (urlObj.pathname === '/api/teacher') {
+          try {
+            const resp = await _origFetch(input, init);
+            if (resp.status !== 404) return resp;
+          } catch(e) {}
+          const results = JSON.parse(localStorage.getItem('qk_results_v11') || '[]');
+          return new Response(JSON.stringify(results), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        return _origFetch(input, init);
+      } catch(err) {
+        return _origFetch(input, init);
+      }
+    };
+
+    let questions = [];
+    let currentType = 'mcq';
+    let editIndex = -1;
+    let currentExamStatus = 'draft'; // 'draft' | 'preview' | 'active' | 'closed'
+
+    // Teacher Student-View Preview State
+    let previewIdx = 0;
+    let previewScore = 0;
+    let previewTimer = null;
+    let previewTimeLeft = 30;
+    let previewAnswers = [];
+
+    function updateStatusUI(status) {
+      currentExamStatus = status || 'draft';
+      const badge = document.getElementById('examStatusDisplay');
+      const text = document.getElementById('examStatusText');
+      if (!badge || !text) return;
+
+      if (currentExamStatus === 'active') {
+        badge.className = "px-3 py-1 rounded-full text-xs font-black border bg-emerald-500/20 border-emerald-500/50 text-emerald-400 flex items-center gap-1.5 transition-all shadow-sm";
+        badge.innerHTML = `<span>🟢</span><span>دۆخ: چالاک (active) - بەرهەڤە بۆ قوتابیان</span>`;
+      } else if (currentExamStatus === 'preview') {
+        badge.className = "px-3 py-1 rounded-full text-xs font-black border bg-sky-500/20 border-sky-500/50 text-sky-400 flex items-center gap-1.5 transition-all shadow-sm";
+        badge.innerHTML = `<span>👁️</span><span>دۆخ: د دەمێ پێداچوونێ (preview)</span>`;
+      } else if (currentExamStatus === 'closed') {
+        badge.className = "px-3 py-1 rounded-full text-xs font-black border bg-rose-500/20 border-rose-500/50 text-rose-400 flex items-center gap-1.5 transition-all shadow-sm";
+        badge.innerHTML = `<span>🔒</span><span>دۆخ: داخستی (closed)</span>`;
+      } else {
+        badge.className = "px-3 py-1 rounded-full text-xs font-black border bg-amber-500/20 border-amber-500/40 text-amber-400 flex items-center gap-1.5 transition-all shadow-sm";
+        badge.innerHTML = `<span>📝</span><span>دۆخ: ڕەشنووس (draft)</span>`;
+      }
+    }
+
+    function generateNewCode() {
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      const code = `QZ-${rand}`;
+      document.getElementById('examCode').value = code;
+      const loadInput = document.getElementById('loadCode');
+      if (loadInput && !loadInput.value) loadInput.value = code;
+    }
+
+    // 2. loadExam() with role=teacher so it can load drafts/previews
+    async function loadExam() {
+      const loadInput = document.getElementById('loadCode');
+      const code = (loadInput ? loadInput.value : '').trim().toUpperCase();
+      if (!code) {
+        alert("تکایە کۆدێ ئەزمونێ بنڤیسە (نموونە: QZ-XXXX) بۆ دەستکاریێ!");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/exam?code=' + encodeURIComponent(code) + '&role=teacher');
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.error || "کۆدێ ئەزمونێ خەلەتە یان نەهاتە دیتن!");
+          return;
+        }
+
+        const exam = await res.json();
+        let qData = exam.questions;
+        if (typeof qData === 'string') {
+          try { qData = JSON.parse(qData); } catch(e) { qData = []; }
+        }
+        questions = Array.isArray(qData) ? qData : [];
+
+        const examTitle = document.getElementById('examTitle');
+        if (examTitle) examTitle.value = exam.title || exam.name || '';
+
+        const examCode = document.getElementById('examCode');
+        if (examCode) examCode.value = exam.id || exam.code || code;
+
+        updateStatusUI(exam.status || 'draft');
+
+        // Render questions list, preview, and sync
+        render();
+
+        alert(`ئەزموونا (${code}) ب سەرکەفتیانە هاتە بارکرن! دۆخ: ${currentExamStatus}. نها دشێی دەستکاری، پێداچوون (Preview) یان ئاگەهدارکرنا قوتابیان (Active) ئەنجام بدەی.`);
+      } catch (err) {
+        alert("خەلەتی د بارکرنا ئەزمونێ دا: " + err.message);
+      }
+    }
+
+    let currentDiagramDataUrl = null;
+    let currentMatchingPairs = [
+      { left: '', right: '' },
+      { left: '', right: '' },
+      { left: '', right: '' }
+    ];
+
+    // Initialize default type to math
+    currentType = 'math';
+
+    function setQuestionType(type) {
+      currentType = type;
+      const select = document.getElementById('questionTypeSelect');
+      if (select && select.value !== type) select.value = type;
+
+      // 1. Math / Chem Toolbars
+      const mathChemToolbar = document.getElementById('mathChemToolbar');
+      const mathShortcuts = document.getElementById('mathShortcuts');
+      const chemShortcuts = document.getElementById('chemShortcuts');
+      const formulaLivePreview = document.getElementById('formulaLivePreview');
+
+      const isMath = (type === 'math');
+      const isChem = (type === 'chemical');
+      const isDiagram = (type === 'diagram');
+      const isTF = (type === 'truefalse');
+      const isBlank = (type === 'blank');
+      const isMatching = (type === 'matching');
+      const isNumerical = (type === 'numerical');
+      const isWriting = (type === 'writing');
+      const isMCQFormat = (isMath || isChem || isDiagram || type === 'mcq');
+
+      if (mathChemToolbar) mathChemToolbar.classList.toggle('hidden', !isMath && !isChem);
+      if (mathShortcuts) mathShortcuts.classList.toggle('hidden', !isMath);
+      if (chemShortcuts) chemShortcuts.classList.toggle('hidden', !isChem);
+      if (formulaLivePreview) formulaLivePreview.classList.toggle('hidden', !isMath && !isChem);
+
+      // 2. Specific Field containers
+      document.getElementById('diagramFields')?.classList.toggle('hidden', !isDiagram);
+      document.getElementById('mcqFields')?.classList.toggle('hidden', !isMCQFormat);
+      document.getElementById('trueFalseFields')?.classList.toggle('hidden', !isTF);
+      document.getElementById('blankFields')?.classList.toggle('hidden', !isBlank);
+      document.getElementById('matchingFields')?.classList.toggle('hidden', !isMatching);
+      document.getElementById('numericalFields')?.classList.toggle('hidden', !isNumerical);
+      document.getElementById('writingFields')?.classList.toggle('hidden', !isWriting);
+
+      // Label adjustment
+      const qLabel = document.getElementById('qTextLabel');
+      if (qLabel) {
+        if (isBlank) qLabel.innerText = "دەقێ پرسیارێ (هێما ___ بکاربینە بۆ جهێ بەتال، نموونە: پایتەختێ کوردستانێ ___ یە):";
+        else if (isMath) qLabel.innerText = "دەقێ پرسیارێ (دشێی هاوکێشە ب $$...$$ بنڤیسی، نموونە: $$x^2 + y^2 = z^2$$):";
+        else if (isChem) qLabel.innerText = "دەقێ پرسیارێ (دشێی ئاوێتە ب $$...$$ بنڤیسی، نموونە: $$2H_2 + O_2 \\rightarrow 2H_2O$$):";
+        else if (isDiagram) qLabel.innerText = "دەقێ پرسیارێ و ڕوونکردنەوا دیاگرامێ:";
+        else if (isMatching) qLabel.innerText = "ڕێنمایا پرسیارێ (نموونە: هەر بڕگەیەک ژ ستوونا A ب گونجاوێ وێ ل ستوونا B گرێدە):";
+        else if (isNumerical) qLabel.innerText = "دەقێ پرسیارێ یان کێشەیا ژمارەیی:";
+        else qLabel.innerText = "دەقێ پرسیارێ:";
+      }
+
+      if (isMatching && (!currentMatchingPairs || currentMatchingPairs.length === 0)) {
+        currentMatchingPairs = [
+          { left: '', right: '' },
+          { left: '', right: '' },
+          { left: '', right: '' }
+        ];
+      }
+      if (isMatching) renderMatchingPairInputs();
+
+      updateFormulaLivePreview();
+    }
+
+    // KaTeX Live Preview Helper
+    function updateFormulaLivePreview() {
+      const previewBox = document.getElementById('formulaLivePreview');
+      const previewContent = document.getElementById('formulaPreviewContent');
+      if (!previewBox || !previewContent) return;
+
+      if (currentType === 'math' || currentType === 'chemical') {
+        previewBox.classList.remove('hidden');
+        const text = (document.getElementById('qText')?.value || '').trim();
+        if (!text) {
+          previewContent.innerHTML = `<span class="text-xs text-slate-500 italic">ل دەقێ سەرێ بنڤیسە دا هاوکێشە ب شێوەیەکێ جوان ب KaTeX بهێتە رێندەرکرن...</span>`;
+          return;
+        }
+
+        // Display sanitized text with math rendering
+        previewContent.innerHTML = formatMathHtml(text);
+        if (window.renderMathInElement) {
+          try {
+            renderMathInElement(previewContent, {
+              delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      } else {
+        previewBox.classList.add('hidden');
+      }
+    }
+
+    function formatMathHtml(str) {
+      if (!str) return '';
+      // Escape HTML
+      let escaped = str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return escaped;
+    }
+
+    // Quick Insert Formula Helpers
+    function insertFormulaToText(snippet) {
+      const qInput = document.getElementById('qText');
+      if (!qInput) return;
+      const start = qInput.selectionStart || qInput.value.length;
+      const end = qInput.selectionEnd || qInput.value.length;
+      const current = qInput.value;
+      qInput.value = current.substring(0, start) + snippet + current.substring(end);
+      qInput.focus();
+      qInput.selectionStart = qInput.selectionEnd = start + snippet.length;
+      updateFormulaLivePreview();
+    }
+
+    // Periodic Table Modal Helpers
+    function openPeriodicTableModal() {
+      document.getElementById('periodicTableModal')?.classList.remove('hidden');
+    }
+
+    function closePeriodicTableModal() {
+      document.getElementById('periodicTableModal')?.classList.add('hidden');
+    }
+
+    function insertPeriodicElement(val) {
+      insertFormulaToText(val);
+      // Optional: keep modal or close
+    }
+
+    // Diagram Upload & URL Helpers
+    function handleDiagramFileUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const fileNameLabel = document.getElementById('diagramFileName');
+      if (fileNameLabel) fileNameLabel.innerText = file.name;
+      const urlInput = document.getElementById('diagramUrlInput');
+      if (urlInput) urlInput.value = '';
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        currentDiagramDataUrl = evt.target.result;
+        const previewContainer = document.getElementById('diagramImagePreviewContainer');
+        const previewImg = document.getElementById('diagramImagePreview');
+        if (previewImg && previewContainer) {
+          previewImg.src = currentDiagramDataUrl;
+          previewContainer.classList.remove('hidden');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleDiagramUrlInput(val) {
+      const url = (val || '').trim();
+      const previewContainer = document.getElementById('diagramImagePreviewContainer');
+      const previewImg = document.getElementById('diagramImagePreview');
+      const fileNameLabel = document.getElementById('diagramFileName');
+
+      if (!url) {
+        currentDiagramDataUrl = null;
+        if (previewContainer) previewContainer.classList.add('hidden');
+        if (fileNameLabel) fileNameLabel.innerText = 'چ وێنە نەهاتیە دیارکرن';
+        return;
+      }
+
+      currentDiagramDataUrl = url;
+      if (fileNameLabel) fileNameLabel.innerText = 'لینکا وێنەی (URL) دانرا';
+      if (previewImg && previewContainer) {
+        previewImg.src = url;
+        previewContainer.classList.remove('hidden');
+      }
+    }
+
+    function removeDiagramImage() {
+      currentDiagramDataUrl = null;
+      const input = document.getElementById('diagramFileInput');
+      if (input) input.value = '';
+      const urlInput = document.getElementById('diagramUrlInput');
+      if (urlInput) urlInput.value = '';
+      const fileNameLabel = document.getElementById('diagramFileName');
+      if (fileNameLabel) fileNameLabel.innerText = 'چ وێنە نەهاتیە دیارکرن';
+      const previewContainer = document.getElementById('diagramImagePreviewContainer');
+      if (previewContainer) previewContainer.classList.add('hidden');
+    }
+
+    // Matching Pairs Builder Helpers
+    function renderMatchingPairInputs() {
+      const container = document.getElementById('matchingPairsContainer');
+      if (!container) return;
+
+      container.innerHTML = currentMatchingPairs.map((pair, idx) => `
+        <div class="flex items-center gap-2 bg-slate-900/90 p-2 rounded-xl border border-slate-700">
+          <span class="w-6 h-6 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">${idx + 1}</span>
+          <div class="flex-1 grid grid-cols-2 gap-2">
+            <input 
+              type="text" 
+              placeholder="ستوونا A (نموونە: H2O)" 
+              value="${pair.left ? pair.left.replace(/"/g, '&quot;') : ''}"
+              oninput="currentMatchingPairs[${idx}].left = this.value"
+              class="h-9 px-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-yellow-400"
+            />
+            <input 
+              type="text" 
+              placeholder="ستوونا B (نموونە: ئاو)" 
+              value="${pair.right ? pair.right.replace(/"/g, '&quot;') : ''}"
+              oninput="currentMatchingPairs[${idx}].right = this.value"
+              class="h-9 px-2.5 rounded-lg bg-slate-800 border border-slate-700 text-xs text-white focus:outline-none focus:border-yellow-400"
+            />
+          </div>
+          ${currentMatchingPairs.length > 2 ? `
+            <button 
+              type="button" 
+              onclick="removeMatchingPairInput(${idx})" 
+              class="text-rose-400 hover:text-rose-300 p-1.5 text-xs font-bold"
+              title="ژێبرنا ڤێ جووتێ"
+            >
+              ✕
+            </button>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    function addMatchingPairInput(leftVal = '', rightVal = '') {
+      currentMatchingPairs.push({ left: leftVal, right: rightVal });
+      renderMatchingPairInputs();
+    }
+
+    function removeMatchingPairInput(idx) {
+      if (currentMatchingPairs.length <= 2) {
+        alert("پێتڤیە کەمترین ٢ جووت هەبن!");
+        return;
+      }
+      currentMatchingPairs.splice(idx, 1);
+      renderMatchingPairInputs();
+    }
+
+    // Add or Update Question
+    function addOrUpdateQuestion() {
+      const text = document.getElementById('qText').value.trim();
+      if (!text) {
+        alert("تکایە دەقێ پرسیارێ بنڤیسە!");
+        return;
+      }
+
+      let qObj = { text, type: currentType };
+
+      if (currentType === 'math' || currentType === 'chemical' || currentType === 'diagram' || currentType === 'mcq') {
+        const opt0 = document.getElementById('opt0').value.trim();
+        const opt1 = document.getElementById('opt1').value.trim();
+        const opt2 = document.getElementById('opt2').value.trim();
+        const opt3 = document.getElementById('opt3').value.trim();
+
+        if (!opt0 || !opt1) {
+          alert("تکایە کەمترین دوو هەلبژاردنان بنڤیسە!");
+          return;
+        }
+
+        const options = [opt0, opt1, opt2 || '—', opt3 || '—'];
+        const correctRadio = document.querySelector('input[name="mcqCorrect"]:checked');
+        const correct = correctRadio ? parseInt(correctRadio.value, 10) : 0;
+
+        qObj.options = options;
+        qObj.correct = correct;
+
+        if (currentType === 'diagram') {
+          if (!currentDiagramDataUrl) {
+            alert("تکایە وێنەیەک باربکە یان لینکا وێنەی بنڤیسە بۆ ڤێ پرسیارێ!");
+            return;
+          }
+          qObj.image = currentDiagramDataUrl;
+          qObj.imageUrl = currentDiagramDataUrl;
+          qObj.hasCanvas = true;
+        }
+      } else if (currentType === 'truefalse') {
+        const tfRadio = document.querySelector('input[name="tfCorrect"]:checked');
+        const isTrue = tfRadio ? (tfRadio.value === 'true') : true;
+        qObj.correct = isTrue;
+        qObj.correctAnswer = isTrue ? 'true' : 'false';
+      } else if (currentType === 'blank') {
+        const correctAnswer = document.getElementById('blankAnswer').value.trim();
+        if (!correctAnswer) {
+          alert("تکایە وشەیا دروستا بۆشاییێ بنڤیسە!");
+          return;
+        }
+        if (!text.includes('___')) {
+          if (!confirm("دەقێ پرسیارێ هێما ___ تێدا نینە. ئایا دتەوێت بەردەوام بی؟")) return;
+        }
+        qObj.correctAnswer = correctAnswer;
+      } else if (currentType === 'matching') {
+        const validPairs = currentMatchingPairs.filter(p => p.left && p.left.trim() && p.right && p.right.trim());
+        if (validPairs.length < 2) {
+          alert("تکایە کەمترین ٢ جووتێن تژی بنڤیسە بۆ هەڤبەرکرنێ!");
+          return;
+        }
+        qObj.pairs = validPairs.map(p => ({ left: p.left.trim(), right: p.right.trim() }));
+      } else if (currentType === 'numerical') {
+        const valStr = document.getElementById('numCorrectValue').value.trim();
+        if (!valStr || isNaN(parseFloat(valStr))) {
+          alert("تکایە ژمارەیا دروست بنڤیسە!");
+          return;
+        }
+        const tolStr = document.getElementById('numTolerance').value.trim();
+        const tol = (!tolStr || isNaN(parseFloat(tolStr))) ? 0.1 : parseFloat(tolStr);
+        const unit = document.getElementById('numUnit').value.trim();
+
+        qObj.correctNumber = parseFloat(valStr);
+        qObj.tolerance = tol;
+        qObj.unit = unit;
+        qObj.correctAnswer = `${valStr} ± ${tol} ${unit}`.trim();
+      } else if (currentType === 'writing') {
+        const modelAnswer = (document.getElementById('writingModelAnswer')?.value || '').trim();
+        const keywordsStr = (document.getElementById('writingKeywords')?.value || '').trim();
+        const ptsVal = parseInt(document.getElementById('writingPoints')?.value || '10', 10) || 10;
+        const rubric = (document.getElementById('writingRubric')?.value || '').trim();
+
+        if (!modelAnswer) {
+          alert("تکایە بەرسڤا نمونەیی (Model Answer) بنڤیسە!");
+          return;
+        }
+
+        qObj.model_answer = modelAnswer;
+        qObj.correctAnswer = modelAnswer; // For backward compatibility
+        qObj.keywords = keywordsStr;
+        qObj.pts = ptsVal;
+        qObj.points = ptsVal;
+        qObj.grading_rubric = rubric;
+      }
+
+      if (editIndex >= 0) {
+        questions[editIndex] = qObj;
+        cancelEditing();
+      } else {
+        questions.push(qObj);
+      }
+
+      // Reset form fields
+      document.getElementById('qText').value = '';
+      document.getElementById('opt0').value = '';
+      document.getElementById('opt1').value = '';
+      document.getElementById('opt2').value = '';
+      document.getElementById('opt3').value = '';
+      document.getElementById('blankAnswer').value = '';
+      const wMod = document.getElementById('writingModelAnswer');
+      if (wMod) wMod.value = '';
+      const wKeys = document.getElementById('writingKeywords');
+      if (wKeys) wKeys.value = '';
+      const wPts = document.getElementById('writingPoints');
+      if (wPts) wPts.value = '10';
+      const wRub = document.getElementById('writingRubric');
+      if (wRub) wRub.value = '';
+      document.getElementById('numCorrectValue').value = '';
+      document.getElementById('numTolerance').value = '0.1';
+      document.getElementById('numUnit').value = '';
+      removeDiagramImage();
+      currentMatchingPairs = [
+        { left: '', right: '' },
+        { left: '', right: '' },
+        { left: '', right: '' }
+      ];
+      renderMatchingPairInputs();
+      updateFormulaLivePreview();
+
+      render();
+    }
+
+    // 3. render() function - List of questions with badges, KaTeX formulas, and details
+    function render() {
+      const container = document.getElementById('questionsContainer');
+      const countEl = document.getElementById('qCount');
+      if (countEl) countEl.innerText = questions.length;
+
+      if (!container) return;
+
+      if (questions.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">هێشتا چ پرسیار نەهاتینە زێدەکرن. پرسیارەکێ ل سەرێ زێدە بکە!</p>`;
+      } else {
+        container.innerHTML = questions.map((q, i) => {
+          let typeBadge = '';
+          let detailHtml = '';
+
+          if (q.type === 'math') {
+            typeBadge = '<span class="bg-amber-500/20 text-yellow-300 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-500/30">📐 بیرکاری (LaTeX)</span>';
+            detailHtml = `
+              <div class="grid grid-cols-2 gap-1.5 mt-2 text-xs">
+                ${(q.options || []).map((opt, oi) => `
+                  <div class="p-1.5 rounded bg-slate-900 border ${oi === q.correct ? 'border-yellow-400 text-yellow-300 font-bold' : 'border-slate-700 text-slate-400'}">
+                    ${oi === q.correct ? '✓ ' : ''}${opt}
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          } else if (q.type === 'chemical') {
+            typeBadge = '<span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">🧪 کیمیا</span>';
+            detailHtml = `
+              <div class="grid grid-cols-2 gap-1.5 mt-2 text-xs">
+                ${(q.options || []).map((opt, oi) => `
+                  <div class="p-1.5 rounded bg-slate-900 border ${oi === q.correct ? 'border-emerald-400 text-emerald-300 font-bold' : 'border-slate-700 text-slate-400'}">
+                    ${oi === q.correct ? '✓ ' : ''}${opt}
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          } else if (q.type === 'diagram') {
+            typeBadge = '<span class="bg-sky-500/20 text-sky-400 text-[10px] font-bold px-2 py-0.5 rounded border border-sky-500/30">⚡ فیزیا (Diagram)</span>';
+            detailHtml = `
+              <div class="mt-2 space-y-2">
+                ${q.image ? `<img src="${q.image}" class="max-h-24 rounded border border-slate-700 object-contain bg-slate-950 p-1">` : ''}
+                <div class="grid grid-cols-2 gap-1.5 text-xs">
+                  ${(q.options || []).map((opt, oi) => `
+                    <div class="p-1.5 rounded bg-slate-900 border ${oi === q.correct ? 'border-sky-400 text-sky-300 font-bold' : 'border-slate-700 text-slate-400'}">
+                      ${oi === q.correct ? '✓ ' : ''}${opt}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          } else if (q.type === 'truefalse') {
+            typeBadge = '<span class="bg-violet-500/20 text-violet-400 text-[10px] font-bold px-2 py-0.5 rounded border border-violet-500/30">⚖️ دگ یا نەدگ</span>';
+            detailHtml = `<p class="mt-2 text-xs text-slate-300">بەرسڤا دروست: <span class="text-yellow-400 font-black">${q.correct === true || q.correctAnswer === 'true' ? 'دگ (True) ✅' : 'نەدگ (False) ❌'}</span></p>`;
+          } else if (q.type === 'blank') {
+            typeBadge = '<span class="bg-purple-500/20 text-purple-400 text-[10px] font-bold px-2 py-0.5 rounded border border-purple-500/30">✍️ بۆشایی</span>';
+            detailHtml = `<p class="mt-2 text-xs text-slate-300">بەرسڤا دروست: <span class="text-yellow-400 font-bold font-mono">${q.correctAnswer || ''}</span></p>`;
+          } else if (q.type === 'matching') {
+            typeBadge = '<span class="bg-pink-500/20 text-pink-400 text-[10px] font-bold px-2 py-0.5 rounded border border-pink-500/30">🔗 هەڤبەرکرن</span>';
+            detailHtml = `
+              <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs text-slate-300">
+                ${(q.pairs || []).map(p => `
+                  <div class="p-1.5 rounded bg-slate-900 border border-slate-700 flex items-center justify-between">
+                    <span class="font-bold text-yellow-300">${p.left}</span>
+                    <span class="text-slate-500">↔</span>
+                    <span class="font-bold text-emerald-300">${p.right}</span>
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          } else if (q.type === 'numerical') {
+            typeBadge = '<span class="bg-teal-500/20 text-teal-400 text-[10px] font-bold px-2 py-0.5 rounded border border-teal-500/30">🔢 هەژمارتن</span>';
+            detailHtml = `<p class="mt-2 text-xs text-slate-300">بەرسڤ: <span class="text-yellow-400 font-mono font-black">${q.correctNumber} ± ${q.tolerance || 0.1} ${q.unit || ''}</span></p>`;
+          } else if (q.type === 'mcq') {
+            typeBadge = '<span class="bg-blue-500/20 text-blue-400 text-[10px] font-bold px-2 py-0.5 rounded">هەڵبژاردن</span>';
+            detailHtml = `
+              <div class="grid grid-cols-2 gap-1.5 mt-2 text-xs">
+                ${(q.options || []).map((opt, oi) => `
+                  <div class="p-1.5 rounded bg-slate-900 border ${oi === q.correct ? 'border-yellow-400 text-yellow-300 font-bold' : 'border-slate-700 text-slate-400'}">
+                    ${oi === q.correct ? '✓ ' : ''}${opt}
+                  </div>
+                `).join('')}
+              </div>
+            `;
+          } else {
+            typeBadge = '<span class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/30">📝 نڤیسین (Fair Grading)</span>';
+            const modelAns = q.model_answer || q.correctAnswer || '';
+            const kw = q.keywords || '';
+            const pts = q.pts || q.points || 10;
+            const rub = q.grading_rubric || '';
+            detailHtml = `
+              <div class="mt-2 text-xs text-slate-300 space-y-1 bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/60">
+                <div class="flex items-center justify-between">
+                  <span>بەرسڤا نمونەیی: <strong class="text-yellow-400">${modelAns}</strong></span>
+                  <span class="text-amber-400 font-mono font-bold">${pts} نمرە</span>
+                </div>
+                ${kw ? `<div class="text-[11px] text-slate-400">پەیڤێن سەرەکی: <strong class="text-emerald-400">${kw}</strong></div>` : ''}
+                ${rub ? `<div class="text-[11px] text-sky-400/90">رێنمایا سەحکرنێ: ${rub}</div>` : ''}
+              </div>
+            `;
+          }
+
+          return `
+            <div class="bg-slate-800/80 border border-slate-700 p-3.5 rounded-xl space-y-1">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-xs shrink-0">${i + 1}</span>
+                  <span class="font-bold text-sm text-white formula-renderable">${q.text}</span>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  ${typeBadge}
+                  <button 
+                    type="button"
+                    onclick="editQuestionPrompt(${i})" 
+                    class="text-xs text-yellow-400 hover:text-yellow-300 px-2 py-1 bg-slate-900 rounded-lg border border-slate-700 font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <span>✏️</span><span>دەستکاری</span>
+                  </button>
+                  <button 
+                    type="button"
+                    onclick="editQuestionInForm(${i})" 
+                    class="text-xs text-blue-400 hover:text-blue-300 px-2 py-1 bg-slate-900 rounded-lg border border-slate-700 font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <span>📝</span><span>فۆڕم</span>
+                  </button>
+                  <button 
+                    type="button"
+                    onclick="questions.splice(${i}, 1); render();" 
+                    class="text-xs text-rose-400 hover:text-rose-300 px-2 py-1 bg-slate-900 rounded-lg border border-slate-700 font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <span>🗑️</span><span>ژێبرن</span>
+                  </button>
+                </div>
+              </div>
+              ${detailHtml}
+            </div>
+          `;
+        }).join('');
+
+        // Apply KaTeX rendering
+        if (window.renderMathInElement) {
+          try {
+            renderMathInElement(container, {
+              delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      }
+
+    }
+
+    // ==========================================
+    // 6. Test Preview & Verification Mode
+    // Allows teacher to test-drive quiz as mock student before publish
+    // ==========================================
+    function startTeacherPreviewModal() {
+      if (questions.length === 0) {
+        alert("تکایە کەمترین ئێک پرسیار دانی بەرێ پێداچوونێ!");
+        return;
+      }
+
+      previewIdx = 0;
+      previewScore = 0;
+      previewAnswers = [];
+
+      document.getElementById('previewModalTitle').innerText = document.getElementById('examTitle')?.value || 'تاقیکرن';
+      document.getElementById('previewModal')?.classList.remove('hidden');
+      document.getElementById('previewInteractiveCard')?.classList.remove('hidden');
+      document.getElementById('previewFinishedCard')?.classList.add('hidden');
+
+      renderPreviewInteractiveQuestion();
+    }
+
+    function renderPreviewInteractiveQuestion() {
+      if (previewTimer) clearInterval(previewTimer);
+      if (previewIdx >= questions.length) {
+        finishPreviewTest();
+        return;
+      }
+
+      const q = questions[previewIdx];
+      const total = questions.length;
+      const progressPercent = Math.round(((previewIdx) / total) * 100);
+
+      document.getElementById('previewProgressText').innerText = `پرسیارا ${previewIdx + 1} ژ ${total}`;
+      document.getElementById('previewProgressBar').style.width = `${progressPercent}%`;
+
+      // Set working timer
+      previewTimeLeft = q.sec || 30;
+      const timerDisp = document.getElementById('previewTimerDisplay');
+      if (timerDisp) timerDisp.innerText = previewTimeLeft;
+
+      previewTimer = setInterval(() => {
+        previewTimeLeft--;
+        if (timerDisp) timerDisp.innerText = previewTimeLeft;
+        if (previewTimeLeft <= 0) {
+          clearInterval(previewTimer);
+          previewSubmitAndNext(null);
+        }
+      }, 1000);
+
+      // Render Question Text & Image
+      const qTextEl = document.getElementById('previewQuestionText');
+      if (qTextEl) {
+        let imageHtml = '';
+        const imgUrl = q.imageUrl || q.image;
+        if (imgUrl) {
+          imageHtml = `
+            <div class="my-2.5 p-2 bg-slate-900 rounded-xl border border-sky-500/30 text-center">
+              <img src="${imgUrl}" alt="Science Diagram" class="max-h-52 mx-auto rounded-lg object-contain shadow-md">
+              <span class="text-[10px] text-sky-400 font-bold block mt-1">⚡ دیاگرامێ پرسیارێ (Science Diagram)</span>
+            </div>
+          `;
+        }
+        qTextEl.innerHTML = `<span class="formula-renderable">${q.text}</span> ${imageHtml}`;
+      }
+
+      // Hide feedback box
+      const fbBox = document.getElementById('previewFeedbackBox');
+      if (fbBox) fbBox.classList.add('hidden');
+
+      // Render interactive answer controls
+      const ansArea = document.getElementById('previewAnswerArea');
+      if (!ansArea) return;
+
+      if (q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+        const letters = ['أ', 'ب', 'ج', 'د'];
+        const opts = q.options || [];
+        ansArea.innerHTML = `
+          <div class="space-y-2">
+            ${opts.map((opt, oi) => `
+              <label class="flex items-center p-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-yellow-400 cursor-pointer transition-all">
+                <input type="radio" name="previewUserAns" value="${oi}" class="w-4 h-4 accent-yellow-400 cursor-pointer ml-2.5">
+                <span class="w-6 h-6 rounded-lg bg-yellow-400 text-slate-950 font-black text-xs flex items-center justify-center ml-2 shrink-0">${letters[oi] || (oi + 1)}</span>
+                <span class="formula-renderable text-white text-xs sm:text-sm">${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+        `;
+      } else if (q.type === 'truefalse') {
+        ansArea.innerHTML = `
+          <div class="grid grid-cols-2 gap-3 py-1">
+            <label class="flex items-center justify-center gap-2 p-3.5 rounded-xl border-2 border-emerald-500/50 bg-emerald-950/30 hover:bg-emerald-950/60 cursor-pointer transition-all">
+              <input type="radio" name="previewUserAns" value="true" class="w-4 h-4 accent-emerald-400">
+              <span class="font-black text-emerald-400 text-sm">دگ (True) ✅</span>
+            </label>
+            <label class="flex items-center justify-center gap-2 p-3.5 rounded-xl border-2 border-rose-500/50 bg-rose-950/30 hover:bg-rose-950/60 cursor-pointer transition-all">
+              <input type="radio" name="previewUserAns" value="false" class="w-4 h-4 accent-rose-400">
+              <span class="font-black text-rose-400 text-sm">نەدگ (False) ❌</span>
+            </label>
+          </div>
+        `;
+      } else if (q.type === 'blank') {
+        ansArea.innerHTML = `
+          <div class="space-y-2">
+            <input 
+              id="previewBlankInput" 
+              type="text" 
+              placeholder="بۆشاییێ پر بکە..." 
+              class="w-full h-11 px-3 bg-slate-800 border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-yellow-400"
+            />
+          </div>
+        `;
+      } else if (q.type === 'matching') {
+        const pairs = q.pairs || [];
+        ansArea.innerHTML = `
+          <div class="space-y-2 p-3 bg-slate-950 rounded-xl border border-slate-800">
+            <span class="text-[11px] text-yellow-400 font-bold block mb-1">جووتێن گونجاو دیاربکە:</span>
+            ${pairs.map((p, pi) => `
+              <div class="flex items-center justify-between gap-2 text-xs">
+                <span class="font-bold text-white bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700 flex-1">${p.left}</span>
+                <span class="text-slate-500">↔</span>
+                <select id="preview_match_${pi}" class="bg-slate-800 border border-slate-700 rounded-lg p-1.5 text-yellow-300 text-xs flex-1">
+                  <option value="">هەڵبژێرە...</option>
+                  ${pairs.map(p2 => `<option value="${p2.right}">${p2.right}</option>`).join('')}
+                </select>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (q.type === 'numerical') {
+        ansArea.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <input 
+                id="previewNumInput" 
+                type="number" 
+                step="any" 
+                placeholder="ژمارەیێ بنڤیسە..." 
+                class="flex-1 h-11 px-3 bg-slate-800 border border-slate-700 rounded-xl text-white font-mono text-center text-sm focus:outline-none focus:border-yellow-400"
+              />
+              ${q.unit ? `<span class="px-3 py-2 bg-slate-800 text-yellow-400 rounded-xl border border-slate-700 text-xs font-mono">${q.unit}</span>` : ''}
+            </div>
+            <p class="text-[11px] text-slate-400 font-mono">مەودایێ لێبوردەییێ: ± ${q.tolerance || 0.1}</p>
+          </div>
+        `;
+      } else {
+        // Written question
+        ansArea.innerHTML = `
+          <div class="space-y-2">
+            <textarea 
+              id="previewWrittenInput" 
+              rows="4" 
+              placeholder="بەرسڤا نڤیسینێ ل ڤێرێ تاقی بکە..." 
+              class="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-yellow-400 leading-relaxed font-sans"
+            ></textarea>
+            ${q.grading_rubric ? `<p class="text-[11px] text-sky-400 font-bold">📌 رێنمایا سەحکرنێ: ${q.grading_rubric}</p>` : ''}
+          </div>
+        `;
+      }
+
+      // Auto-render formulas inside modal
+      setTimeout(() => {
+        if (window.renderMathInElement) {
+          try {
+            renderMathInElement(document.getElementById('previewInteractiveCard'), {
+              delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false }
+              ],
+              throwOnError: false
+            });
+          } catch(e) {}
+        }
+      }, 50);
+    }
+
+    function previewSubmitAndNext(forceAns) {
+      if (previewTimer) clearInterval(previewTimer);
+      const q = questions[previewIdx];
+      let userAns = forceAns;
+
+      if (userAns === undefined) {
+        if (q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+          const checked = document.querySelector('input[name="previewUserAns"]:checked');
+          userAns = checked ? parseInt(checked.value, 10) : null;
+        } else if (q.type === 'truefalse') {
+          const checked = document.querySelector('input[name="previewUserAns"]:checked');
+          userAns = checked ? (checked.value === 'true') : null;
+        } else if (q.type === 'blank') {
+          userAns = document.getElementById('previewBlankInput')?.value.trim() || '';
+        } else if (q.type === 'matching') {
+          const map = {};
+          (q.pairs || []).forEach((p, pi) => {
+            map[p.left] = document.getElementById(`preview_match_${pi}`)?.value || '';
+          });
+          userAns = map;
+        } else if (q.type === 'numerical') {
+          userAns = document.getElementById('previewNumInput')?.value.trim() || '';
+        } else {
+          userAns = document.getElementById('previewWrittenInput')?.value.trim() || '';
+        }
+      }
+
+      // Check correctness
+      let isCorrect = false;
+      let expectedDisplay = '';
+
+      if (q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+        const cor = q.correct !== undefined ? q.correct : 0;
+        isCorrect = (userAns === cor);
+        expectedDisplay = (q.options || [])[cor] || `هەلبژاردنا ${cor + 1}`;
+      } else if (q.type === 'truefalse') {
+        const corBool = (q.correct === true || q.correctAnswer === 'true');
+        isCorrect = (userAns === corBool);
+        expectedDisplay = corBool ? 'دگ (True)' : 'نەدگ (False)';
+      } else if (q.type === 'blank') {
+        const exp = (q.correctAnswer || '').toLowerCase().trim();
+        isCorrect = String(userAns || '').toLowerCase().trim() === exp;
+        expectedDisplay = q.correctAnswer || '';
+      } else if (q.type === 'matching') {
+        const pairs = q.pairs || [];
+        isCorrect = pairs.length > 0 && pairs.every(p => userAns && userAns[p.left] === p.right);
+        expectedDisplay = pairs.map(p => `${p.left}↔${p.right}`).join(', ');
+      } else if (q.type === 'numerical') {
+        const numVal = parseFloat(userAns);
+        const target = parseFloat(q.correctNumber !== undefined ? q.correctNumber : 0);
+        const tol = parseFloat(q.tolerance !== undefined ? q.tolerance : 0.1);
+        isCorrect = !isNaN(numVal) && Math.abs(numVal - target) <= tol;
+        expectedDisplay = `${target} ± ${tol} ${q.unit || ''}`.trim();
+      } else {
+        // Written question: check using keywords & model answer
+        const modelAns = q.model_answer || q.correctAnswer || '';
+        const kwList = (q.keywords || '').split(/[,،]+/).map(k => k.trim().toLowerCase()).filter(Boolean);
+        const studentText = String(userAns || '').toLowerCase().trim();
+        const foundKw = kwList.filter(k => studentText.includes(k));
+        isCorrect = foundKw.length >= Math.ceil(kwList.length * 0.5) && studentText.length > 5;
+        expectedDisplay = modelAns;
+      }
+
+      if (isCorrect) previewScore++;
+
+      let userAnsDisplay = userAns;
+      if (typeof userAns === 'object' && userAns !== null) {
+        userAnsDisplay = JSON.stringify(userAns);
+      } else if (q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+        userAnsDisplay = (userAns !== null && q.options && q.options[userAns]) ? q.options[userAns] : (userAns === null ? 'چ نەهاتە هەڵبژاردن' : userAns);
+      }
+
+      previewAnswers.push({
+        question: q.text,
+        userAns: String(userAnsDisplay || '—'),
+        expected: String(expectedDisplay || '—'),
+        isCorrect
+      });
+
+      previewIdx++;
+      if (previewIdx < questions.length) {
+        renderPreviewInteractiveQuestion();
+      } else {
+        finishPreviewTest();
+      }
+    }
+
+    function finishPreviewTest() {
+      if (previewTimer) clearInterval(previewTimer);
+
+      document.getElementById('previewInteractiveCard').classList.add('hidden');
+      const finishedCard = document.getElementById('previewFinishedCard');
+      finishedCard.classList.remove('hidden');
+
+      const total = questions.length;
+      const percent = Math.round((previewScore / total) * 100);
+      document.getElementById('previewFinalScore').innerText = `${previewScore} / ${total} — ${percent}%`;
+
+      // Show summary of all questions so teacher can see if any questions have errors
+      const summaryDiv = document.getElementById('previewErrorsSummary');
+      summaryDiv.innerHTML = `
+        <h4 class="text-xs font-black text-yellow-400 mb-2 border-b border-slate-800 pb-1">پشکنینا پرسیاران و هەڵەیاسەکان:</h4>
+        <div class="space-y-2">
+          ${previewAnswers.map((item, idx) => `
+            <div class="p-2.5 rounded-lg border text-xs ${item.isCorrect ? 'bg-emerald-950/20 border-emerald-500/40 text-emerald-300' : 'bg-rose-950/20 border-rose-500/40 text-rose-300'}">
+              <div class="flex items-center justify-between font-bold mb-1">
+                <span>${idx + 1}. ${item.question}</span>
+                <span>${item.isCorrect ? '✓ راست' : '✗ خەلەت'}</span>
+              </div>
+              <div class="text-[11px] text-slate-300">
+                <span>بەرسڤا تە: <strong class="text-white">${item.userAns}</strong></span> | 
+                <span>بەرسڤا دروست: <strong class="text-yellow-400">${item.expected}</strong></span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      // CRITICAL: NO API save is called here!
+    }
+
+    function restartPreviewTest() {
+      startTeacherPreviewModal();
+    }
+
+    function closePreviewModal() {
+      if (previewTimer) clearInterval(previewTimer);
+      document.getElementById('previewModal').classList.add('hidden');
+    }
+
+    function toggleStaticPreviewModal() {
+      const modal = document.getElementById('staticPreviewModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        renderLivePreviewDiv();
+        const content = document.getElementById('previewContent');
+        const live = document.getElementById('livePreviewContainer');
+        if (content && live) content.innerHTML = live.innerHTML;
+      }
+    }
+
+    // ==============================================================
+    // 2. "📢 ئاگەهدارکرنا قوتابیان" - After preview is OK, teacher clicks this
+    //    to make exam ACTIVE. Show notification: "Exam is now live for students"
+    // ==============================================================
+    async function activateExamForStudents() {
+      if (questions.length === 0) {
+        alert("تکایە کەمترین ئێک پرسیار زێدە بکە بەرێ چالاککرنێ!");
+        return;
+      }
+
+      const loadInput = document.getElementById('loadCode');
+      const examCodeInput = document.getElementById('examCode');
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      const id = (loadInput?.value || examCodeInput?.value || `QZ-${rand}`).trim().toUpperCase();
+      const title = (document.getElementById('examTitle')?.value || '').trim() || 'تاقیکرن';
+
+      const btn = document.getElementById('btnActivateExam');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "چالاککرن دەستپێکر...";
+      }
+
+      try {
+        const res = await fetch('/api/exam', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: id,
+            code: id,
+            title: title,
+            questions: questions,
+            status: 'active'
+          })
+        });
+
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>📢</span><span>ئاگەهدارکرنا قوتابیان</span>';
+        }
+
+        // Update local status
+        updateStatusUI('active');
+
+        // Also update local storage
+        const rawStore = localStorage.getItem('qk_Q2') || '[]';
+        let quizzes = JSON.parse(rawStore);
+        const idx = quizzes.findIndex(q => (q.code || q.id) === id);
+        if (idx >= 0) {
+          quizzes[idx].status = 'active';
+          quizzes[idx].active = true;
+        } else {
+          quizzes.unshift({ id, code: id, title, questions, status: 'active', active: true });
+        }
+        localStorage.setItem('qk_Q2', JSON.stringify(quizzes));
+        localStorage.setItem('quiz_exams_v11', JSON.stringify(quizzes));
+
+        // Show prominent on-screen notification
+        const toast = document.getElementById('teacherLiveNotification');
+        if (toast) {
+          toast.classList.remove('hidden');
+          setTimeout(() => toast.classList.add('hidden'), 5000);
+        }
+
+        // Mandatory Notification: "Exam is now live for students"
+        alert("Exam is now live for students\nئەزموون نها یا چالاکە بۆ قوتابیان! کۆد: " + id);
+      } catch (err) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>📢</span><span>ئاگەهدارکرنا قوتابیان</span>';
+        }
+        alert("خەلەتی د چالاککرنێ دا: " + err.message);
+      }
+    }
+
+    // 4. publish() function
+    async function publish() {
+      if (questions.length === 0) {
+        alert("تکایە کەمترین ئێک پرسیار دانی بەرێ تومارکرنێ!");
+        return;
+      }
+
+      const loadInput = document.getElementById('loadCode');
+      const examCodeInput = document.getElementById('examCode');
+      const rand = Math.floor(1000 + Math.random() * 9000);
+
+      const loadVal = (loadInput ? loadInput.value : '').trim().toUpperCase();
+      const codeVal = (examCodeInput ? examCodeInput.value : '').trim().toUpperCase();
+
+      const id = loadVal || codeVal || `QZ-${rand}`;
+
+      if (loadInput) loadInput.value = id;
+      if (examCodeInput) examCodeInput.value = id;
+
+      const title = (document.getElementById('examTitle')?.value || '').trim() || 'تاقیکرن';
+      const btn = document.getElementById('btnPublish');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "تومارکردن دهێتە ئەنجامدان...";
+      }
+
+      try {
+        const res = await fetch('/api/exam', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: id,
+            code: id,
+            title: title,
+            questions: questions,
+            status: currentExamStatus || 'draft'
+          })
+        });
+
+        const data = await res.json();
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = "🚀 تۆمارکردن / نویکردنا ئەزموونێ (Save Exam)";
+        }
+
+        if (res.ok) {
+          const finalId = data.id || id;
+          const successBox = document.getElementById('publishSuccessBox');
+          const disp = document.getElementById('publishedCodeDisplay');
+          if (disp) disp.innerText = finalId;
+          if (successBox) successBox.classList.remove('hidden');
+
+          if (loadInput) loadInput.value = finalId;
+          if (examCodeInput) examCodeInput.value = finalId;
+
+          updateStatusUI(data.status || currentExamStatus || 'draft');
+
+          window.scrollTo({ top: successBox ? successBox.offsetTop - 50 : 0, behavior: 'smooth' });
+          alert(`ئەزموون ب سەرکەفتیانە ب کۆدێ (${finalId}) هاتە تومارکردن! نها دشێی ب دوگمەیا (👁️ پێداچوون و تاقیکرن) تاقی بکەی و ب (📢 ئاگەهدارکرنا قوتابیان) کارا بکەی.`);
+        } else {
+          alert("خەلەتی: " + (data.error || 'نەهاتە تومارکردن'));
+        }
+      } catch (err) {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = "🚀 تۆمارکردن / نویکردنا ئەزموونێ (Save Exam)";
+        }
+        alert("خەلەتی د پەیوەندیکردنێ دا: " + err.message);
+      }
+    }
+
+    function publishExam() {
+      return publish();
+    }
+
+    function copyExamCode() {
+      const code = document.getElementById('publishedCodeDisplay')?.innerText || document.getElementById('examCode')?.value;
+      if (navigator.clipboard && code) {
+        navigator.clipboard.writeText(code);
+        alert(`کۆدێ (${code}) هاتە کۆپیکردن!`);
+      }
+    }
+
+    async function loadTeacherResults() {
+      const tbody = document.getElementById('resultsTbody');
+      try {
+        const res = await fetch('/api/teacher');
+        if (res.ok) {
+          const list = await res.json();
+          if (list.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-slate-500">چ ئەنجام هێشتا نینن</td></tr>';
+            return;
+          }
+          tbody.innerHTML = list.map(item => `
+            <tr>
+              <td class="py-2.5 font-bold">${item.student_name || item.name || 'قوتابی'}</td>
+              <td class="py-2.5 font-mono text-slate-400">${item.exam_id || item.code || '—'}</td>
+              <td class="py-2.5 font-mono text-yellow-400 font-bold">${item.result_code || '—'}</td>
+              <td class="py-2.5 font-mono text-emerald-400">${item.score}</td>
+              <td class="py-2.5 font-mono text-slate-300">${item.percent}%</td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-slate-500">بارکرنا ئەنجامان سەرنەکەفت</td></tr>';
+      }
+    }
+
+    function editQuestionPrompt(i) {
+      const q = questions[i];
+      if (!q) return;
+      const newText = prompt("دەستکاریکردنا دەقێ پرسیارێ:", q.text);
+      if (newText !== null && newText.trim()) {
+        q.text = newText.trim();
+        render();
+      }
+    }
+
+    function editQuestionInForm(i) {
+      const q = questions[i];
+      if (!q) return;
+      editIndex = i;
+
+      setQuestionType(q.type || 'mcq');
+      document.getElementById('qText').value = q.text || '';
+
+      if (q.type === 'mcq' || q.type === 'math' || q.type === 'chemical' || q.type === 'diagram') {
+        const opts = q.options || [];
+        document.getElementById('opt0').value = opts[0] || '';
+        document.getElementById('opt1').value = opts[1] || '';
+        document.getElementById('opt2').value = opts[2] || '';
+        document.getElementById('opt3').value = opts[3] || '';
+        const cor = q.correct !== undefined ? q.correct : 0;
+        const radios = document.querySelectorAll('input[name="mcqCorrect"]');
+        if (radios[cor]) radios[cor].checked = true;
+
+        if (q.type === 'diagram' && q.image) {
+          currentDiagramDataUrl = q.image;
+          const previewImg = document.getElementById('diagramImagePreview');
+          if (previewImg) previewImg.src = q.image;
+          document.getElementById('diagramImagePreviewContainer')?.classList.remove('hidden');
+        }
+      } else if (q.type === 'truefalse') {
+        const isTrue = q.correct === true || q.correctAnswer === 'true';
+        const tfRadios = document.querySelectorAll('input[name="tfCorrect"]');
+        tfRadios.forEach(r => {
+          if ((r.value === 'true' && isTrue) || (r.value === 'false' && !isTrue)) r.checked = true;
+        });
+      } else if (q.type === 'blank') {
+        document.getElementById('blankAnswer').value = q.correctAnswer || '';
+      } else if (q.type === 'matching') {
+        currentMatchingPairs = (q.pairs && q.pairs.length > 0) ? JSON.parse(JSON.stringify(q.pairs)) : [
+          { left: '', right: '' },
+          { left: '', right: '' },
+          { left: '', right: '' }
+        ];
+        renderMatchingPairInputs();
+      } else if (q.type === 'numerical') {
+        document.getElementById('numCorrectValue').value = q.correctNumber !== undefined ? q.correctNumber : '';
+        document.getElementById('numTolerance').value = q.tolerance !== undefined ? q.tolerance : 0.1;
+        document.getElementById('numUnit').value = q.unit || '';
+      } else if (q.type === 'writing') {
+        if (document.getElementById('writingModelAnswer')) {
+          document.getElementById('writingModelAnswer').value = q.model_answer || q.correctAnswer || '';
+        }
+        if (document.getElementById('writingKeywords')) {
+          document.getElementById('writingKeywords').value = q.keywords || '';
+        }
+        if (document.getElementById('writingPoints')) {
+          document.getElementById('writingPoints').value = q.pts || q.points || 10;
+        }
+        if (document.getElementById('writingRubric')) {
+          document.getElementById('writingRubric').value = q.grading_rubric || '';
+        }
+      }
+
+      const badge = document.getElementById('editingBadge');
+      if (badge) badge.classList.remove('hidden');
+      const btnText = document.getElementById('btnActionText');
+      if (btnText) btnText.innerText = "نویکردنا پرسیارێ (Update)";
+      const cancelBtn = document.getElementById('btnCancelEdit');
+      if (cancelBtn) cancelBtn.classList.remove('hidden');
+
+      updateFormulaLivePreview();
+      window.scrollTo({ top: document.getElementById('builderHeading')?.offsetTop - 60 || 0, behavior: 'smooth' });
+    }
+
+    function cancelEditing() {
+      editIndex = -1;
+      const badge = document.getElementById('editingBadge');
+      if (badge) badge.classList.add('hidden');
+      const btnText = document.getElementById('btnActionText');
+      if (btnText) btnText.innerText = "زێدەکرنا پرسیارێ ل لیستێ";
+      const cancelBtn = document.getElementById('btnCancelEdit');
+      if (cancelBtn) cancelBtn.classList.add('hidden');
+
+      document.getElementById('qText').value = '';
+      document.getElementById('opt0').value = '';
+      document.getElementById('opt1').value = '';
+      document.getElementById('opt2').value = '';
+      document.getElementById('opt3').value = '';
+      document.getElementById('blankAnswer').value = '';
+      if (document.getElementById('writingModelAnswer')) document.getElementById('writingModelAnswer').value = '';
+      if (document.getElementById('writingKeywords')) document.getElementById('writingKeywords').value = '';
+      if (document.getElementById('writingPoints')) document.getElementById('writingPoints').value = '10';
+      if (document.getElementById('writingRubric')) document.getElementById('writingRubric').value = '';
+      document.getElementById('numCorrectValue').value = '';
+      document.getElementById('numTolerance').value = '0.1';
+      document.getElementById('numUnit').value = '';
+      removeDiagramImage();
+      currentMatchingPairs = [
+        { left: '', right: '' },
+        { left: '', right: '' },
+        { left: '', right: '' }
+      ];
+      renderMatchingPairInputs();
+      updateFormulaLivePreview();
+    }
+
+    // Default sample STEM questions on first visit
+    generateNewCode();
+    questions = [
+      {
+        type: 'math',
+        text: 'شیکاریا ڤێ هاوکێشەیێ بدۆزەوە: $$x^2 - 4 = 0$$',
+        options: ['$$x = \\pm 2$$', '$$x = 4$$', '$$x = 1$$', '$$x = 0$$'],
+        correct: 0
+      },
+      {
+        type: 'chemical',
+        text: 'فۆرمولا کیمیایی یا ئاڤێ (Water) کیژە؟',
+        options: ['$$H_2O$$', '$$CO_2$$', '$$NaCl$$', '$$H_2SO_4$$'],
+        correct: 0
+      },
+      {
+        type: 'truefalse',
+        text: 'کێشکردنا ئەردی (g) نێزیکی $$9.81\\text{ m/s}^2$$ یە.',
+        correct: true,
+        correctAnswer: 'true'
+      },
+      {
+        type: 'blank',
+        text: 'گازی ___ ژ بۆ هەناسەدانا زیندەوەران پێتڤیە.',
+        correctAnswer: 'ئۆکسجین'
+      },
+      {
+        type: 'numerical',
+        text: 'ئەگەر بارستایی 10 kg بیت و لەزاتی 2 m/s بیت، ووزەیا جوولێ (KE = ½mv²) بهەژمێرە:',
+        correctNumber: 20,
+        tolerance: 0.5,
+        unit: 'Joule',
+        correctAnswer: '20 ± 0.5 Joule'
+      }
+    ];
+
+    updateStatusUI('draft');
+    render();
+    loadTeacherResults();
+  </script>
+</body>
+</html>
